@@ -1,6 +1,17 @@
 import bcrypt from "bcrypt";
 import database from "../models/connection.js";
 
+async function verifyUserExist(email){
+  const sql = "select * from tbl_usuario where email=?";
+  const dataLogin = [email];
+
+  const conn = await database.connect();
+  const [user] = await conn.query(sql, dataLogin);
+
+  conn.end();
+  return user
+}
+
 async function createUser(name, email, hashPass = undefined, telefone = undefined) {
   const sql =
     "insert into tbl_usuario(nome, email, hashPass, telefone) values(?,?,?,?)";
@@ -30,13 +41,7 @@ async function deleteUser(id) {
 }
 
 async function loginUser(email, password) {
-  const sql = "select * from tbl_usuario where email=?";
-  const dataLogin = [email];
-
-  const conn = await database.connect();
-  const [user] = await conn.query(sql, dataLogin);
-
-  conn.end();
+  const user = verifyUserExist(email);
 
   if (!user) {
     return user;
@@ -50,4 +55,4 @@ async function loginUser(email, password) {
   return false;
 }
 
-export default { createUser, updateUser, deleteUser, loginUser };
+export default { createUser, updateUser, deleteUser, loginUser, verifyUserExist };
