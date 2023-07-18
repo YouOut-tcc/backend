@@ -15,6 +15,8 @@ create table tbl_usuario(
     primary key(id)
 );
 
+-- falta imformação, nome que vai mostrar e um uuid ou coisa do tipo
+-- tags para pesquisa
 create table tbl_places(
 	id            integer auto_increment not null,
     cnpj          int(18) unique not null,
@@ -23,6 +25,7 @@ create table tbl_places(
     celular       int(15) default null,
 
     -- Endereço:
+    -- mudar numero para suporta letras
     numero int(15) default null,
     bairro varchar(65) not null,
     cidade varchar(65) not null,
@@ -49,14 +52,12 @@ create table tbl_place_logins(
     telefone int(15) default null,
 
     tipo_acesso varchar(45) not null,
-    FK_place_id integer not null,
     
     criado       datetime default now(),
     deletado_dia date default null,
     deletado     boolean not null default false,
     
-    primary key(id),
-    foreign key(FK_place_id) references tbl_places(id)
+    primary key(id)
 );
 
 create table tbl_logins_has_places(
@@ -70,7 +71,8 @@ create table tbl_logins_has_places(
     foreign key(FK_login_id) references tbl_place_logins(id)
 );
 
-drop table tbl_usuario;
+-- drop table tbl_usuario;
+-- drop database youout;
 desc tbl_usuario;
 select * from tbl_usuario;
 select * from tbl_place_logins;

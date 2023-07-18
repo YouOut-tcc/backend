@@ -41,7 +41,7 @@ async function deleteUser(id) {
 }
 
 async function loginUser(email, password) {
-  const user = verifyUserExist(email);
+  const [user] = await verifyUserExist(email);
 
   if (!user) {
     return user;

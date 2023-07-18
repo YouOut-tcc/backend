@@ -1,6 +1,8 @@
 import { OAuth2Client } from "google-auth-library";
 
-const client = new OAuth2Client('649152602471-v9uc0u56ptiue3aj0snm83r5jreruphb.apps.googleusercontent.com');
+const client = new OAuth2Client(
+  "649152602471-v9uc0u56ptiue3aj0snm83r5jreruphb.apps.googleusercontent.com"
+);
 
 function valifyTokenFormat(header) {
   const authHeader = header.authorization;
@@ -15,14 +17,15 @@ function valifyTokenFormat(header) {
 }
 
 function parseJwt(token) {
-  return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+  return JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
 }
 
 async function verifyGoogleToken(token) {
   try {
     const ticket = await client.verifyIdToken({
       idToken: token,
-      audience: '649152602471-v9uc0u56ptiue3aj0snm83r5jreruphb.apps.googleusercontent.com', // Specify the CLIENT_ID of the app that accesses the backend
+      audience:
+        "649152602471-v9uc0u56ptiue3aj0snm83r5jreruphb.apps.googleusercontent.com", // Specify the CLIENT_ID of the app that accesses the backend
       // Or, if multiple clients access the backend:
       //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
     });
