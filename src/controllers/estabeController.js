@@ -59,7 +59,7 @@ async function placeLogin(req, res){
 			const id = users.id;
 			const email = users.email;
 			const nome = users.nome;
-			const token = generateToken(id, nome, email);
+			const token = generateToken(id, nome, email, 'place');
 
 			res.status(200).send({message: 'Login efetuado com sucesso', token});
 		} else {

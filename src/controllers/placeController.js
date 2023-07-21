@@ -17,7 +17,7 @@ async function requestCreation(req, res) {
     longitude,
   } = req.body;
 
-  // fazer um helper disso
+  // fazer um helper disso?
   let elements = Object.entries({
     cnpj,
     nome_fantasia,
@@ -50,6 +50,7 @@ async function requestCreation(req, res) {
     await service.createPlace(
       cnpj,
       nome_fantasia,
+      nome,
       telefone,
       celular,
       numero,
@@ -73,6 +74,11 @@ async function requestCreation(req, res) {
 
 }
 
+async function showInfo(req, res){
+  return res.status(200).send({message: req.place})
+}
+
 export default {
   requestCreation,
+  showInfo
 };

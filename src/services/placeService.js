@@ -17,6 +17,7 @@ async function sendRequest(email) {
 async function createPlace(
   cnpj,
   nome_fantasia,
+  nome,
   telefone,
   celular,
   numero,
@@ -29,10 +30,11 @@ async function createPlace(
   longitude
 ) {
   const sql =
-    "insert into tbl_places(cnpj,nome_fantasia,telefone,celular,numero,bairro,cidade,cep,uf,rua,latitute,longitude) values(?,?,?,?,?,?,?,?,?,?,?,?)";
+    "insert into tbl_places(uuid,cnpj,nome_fantasia,nome,telefone,celular,numero,bairro,cidade,cep,uf,rua,latitute,longitude) values(uuid_v5(uuid(), ''),?,?,?,?,?,?,?,?,?,?,?,?,?)";
   const data = [
     cnpj,
     nome_fantasia,
+    nome,
     telefone,
     celular,
     numero,
@@ -44,6 +46,8 @@ async function createPlace(
     latitute,
     longitude,
   ];
+
+  // TODO: em caso de duplicação do uuid, tenta de novo ate pegar um não usado
 
   const conn = await database.connect();
   await conn.query(sql, data);
@@ -63,6 +67,10 @@ async function linkLogin(email, cnpj){
   data = [email];
   [idUser] = await conn.query(sql, data);
 
+  if(idUser == undefined || idPlace == undefined){
+    res.status(400).send({ message: 'id não achado'})
+  }
+
   sql = "insert into tbl_logins_has_places(FK_place_id, FK_login_id) values(?,?)";
   data = [idPlace.id, idUser.id];
   await conn.query(sql, data);
@@ -71,4 +79,15 @@ async function linkLogin(email, cnpj){
   return;
 }
 
-export default { sendRequest, createPlace, linkLogin };
+async function getInfo(uuid){
+  const sql = "select * from tbl_places where uuid=uuid_from_bin(?)";
+  const data = [uuid];
+
+  const conn = await database.connect();
+  const [result] = await conn.query(sql, data);
+
+  conn.end();
+  return result;
+}
+
+export default { sendRequest, createPlace, linkLogin, getInfo };

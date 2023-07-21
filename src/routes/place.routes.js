@@ -1,5 +1,7 @@
 import express from 'express';
 import places from '../controllers/placeController.js';
+import uuidManagePlaces from './uuidManagePlace.routes.js';
+import { verifyUUID } from '../middlewares/place.js';
 
 
 const routes = express();
@@ -17,6 +19,7 @@ const routes = express();
 
 // criar ou pedir acesso ao um place
 routes.post('/request', places.requestCreation);
+routes.use('/:uuid', verifyUUID, uuidManagePlaces)
 // routes.delete('/remover')
 
 export default routes;

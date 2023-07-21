@@ -1,5 +1,6 @@
 create database youout;
 use youout;
+-- drop database youout;
 
 create table tbl_usuario(
 	id       integer auto_increment not null,
@@ -17,10 +18,14 @@ create table tbl_usuario(
 
 -- falta imformação, nome que vai mostrar e um uuid ou coisa do tipo
 -- tags para pesquisa
+-- acho que o tipo UUID não exite no mysql
 create table tbl_places(
 	id            integer auto_increment not null,
+    uuid          binary(16) not null unique,
+
     cnpj          int(18) unique not null,
     nome_fantasia varchar(65) not null,
+    nome          varchar(255) not null,
     telefone      int(15) default null,
     celular       int(15) default null,
 
@@ -51,7 +56,7 @@ create table tbl_place_logins(
     hashPass varchar(150) default null,
     telefone int(15) default null,
 
-    tipo_acesso varchar(45) not null,
+    tipo_acesso varchar(45) not null, -- remover
     
     criado       datetime default now(),
     deletado_dia date default null,
@@ -60,6 +65,7 @@ create table tbl_place_logins(
     primary key(id)
 );
 
+-- colocar um sistema de permissoes
 create table tbl_logins_has_places(
     id          integer auto_increment not null,
     FK_place_id integer not null,
@@ -78,3 +84,4 @@ select * from tbl_usuario;
 select * from tbl_place_logins;
 select * from tbl_places;
 select * from tbl_logins_has_places;
+-- select uuid_from_bin(uuid_v5(uuid(), ''));

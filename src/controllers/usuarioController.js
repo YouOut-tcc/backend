@@ -59,7 +59,7 @@ async function usuarioLogin(req, res){
 			const id = users.id;
 			const email = users.email;
 			const nome = users.nome;
-			const token = generateToken(id, nome, email);
+			const token = generateToken(id, nome, email, 'user');
 
 			res.status(200).send({message: 'Login efetuado com sucesso', token});
 		} else {
@@ -86,7 +86,7 @@ async function usuarioOauth(req, res){
 		const id = user.id;
 		const email = user.email;
 		const nome = user.nome;
-		const token = generateToken(id, nome, email);
+		const token = generateToken(id, nome, email, 'user');
 		res.status(200).send({message: 'Login efetuado com sucesso', token});
 	} else {
 		const name = userInfo.given_name;
@@ -111,7 +111,7 @@ async function usuarioToken(req, res){
 		const id = infoUser.id;
 		const email = infoUser.email;
 		const nome = infoUser.userName;
-		const token = generateToken(id, nome, email);
+		const token = generateToken(id, nome, email, 'user');
 		res.status(200).send({message: 'Login efetuado com sucesso', token});
 	} else {
 		res.status(500).send({message: 'Usuario naõ existe'})
