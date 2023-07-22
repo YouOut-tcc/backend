@@ -14,6 +14,7 @@ async function verifyUUID(req, res, next){
   }
 
   req.place = result;
+  req.place.uuid = req.params.uuid;
 
   return next();
 }

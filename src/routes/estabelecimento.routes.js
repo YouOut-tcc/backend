@@ -1,6 +1,6 @@
 import express from 'express';
 import estabelecimento from '../controllers/estabeController.js';
-import places from './place.routes.js';
+import manage from './managePlace.routes.js';
 import uuidPlaces from './uuidPlaces.routes.js';
 import { verifyJWT } from '../middlewares/jwt.js';
 import { verifyUUID } from '../middlewares/place.js';
@@ -23,13 +23,13 @@ routes.use(verifyJWT)
 // /estabelecimento/manage/uuid/ - rota para gerenciar um restaurante individial
 // /estabelecimento/manage/uuid/maiscoisas
 
-// qualquer conta com u token valido pode entrar aqui, mudar isso
 
 // routes.use('/logout')
 // routes.use('/reset')
 // routes.use('/update')
 
-routes.use('/manage', places)
+// qualquer conta com u token valido pode entrar aqui, mudar isso
+routes.use('/manage', manage)
 routes.use('/:uuid', verifyUUID, uuidPlaces)
 
 export default routes;

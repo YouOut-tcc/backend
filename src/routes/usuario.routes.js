@@ -19,10 +19,10 @@ routes.use(verifyJWT)
 
 routes.post('/token', usuario.usuarioToken)
 
+routes.get('/favoritos', usuario.getFavoritos)
+routes.get('/avaliacoes', usuario.getAvaliacoes)
 // routes.use('/logout')
 // routes.use('/reset')
 // routes.use('/update')
-// routes.use('/favoritos')
-// routes.use('/avaliacoes')
 
 export default routes;

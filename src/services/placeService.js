@@ -80,7 +80,7 @@ async function linkLogin(email, cnpj){
 }
 
 async function getInfo(uuid){
-  const sql = "select * from tbl_places where uuid=uuid_from_bin(?)";
+  const sql = "select * from tbl_places where uuid=uuid_to_bin(?)";
   const data = [uuid];
 
   const conn = await database.connect();
@@ -90,4 +90,35 @@ async function getInfo(uuid){
   return result;
 }
 
-export default { sendRequest, createPlace, linkLogin, getInfo };
+async function criarAvaliacao(comentario, nota, placeid, userid){
+  const sql = "insert into tbl_avaliacoes(pontuacao,comentario,FK_place_id,FK_usuario_id) values(?,?,?,?)";
+  const data = [nota,comentario,placeid,userid];
+
+  const conn = await database.connect();
+  await conn.query(sql, data);
+
+  conn.end();
+}
+
+async function getAvaliacoes(placeid, userid){
+  const sql = "select * from tbl_avaliacoes where FK_place_id=? and FK_usuario_id=?";
+  const data = [placeid, userid];
+
+  const conn = await database.connect();
+  const result = await conn.query(sql, data);
+
+  conn.end();
+  return result;
+}
+
+async function criarFavorito(placeid, userid){
+  const sql = "insert into tbl_favoritos(FK_place_id,FK_usuario_id) values(?,?)";
+  const data = [placeid,userid];
+
+  const conn = await database.connect();
+  await conn.query(sql, data);
+
+  conn.end();
+}
+
+export default { sendRequest, createPlace, linkLogin, getInfo, criarAvaliacao, getAvaliacoes, criarFavorito };

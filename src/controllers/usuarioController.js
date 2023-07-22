@@ -118,11 +118,33 @@ async function usuarioToken(req, res){
 	}
 }
 
+async function getFavoritos(req, res) {
+  try {
+    let result = await service.getFavoritos(req.infoUser.id)
+    res.status(200).send(result)
+  } catch (error) {
+    console.log(error)
+    res.status(400).send({ message: error})
+  }
+}
+
+async function getAvaliacoes(req, res) {
+  try {
+    let result = await service.getAvaliacoes(req.infoUser.id)
+    res.status(200).send(result)
+  } catch (error) {
+    console.log(error)
+    res.status(400).send({ message: error})
+  }
+}
+
 export default {
   usuarioCadastro,
   usuarioDeletar,
   usuarioUpdate,
   usuarioLogin,
   usuarioOauth,
-  usuarioToken
+  usuarioToken,
+	getFavoritos,
+	getAvaliacoes
 };

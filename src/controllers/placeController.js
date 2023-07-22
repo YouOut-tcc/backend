@@ -74,11 +74,59 @@ async function requestCreation(req, res) {
 
 }
 
-async function showInfo(req, res){
+function showInfo(req, res){
   return res.status(200).send({message: req.place})
+}
+
+async function avaliarPlace(req, res){
+  const {comentario, nota} = req.body;
+
+  if(comentario == undefined || nota == undefined){
+    return res.status(400).send({ message: "Invalido, falta imformaçao"})
+  }
+
+  if(typeof nota != 'number'){
+    return res.status(400).send({ message: "Invalido, nota não é uma numero"})
+  }
+
+  if(nota < 0 || nota > 5){
+    return res.status(400).send({ message: "Invalido, nota vai de 0 á 5"})
+  }
+
+  try {
+    await service.criarAvaliacao(comentario, nota, req.place.id, req.infoUser.id)
+    res.status(200).send({ message: "Salvo"})
+  } catch (error) {
+    console.log(error)
+    res.status(400).send({ message: error})
+  }
+}
+
+// TODO: tirar as FK do resultado
+async function getAvaliacoes(req, res) {
+  try {
+    let result = await service.getAvaliacoes(req.place.id, req.infoUser.id)
+    res.status(200).send(result)
+  } catch (error) {
+    console.log(error)
+    res.status(400).send({ message: error})
+  }
+}
+
+async function criarFavorito(req, res) {
+  try {
+    await service.criarFavorito(req.place.id, req.infoUser.id)
+    res.status(200).send({ message: "Salvo"})
+  } catch (error) {
+    console.log(error)
+    res.status(400).send({ message: error})
+  }
 }
 
 export default {
   requestCreation,
-  showInfo
+  showInfo,
+  avaliarPlace,
+  getAvaliacoes,
+  criarFavorito
 };

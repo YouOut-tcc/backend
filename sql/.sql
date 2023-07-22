@@ -16,9 +16,8 @@ create table tbl_usuario(
     primary key(id)
 );
 
--- falta imformação, nome que vai mostrar e um uuid ou coisa do tipo
--- tags para pesquisa
--- acho que o tipo UUID não exite no mysql
+-- TODO: tags para pesquisa
+--       adicionar uma coluna de nota
 create table tbl_places(
 	id            integer auto_increment not null,
     uuid          binary(16) not null unique,
@@ -30,8 +29,7 @@ create table tbl_places(
     celular       int(15) default null,
 
     -- Endereço:
-    -- mudar numero para suporta letras
-    numero int(15) default null,
+    numero varchar(32) default null,
     bairro varchar(65) not null,
     cidade varchar(65) not null,
     cep    int(15) not null,
@@ -55,8 +53,6 @@ create table tbl_place_logins(
     email    varchar(65) not null,
     hashPass varchar(150) default null,
     telefone int(15) default null,
-
-    tipo_acesso varchar(45) not null, -- remover
     
     criado       datetime default now(),
     deletado_dia date default null,
@@ -77,11 +73,54 @@ create table tbl_logins_has_places(
     foreign key(FK_login_id) references tbl_place_logins(id)
 );
 
+create table tbl_avaliacoes(
+    id integer auto_increment not null,
+    FK_usuario_id integer not null,
+    FK_place_id integer not null,
+
+    pontuacao decimal(3, 1) unsigned  NOT NULL,
+    -- comentario_null 
+    comentario varchar(255) default '',
+    criado    datetime default now(),
+
+    primary key(id),
+    foreign key(FK_place_id) references tbl_places(id),
+    foreign key(FK_usuario_id) references tbl_usuario(id)
+);
+
+-- fazendo essa tabela dessa forma, deixa possivel uma avaliação receber varios comentarios
+-- algo indesejado, tratar isso na logica do backend, mas mander por motivos de compatibilidade
+create table tbl_respotas(
+    id integer auto_increment not null,
+    FK_avaliacao_id integer not null,
+
+    -- comentario_null 
+    comentario varchar(255) default '',
+    criado    datetime default now(),
+
+    primary key(id),
+    foreign key(FK_avaliacao_id) references tbl_avaliacoes(id)
+);
+
+create table tbl_favoritos(
+    id integer auto_increment not null,
+    FK_usuario_id integer not null,
+    FK_place_id integer not null,
+    criado    datetime default now(),
+    primary key(id),
+    foreign key(FK_usuario_id) references tbl_usuario(id),
+    foreign key(FK_place_id) references tbl_places(id),
+    UNIQUE (FK_usuario_id, FK_place_id)
+);
+
 -- drop table tbl_usuario;
 -- drop database youout;
-desc tbl_usuario;
-select * from tbl_usuario;
-select * from tbl_place_logins;
+-- desc tbl_usuario;
+select * from tbl_avaliacoes; 
+select * from tbl_favoritos;
+-- select * from tbl_place_logins;
 select * from tbl_places;
+select cnpj, uuid_from_bin(uuid) from tbl_places;
 select * from tbl_logins_has_places;
+select * from tbl_avaliacoes where FK_place_id=1 and FK_usuario_id=1;
 -- select uuid_from_bin(uuid_v5(uuid(), ''));

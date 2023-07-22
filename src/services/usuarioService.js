@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import database from "../models/connection.js";
 
-async function verifyUserExist(email){
+async function verifyUserExist(email) {
   const sql = "select * from tbl_usuario where email=?";
   const dataLogin = [email];
 
@@ -9,10 +9,15 @@ async function verifyUserExist(email){
   const [user] = await conn.query(sql, dataLogin);
 
   conn.end();
-  return user
+  return user;
 }
 
-async function createUser(name, email, hashPass = undefined, telefone = undefined) {
+async function createUser(
+  name,
+  email,
+  hashPass = undefined,
+  telefone = undefined
+) {
   const sql =
     "insert into tbl_usuario(nome, email, hashPass, telefone) values(?,?,?,?)";
   const data = [name, email, hashPass, telefone];
@@ -41,7 +46,7 @@ async function deleteUser(id) {
 }
 
 async function loginUser(email, password) {
-  const [user] = await verifyUserExist(email);
+  const user = await verifyUserExist(email);
 
   if (!user) {
     return user;
@@ -55,4 +60,36 @@ async function loginUser(email, password) {
   return false;
 }
 
-export default { createUser, updateUser, deleteUser, loginUser, verifyUserExist };
+async function getFavoritos(userid) {
+  const sql =
+    "select * from tbl_favoritos where FK_usuario_id=?";
+  const data = [userid];
+
+  const conn = await database.connect();
+  const result = await conn.query(sql, data);
+
+  conn.end();
+  return result;
+}
+
+async function getAvaliacoes(userid) {
+  const sql =
+    "select * from tbl_avaliacoes where FK_usuario_id=?";
+  const data = [userid];
+
+  const conn = await database.connect();
+  const result = await conn.query(sql, data);
+
+  conn.end();
+  return result;
+}
+
+export default {
+  createUser,
+  updateUser,
+  deleteUser,
+  loginUser,
+  verifyUserExist,
+  getFavoritos,
+  getAvaliacoes
+};
