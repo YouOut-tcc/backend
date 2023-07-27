@@ -19,7 +19,10 @@ const routes = express();
 
 // criar ou pedir acesso ao um place
 routes.post('/request', places.requestCreation);
+
+// TODO: permitir so tokens novos acessar essa parte
 routes.use('/:uuid', verifyUUID, uuidManagePlaces)
+
 // routes.delete('/remover')
 
 export default routes;

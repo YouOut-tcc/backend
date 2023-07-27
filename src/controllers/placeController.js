@@ -123,10 +123,22 @@ async function criarFavorito(req, res) {
   }
 }
 
+async function getPlaces(req, res) {
+  console.log(req.query)
+  try {
+    let result = await service.getAllPlaces()
+    res.status(200).send(result)
+  } catch (error) {
+    console.log(error)
+    res.status(400).send({ message: error})
+  }
+}
+
 export default {
   requestCreation,
   showInfo,
   avaliarPlace,
   getAvaliacoes,
-  criarFavorito
+  criarFavorito,
+  getPlaces
 };

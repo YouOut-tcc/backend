@@ -3,11 +3,11 @@ use youout;
 -- drop database youout;
 
 create table tbl_usuario(
-	id       integer auto_increment not null,
-    nome     varchar(65) not null,
-    email    varchar(65) not null,
-    hashPass varchar(150) default null,
-    telefone int(15) default null,
+	id           integer auto_increment not null,
+    nome         varchar(65) not null,
+    email        varchar(65) not null,
+    hashPass     varchar(150) default null,
+    telefone     int(15) default null,
     
     criado       datetime default now(),
     deletado_dia date default null,
@@ -47,6 +47,20 @@ create table tbl_places(
     primary key(id)
 );
 
+create table tbl_tags(
+    id  integer auto_increment not null,
+    tag varchar(255) not null,
+    primary key(id)
+);
+
+create table tbl_place_has_tags(
+    id          integer auto_increment not null,
+    tag         varchar(255) not null,
+    FK_place_id integer not null,
+    primary key(id),
+    foreign key(FK_place_id) references tbl_places(id)
+);
+
 create table tbl_place_logins(
 	id       integer auto_increment not null,
     nome     varchar(65) not null,
@@ -74,14 +88,14 @@ create table tbl_logins_has_places(
 );
 
 create table tbl_avaliacoes(
-    id integer auto_increment not null,
+    id            integer auto_increment not null,
     FK_usuario_id integer not null,
-    FK_place_id integer not null,
+    FK_place_id   integer not null,
 
-    pontuacao decimal(3, 1) unsigned  NOT NULL,
+    pontuacao  decimal(3, 1) unsigned  NOT NULL,
     -- comentario_null 
     comentario varchar(255) default '',
-    criado    datetime default now(),
+    criado     datetime default now(),
 
     primary key(id),
     foreign key(FK_place_id) references tbl_places(id),
@@ -91,22 +105,22 @@ create table tbl_avaliacoes(
 -- fazendo essa tabela dessa forma, deixa possivel uma avaliação receber varios comentarios
 -- algo indesejado, tratar isso na logica do backend, mas mander por motivos de compatibilidade
 create table tbl_respotas(
-    id integer auto_increment not null,
+    id              integer auto_increment not null,
     FK_avaliacao_id integer not null,
 
     -- comentario_null 
     comentario varchar(255) default '',
-    criado    datetime default now(),
+    criado     datetime default now(),
 
     primary key(id),
     foreign key(FK_avaliacao_id) references tbl_avaliacoes(id)
 );
 
 create table tbl_favoritos(
-    id integer auto_increment not null,
+    id            integer auto_increment not null,
     FK_usuario_id integer not null,
-    FK_place_id integer not null,
-    criado    datetime default now(),
+    FK_place_id   integer not null,
+    criado        datetime default now(),
     primary key(id),
     foreign key(FK_usuario_id) references tbl_usuario(id),
     foreign key(FK_place_id) references tbl_places(id),

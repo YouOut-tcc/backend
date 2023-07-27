@@ -1,22 +1,79 @@
-BACKEND:
-  USUARIO:
-    FAVORITOS:
-    LOGOUT:
-    RESETPASS:
-    UPDATE:
-    AVALIAÇOES:
-    LISTARPLACES:
-    DELETAR:
-    USARCUPONS:
-  ESTABELECIMANTO:
-    LOGOUT:
-    RESTPASS:
-    UPDATE:
-    AVALIAÇOES:
-    DELETAR:
-    CUPONS:
-    MANTERACESSO:
-    PEGARINFORMAÇOES:
 
-BANCO DE DADOS:
-  manutenção do banco:
+Usuario comum do sistema
+USUARIO:
+  FAVORITOS:
+    favoritar um estabelecimento
+    Visualizar favoritos
+  LOGOUT:
+    Revogar o Oauth da conta
+  REINICIARSENHA:
+  UPDATE:
+    Mudar imfomarções sobre o usuario:
+      nome,
+      telefone,
+  AVALIAÇOES:
+    Avaliar um estabelecimento
+  LISTARPLACES:
+  DELETAR:
+    Requisição para deletar a conta até x dias
+  USARCUPONS:
+  INFORMAÇOES:
+
+Usuario que tem o poder de gerenciar um estabelimentos e permissoes dos seus childs
+LOGINESTABELECIMENTOMAIN:
+  LOGOUT:
+    Revogar o Oauth da conta
+  REINICIARSENHA:
+  UPDATE:
+    Mudar imfomarções sobre o estabelecimento:
+      nome,
+      telefone,
+  DELETAR:
+    Requisição para deletar a conta até x dias
+  INFORMAÇOES:
+    Visualisar todas as imformações do login
+    Visualisar todas as imformações dos childs
+
+LOGINESTABELECIMENTOCHILD:
+
+Fuções onde todos os login de tipo usuario poderam usar
+ESTABELECIMENTO:
+  FAVORITOS:
+    favoritar o estabelecimento
+  AVALIAÇOES:
+    Lista todas as avaliações ja feitas
+  CUPONS:
+    Visualisar todos cupons
+  INFORMAÇOES:
+    Visualisar todas a imformações do estabelecimento
+  CHECKIN CHECKOUT:
+    Fazer essa funçao que ainda não tem um nome definido
+
+Fuções de gerenciamento de um estabelecimento
+ESTABELECIMENTOMANAGER:
+  FAVORITOS:
+    Estabelecimento ver a quantidade de favoritos
+  INFORMAÇOES:
+    Visualisar todas as imformações do estabelecimento
+  UPDATE:
+    Mudar imfomarções sobre o estabelecimento:
+      nome,
+      telefone,
+      celular,
+      descricão,
+      horarios,
+      site,
+      tags
+  AVALIAÇOES:
+    Lista todas as avaliações ja feitas
+  RESPOSTA:
+    Responter uma Avaliação
+    Mostrar avaliações com resposta
+    Mostrar avaliações sem resposta
+  DELETAR:
+    Requisição para deletar o estabelecimento até x dias
+  CUPONS:
+    Adicionar cupons e seus requisitos
+    Deletar e Modificar cupons e seus requisitos
+    Visualisar todos cupons
+
