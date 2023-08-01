@@ -127,6 +127,40 @@ create table tbl_favoritos(
     UNIQUE (FK_usuario_id, FK_place_id)
 );
 
+create table tbl_promocao(
+    id int auto_increment not null,
+    fk_est int not null,
+    dt_criacao datetime default now(),
+    dt_vencimento date default null,
+    deletado boolean default false,
+    descricao varchar(150) not null,
+    primary key(id),
+    foreign key(fk_est) references tbl_places(id)
+);
+
+create table tbl_eventos(
+	id int auto_increment not null,
+    deletado boolean default null,
+    dt_criacao datetime default now(),
+    descricao varchar(150) not null,
+    dt_inicio date not null,
+    dt_fim date not null,
+    fk_est int not  null,
+    primary key(id),
+    foreign key(fk_est) references tbl_places(id)
+);
+
+create table tbl_cupons (
+	id int auto_increment not null,
+    fk_est int not null,
+    dt_criacao datetime default now(),
+    dt_vencimento date default null,
+    deletado boolean default false,
+    descricao varchar(30) not null,
+    primary key(id),
+    foreign key(fk_est) references tbl_places(id)
+);
+
 -- drop table tbl_usuario;
 -- drop database youout;
 -- desc tbl_usuario;
