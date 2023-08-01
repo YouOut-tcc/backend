@@ -108,7 +108,7 @@ async function getAvaliacoes(placeid, userid) {
   const data = [placeid, userid];
 
   const conn = await database.connect();
-  const result = await conn.query(sql, data);
+  const [result] = await conn.query(sql, data);
 
   conn.end();
   return result;
@@ -130,7 +130,7 @@ async function getAllPlaces() {
     "select uuid_from_bin(uuid) uuid, nome, longitude, latitute from tbl_places where deletado=false";
 
   const conn = await database.connect();
-  const result = await conn.query(sql);
+  const [result] = await conn.query(sql);
 
   conn.end();
   return result;

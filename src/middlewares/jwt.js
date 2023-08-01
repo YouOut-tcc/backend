@@ -13,7 +13,7 @@ async function verifyEmailExist(email, type=undefined){
   const dataLogin = [email];
 
   const conn = await database.connect();
-  const [user] = await conn.query(sql, dataLogin);
+  const [[user]] = await conn.query(sql, dataLogin);
 
   conn.end();
   return user

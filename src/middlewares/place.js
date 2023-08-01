@@ -6,7 +6,7 @@ async function verifyUUID(req, res, next){
   let sql = "select * from tbl_places where uuid=uuid_to_bin(?)";
   let data = [req.params.uuid];
 
-  let [result] = await conn.query(sql, data);
+  let [[result]] = await conn.query(sql, data);
   conn.end();
 
   if(result == undefined){

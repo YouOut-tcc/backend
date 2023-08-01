@@ -6,7 +6,7 @@ async function verifyUserExist(email) {
   const dataLogin = [email];
 
   const conn = await database.connect();
-  const [user] = await conn.query(sql, dataLogin);
+  const [[user]] = await conn.query(sql, dataLogin);
 
   conn.end();
   return user;
@@ -66,7 +66,7 @@ async function getFavoritos(userid) {
   const data = [userid];
 
   const conn = await database.connect();
-  const result = await conn.query(sql, data);
+  const [result] = await conn.query(sql, data);
 
   conn.end();
   return result;
@@ -78,7 +78,7 @@ async function getAvaliacoes(userid) {
   const data = [userid];
 
   const conn = await database.connect();
-  const result = await conn.query(sql, data);
+  const [result] = await conn.query(sql, data);
 
   conn.end();
   return result;
