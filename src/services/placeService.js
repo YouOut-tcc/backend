@@ -136,6 +136,36 @@ async function getAllPlaces() {
   return result;
 }
 
+async function criarEventos(descricao, inicio, fim, placeid){
+  const sql = "insert into tbl_eventos(data, dt_inicio, dt_fim, fk_est) values(?,?,?,?)";
+  const data = [descricao, inicio, fim, placeid];
+
+  const conn = await database.connect();
+  await conn.query(sql,data);
+
+  conn.end()
+}
+
+async function criarPromocao(placeid, dt_fim, descricao){
+  const sql = "insert into tbl_promocao(fk_est, dt_vencimento, data) values(?,?,?)";
+  const data = [placeid, dt_fim, descricao];
+
+  const conn = database.connect();
+  await conn.query(sql, data);
+
+  conn.end();
+}
+
+async function criarCupons(placeid, vencimento, descricao){
+  const sql = "insert into tbl_cupons(fk_est, dt_vencimento, data)";
+  const data = [placeid, vencimento, descricao];
+
+  const conn = await database.connect();
+  await conn.query(sql,data);
+
+  conn.end();
+}
+
 export default {
   sendRequest,
   createPlace,
@@ -144,5 +174,8 @@ export default {
   criarAvaliacao,
   getAvaliacoes,
   criarFavorito,
-  getAllPlaces
+  getAllPlaces,
+  criarEventos,
+  criarPromocao,
+  criarCupons
 };

@@ -134,11 +134,41 @@ async function getPlaces(req, res) {
   }
 }
 
+async function criarEventos(req, res){
+  try{
+    await service.criarEventos(descricao, inicio, fim, req.place.id);
+    res.status(200).send({message: "Evento criado"});
+  } catch(error) {
+    res.status(400).send({message: error});
+  }
+}
+
+async function criarPromocao(req, res){
+  try{
+    await service.criarPromocao(req.place.id, dt_fim, descricao);
+    res.status(200).send({message: "Promoção criada"});
+  } catch(error) {
+    res.status(400).send({message: error})
+  }
+}
+
+async function criarCupons(req, res) {
+  try{
+    await service.criarCupons(req.place.id, vencimento, descricao);
+    res.status(200).send({message: "Cupon criado com sucesso"});
+  } catch(error) {
+    res.status(400).send({Message: error});
+  }
+}
+
 export default {
   requestCreation,
   showInfo,
   avaliarPlace,
   getAvaliacoes,
   criarFavorito,
-  getPlaces
+  getPlaces,
+  criarEventos,
+  criarPromocao,
+  criarCupons
 };
