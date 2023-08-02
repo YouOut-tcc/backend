@@ -135,6 +135,7 @@ async function getPlaces(req, res) {
 }
 
 async function criarEventos(req, res){
+  const {descricao, inicio, fim} = req.body;
   try{
     await service.criarEventos(descricao, inicio, fim, req.place.id);
     res.status(200).send({message: "Evento criado"});
@@ -144,6 +145,7 @@ async function criarEventos(req, res){
 }
 
 async function criarPromocao(req, res){
+  const {dt_fim, descricao} = req.body;
   try{
     await service.criarPromocao(req.place.id, dt_fim, descricao);
     res.status(200).send({message: "Promoção criada"});
@@ -153,6 +155,7 @@ async function criarPromocao(req, res){
 }
 
 async function criarCupons(req, res) {
+  const {vencimento, descricao} = req.body;
   try{
     await service.criarCupons(req.place.id, vencimento, descricao);
     res.status(200).send({message: "Cupon criado com sucesso"});

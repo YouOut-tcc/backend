@@ -137,14 +137,14 @@ create table tbl_promocao(
     primary key(id),
     foreign key(fk_est) references tbl_places(id)
 );
-
+-- colocar nome para eventos
 create table tbl_eventos(
 	id int auto_increment not null,
     deletado boolean default null,
     dt_criacao datetime default now(),
     descricao varchar(150) not null,
-    dt_inicio date not null,
-    dt_fim date not null,
+    dt_inicio date default null,
+    dt_fim date default null,
     fk_est int not  null,
     primary key(id),
     foreign key(fk_est) references tbl_places(id)
@@ -168,6 +168,7 @@ select * from tbl_avaliacoes;
 select * from tbl_favoritos;
 -- select * from tbl_place_logins;
 select * from tbl_places;
+delete from tbl_places where id != 13;
 select cnpj, uuid_from_bin(uuid) from tbl_places;
 select * from tbl_logins_has_places;
 select * from tbl_avaliacoes where FK_place_id=1 and FK_usuario_id=1;

@@ -106,16 +106,11 @@ async function usuarioOauth(req, res){
 
 async function usuarioToken(req, res){
 	const infoUser = req.infoUser;
-	const user = await service.verifyUserExist(infoUser.email);
-	if(user){
-		const id = infoUser.id;
-		const email = infoUser.email;
-		const nome = infoUser.userName;
-		const token = generateToken(id, nome, email, 'user');
-		res.status(200).send({message: 'Login efetuado com sucesso', token});
-	} else {
-		res.status(500).send({message: 'Usuario naõ existe'})
-	}
+	const id = infoUser.id;
+	const email = infoUser.email;
+	const nome = infoUser.userName;
+	const token = generateToken(id, nome, email, 'user');
+	res.status(200).send({message: 'Login efetuado com sucesso', token});
 }
 
 async function getFavoritos(req, res) {

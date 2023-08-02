@@ -21,6 +21,5 @@ routes.get('/coisa', places.showInfo)
 routes.post('/avaliar', places.avaliarPlace)
 routes.get('/avaliacoes', places.getAvaliacoes)
 routes.post('/favoritar', places.criarFavorito)
-routes.post('/eventos', places.criarEventos)
 
 export default routes;

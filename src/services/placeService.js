@@ -61,14 +61,17 @@ async function linkLogin(email, cnpj) {
 
   let sql = "select id from tbl_places where cnpj=?";
   let data = [cnpj];
-  [idPlace] = await conn.query(sql, data);
+  [[idPlace]] = await conn.query(sql, data);
 
   sql = "select id from tbl_place_logins where email=?";
   data = [email];
-  [idUser] = await conn.query(sql, data);
+  [[idUser]] = await conn.query(sql, data);
 
   if (idUser == undefined || idPlace == undefined) {
-    res.status(400).send({ message: "id não achado" });
+    throw {
+      message: "id invalido ou faltando",
+      code: 'INVALID_ID'
+    };
   }
 
   sql =
@@ -108,7 +111,7 @@ async function getAvaliacoes(placeid, userid) {
   const data = [placeid, userid];
 
   const conn = await database.connect();
-  const result = await conn.query(sql, data);
+  const [result] = await conn.query(sql, data);
 
   conn.end();
   return result;
@@ -130,14 +133,14 @@ async function getAllPlaces() {
     "select uuid_from_bin(uuid) uuid, nome, longitude, latitute from tbl_places where deletado=false";
 
   const conn = await database.connect();
-  const result = await conn.query(sql);
+  const [result] = await conn.query(sql);
 
   conn.end();
   return result;
 }
 
 async function criarEventos(descricao, inicio, fim, placeid){
-  const sql = "insert into tbl_eventos(data, dt_inicio, dt_fim, fk_est) values(?,?,?,?)";
+  const sql = "insert into tbl_eventos(descricao, dt_inicio, dt_fim, fk_est) values(?,?,?,?)";
   const data = [descricao, inicio, fim, placeid];
 
   const conn = await database.connect();
@@ -147,17 +150,17 @@ async function criarEventos(descricao, inicio, fim, placeid){
 }
 
 async function criarPromocao(placeid, dt_fim, descricao){
-  const sql = "insert into tbl_promocao(fk_est, dt_vencimento, data) values(?,?,?)";
+  const sql = "insert into tbl_promocao(fk_est, dt_vencimento, descricao) values(?,?,?)";
   const data = [placeid, dt_fim, descricao];
 
-  const conn = database.connect();
-  await conn.query(sql, data);
+  const conn = await database.connect();
+  await conn.query(sql, data)
 
-  conn.end();
+  await conn.end();
 }
 
 async function criarCupons(placeid, vencimento, descricao){
-  const sql = "insert into tbl_cupons(fk_est, dt_vencimento, data)";
+  const sql = "insert into tbl_cupons(fk_est, dt_vencimento, descricao)";
   const data = [placeid, vencimento, descricao];
 
   const conn = await database.connect();

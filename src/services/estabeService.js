@@ -9,7 +9,7 @@ async function verifyPlaceExist(email){
   const dataLogin = [email];
 
   const conn = await database.connect();
-  const [user] = await conn.query(sql, dataLogin);
+  const [[user]] = await conn.query(sql, dataLogin);
 
   conn.end();
   return user
@@ -17,8 +17,8 @@ async function verifyPlaceExist(email){
 
 async function createPlace(name, email, hashPass = undefined, telefone = undefined) {
   const sql =
-    "insert into tbl_place_logins(nome, email, hashPass, telefone, tipo_acesso) values(?,?,?,?,?)";
-  const data = [name, email, hashPass, telefone, "undefined"];
+    "insert into tbl_place_logins(nome, email, hashPass, telefone) values(?,?,?,?)";
+  const data = [name, email, hashPass, telefone];
 
   const conn = await database.connect();
   await conn.query(sql, data);
