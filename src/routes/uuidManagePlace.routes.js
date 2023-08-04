@@ -7,6 +7,7 @@ const routes = express();
 routes.get('/coisa', places.showInfo)
 routes.post('/eventos', places.criarEventos)
 routes.post('/promocoes', places.criarPromocao)
+routes.post('/cupons', places.criarCupons)
 
 export default routes;
 

@@ -160,7 +160,7 @@ async function criarPromocao(placeid, dt_fim, descricao){
 }
 
 async function criarCupons(placeid, vencimento, descricao){
-  const sql = "insert into tbl_cupons(fk_est, dt_vencimento, descricao)";
+  const sql = "insert into tbl_cupons(fk_est, dt_vencimento, descricao) values(?,?,?)";
   const data = [placeid, vencimento, descricao];
 
   const conn = await database.connect();
