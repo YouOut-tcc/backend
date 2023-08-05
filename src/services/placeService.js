@@ -149,6 +149,16 @@ async function criarEventos(descricao, inicio, fim, placeid){
   conn.end()
 }
 
+async function getEventos(placeid){
+  const sql = "select descricao, dt_inicio, dt_fim from tbl_eventos where fk_est = ?";
+
+  const conn = await database.connect();
+  const result = await conn.query(sql, placeid);
+
+  conn.end();
+  return result;
+}
+
 async function criarPromocao(placeid, dt_fim, descricao){
   const sql = "insert into tbl_promocao(fk_est, dt_vencimento, descricao) values(?,?,?)";
   const data = [placeid, dt_fim, descricao];
@@ -159,6 +169,16 @@ async function criarPromocao(placeid, dt_fim, descricao){
   await conn.end();
 }
 
+async function getPromocao(placeid){
+  const sql = "select dt_criacao, dt_vencimento, descricao from tbl_promocao where fk_est = ?";
+
+  const conn = await database.connect();
+  const result = conn.query(sql, placeid);
+
+  conn.end();
+  return result;
+}
+
 async function criarCupons(placeid, vencimento, descricao){
   const sql = "insert into tbl_cupons(fk_est, dt_vencimento, descricao) values(?,?,?)";
   const data = [placeid, vencimento, descricao];
@@ -167,6 +187,16 @@ async function criarCupons(placeid, vencimento, descricao){
   await conn.query(sql,data);
 
   conn.end();
+}
+
+async function getCupons(placeid){
+  const sql = "select dt_criacao, dt_vencimento, descricao from tbl_cupons where fk_est = ?";
+
+  const conn = await database.connect();
+  const result = conn.query(sql, placeid);
+
+  conn.end();
+  return result;
 }
 
 export default {
@@ -180,5 +210,8 @@ export default {
   getAllPlaces,
   criarEventos,
   criarPromocao,
-  criarCupons
-};
+  criarCupons,
+  getEventos,
+  getCupons,
+  getPromocao
+}

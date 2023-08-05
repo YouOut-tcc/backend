@@ -144,6 +144,15 @@ async function criarEventos(req, res){
   }
 }
 
+async function getEventos(req, res){
+  try{
+    const [result] = await service.getEventos(req.place.id);
+    res.status(200).send(result);
+  } catch(error){
+    res.status(400).send({Message: error})
+  }
+}
+
 async function criarPromocao(req, res){
   const {dt_fim, descricao} = req.body;
   try{
@@ -151,6 +160,15 @@ async function criarPromocao(req, res){
     res.status(200).send({message: "Promoção criada"});
   } catch(error) {
     res.status(400).send({message: error})
+  }
+}
+
+async function getPromocao(req, res){
+  try{
+    const [result] = await service.getPromocao(req.place.id);
+    res.status(200).send(result);
+  } catch(error) {
+    res.status(400).send({Message: error})
   }
 }
 
@@ -164,6 +182,15 @@ async function criarCupons(req, res) {
   }
 }
 
+async function getCupons(req, res) {
+  try {
+  const [result] = await service.getCupons(req.place.id);
+  res.status(200).send(result)
+  } catch(error) {
+    res.status(400).send({Message: error})
+  }
+}
+
 export default {
   requestCreation,
   showInfo,
@@ -173,5 +200,8 @@ export default {
   getPlaces,
   criarEventos,
   criarPromocao,
-  criarCupons
+  criarCupons,
+  getEventos,
+  getCupons,
+  getPromocao
 };
