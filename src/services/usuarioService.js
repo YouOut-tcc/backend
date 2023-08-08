@@ -84,6 +84,18 @@ async function getAvaliacoes(userid) {
   return result;
 }
 
+async function getInformacoesUser(userid) {
+  const sql =
+    "select * from tbl_usuario where id=?";
+  const data = [userid];
+
+  const conn = await database.connect();
+  const [result] = await conn.query(sql, data);
+
+  conn.end();
+  return result;
+}
+
 export default {
   createUser,
   updateUser,
@@ -91,5 +103,6 @@ export default {
   loginUser,
   verifyUserExist,
   getFavoritos,
-  getAvaliacoes
+  getAvaliacoes,
+  getInformacoesUser
 };
