@@ -21,6 +21,7 @@ routes.post('/token', usuario.usuarioToken)
 
 routes.get('/favoritos', usuario.getFavoritos)
 routes.get('/avaliacoes', usuario.getAvaliacoes)
+routes.get('/informacoes', usuario.getInformacoesUser)
 // routes.use('/logout')
 // routes.use('/reset')
 // routes.use('/update')
