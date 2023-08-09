@@ -2,6 +2,8 @@ create database youout;
 use youout;
 -- drop database youout;
 
+-- torma os email unicos para as duas tabelas
+
 create table tbl_usuario(
 	id           integer auto_increment not null,
     nome         varchar(65) not null,
@@ -104,6 +106,8 @@ create table tbl_avaliacoes(
 
 -- fazendo essa tabela dessa forma, deixa possivel uma avaliação receber varios comentarios
 -- algo indesejado, tratar isso na logica do backend, mas mander por motivos de compatibilidade
+
+-- colocar a informação de qual login criou a respota
 create table tbl_respotas(
     id              integer auto_increment not null,
     FK_avaliacao_id integer not null,
