@@ -133,6 +133,16 @@ async function getAvaliacoes(req, res) {
   }
 }
 
+async function getInformacoesUser(req, res) {
+  try {
+    let result = await service.getInformacoesUser(req.infoUser.id)
+    res.status(200).send(result)
+  } catch (error) {
+    console.log(error)
+    res.status(400).send({ message: error})
+  }
+}
+
 export default {
   usuarioCadastro,
   usuarioDeletar,
@@ -141,5 +151,6 @@ export default {
   usuarioOauth,
   usuarioToken,
 	getFavoritos,
-	getAvaliacoes
+	getAvaliacoes,
+	getInformacoesUser
 };
