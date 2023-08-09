@@ -191,6 +191,15 @@ async function getCupons(req, res) {
   }
 }
 
+async function getInformacoesPlace(req, res) {
+  try {
+  const [result] = await service.getInformacoesPlace(req.place.id);
+  res.status(200).send(result)
+  } catch(error) {
+    res.status(400).send({Message: error})
+  }
+}
+
 export default {
   requestCreation,
   showInfo,
@@ -203,5 +212,6 @@ export default {
   criarCupons,
   getEventos,
   getCupons,
-  getPromocao
+  getPromocao,
+  getInformacoesPlace
 };
