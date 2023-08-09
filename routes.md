@@ -1,6 +1,6 @@
 # Routes
 
-> /usuario
+## /usuario
 
 - /login
 - /cadastro
@@ -10,15 +10,15 @@
 - /avaliacoes
 - /informacoes
 
-> /estabelecimento
+## /estabelecimento
 
 - /
 - /login
 - /cadastro
 - /manage
-- /:uuid
+- [/:uuid](#uuid)
 
->> /:uuid
+### /:uuid
 
 - /informacoes
 - /avaliar
@@ -28,12 +28,12 @@
 - /promocao
 - /cupons
 
->> /manage
+### /manage
 
 - /request
 - /:uuid
 
->>> /:uuid
+#### /:uuid
 
 - /informacoes
 - /eventos
