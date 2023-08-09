@@ -199,6 +199,16 @@ async function getCupons(placeid){
   return result;
 }
 
+async function getInformacoesPlace(placeid){
+  const sql = "select * from tbl_places where id = ?";
+
+  const conn = await database.connect();
+  const result = await conn.query(sql, placeid);
+
+  conn.end();
+  return result;
+}
+
 export default {
   sendRequest,
   createPlace,
@@ -213,5 +223,6 @@ export default {
   criarCupons,
   getEventos,
   getCupons,
-  getPromocao
+  getPromocao,
+  getInformacoesPlace
 }
