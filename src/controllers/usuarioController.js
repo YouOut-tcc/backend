@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import service from '../services/usuarioService.js';
 import { verifyJWT } from '../middlewares/jwt.js';
-import { generateToken } from "../helpers/usuarioFeatures.js";
+import { generateToken } from "../helpers/tokens.js";
 import helpers from '../helpers/helpers.js';
 
 const saltRounds = 10;

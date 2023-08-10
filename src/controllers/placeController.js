@@ -1,4 +1,5 @@
 import service from "../services/placeService.js";
+import { isJSONEntriesNullorEmpty } from "../helpers/validation.js"; 
 
 async function requestCreation(req, res) {
   const {
@@ -17,8 +18,7 @@ async function requestCreation(req, res) {
     longitude,
   } = req.body;
 
-  // fazer um helper disso?
-  let elements = Object.entries({
+  let boolTest = isJSONEntriesNullorEmpty({
     cnpj,
     nome_fantasia,
     nome,
@@ -34,11 +34,8 @@ async function requestCreation(req, res) {
     longitude,
   })
 
-  let boolTeste = elements.findIndex((x) => x[1] == undefined)
-
-  if(boolTeste != -1){
-    res.status(400).send({ message: `${elements[boolTeste][0]} esta faltando`})
-    return
+  if(boolTest){
+    return res.status(400).send({ message: `${boolTest} esta faltando`})
   }
 
   // validar dados
@@ -191,15 +188,6 @@ async function getCupons(req, res) {
   }
 }
 
-async function getInformacoesPlace(req, res) {
-  try {
-  const [result] = await service.getInformacoesPlace(req.place.id);
-  res.status(200).send(result)
-  } catch(error) {
-    res.status(400).send({Message: error})
-  }
-}
-
 export default {
   requestCreation,
   showInfo,
@@ -213,5 +201,4 @@ export default {
   getEventos,
   getCupons,
   getPromocao,
-  getInformacoesPlace
 };

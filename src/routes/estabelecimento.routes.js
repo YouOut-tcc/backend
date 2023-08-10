@@ -5,6 +5,7 @@ import manage from './managePlace.routes.js';
 import uuidPlaces from './uuidPlaces.routes.js';
 import { verifyJWT } from '../middlewares/jwt.js';
 import { verifyUUID } from '../middlewares/place.js';
+import { verifyifPlace } from '../middlewares/loginType.js';
 
 const routes = express();
 
@@ -14,21 +15,17 @@ routes.post('/cadastro', estabelecimento.placeCadastro);
 
 routes.use(verifyJWT);
 
-routes.get('/', place.getPlaces)
+routes.get('/places', place.getPlaces)
+routes.use('places/:uuid', verifyUUID, uuidPlaces);
+
+routes.use(verifyifPlace)
+
+routes.delete('/delete', estabelecimento.placeDeletar)
 // routes.post('/token', usuario.usuarioToken)
-
-// /estabelecimento/manage - get lista todos os places linkados; 
-// /estabelecimento/manage/request - criar um place e passar para os adm para permitir
-// /estabelecimento/manage/uuid/ - rota para gerenciar um restaurante individial
-// /estabelecimento/manage/uuid/maiscoisas
-
-
 // routes.use('/logout')
 // routes.use('/reset')
 // routes.use('/update')
 
-// qualquer conta com um token valido pode entrar aqui, mudar isso
 routes.use('/manage', manage);
-routes.use('/:uuid', verifyUUID, uuidPlaces);
 
 export default routes;

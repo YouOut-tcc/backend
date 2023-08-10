@@ -75,7 +75,7 @@ async function linkLogin(email, cnpj) {
   }
 
   sql =
-    "insert into tbl_logins_has_places(FK_place_id, FK_login_id) values(?,?)";
+    "insert into tbl_logins_has_places(FK_place_id, FK_login_id,permissions) values(?,?,B'1111111111111111')";
   data = [idPlace.id, idUser.id];
   await conn.query(sql, data);
 

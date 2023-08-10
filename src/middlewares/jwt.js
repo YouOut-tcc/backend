@@ -6,9 +6,9 @@ async function verifyEmailExist(email, type=undefined){
 	let sql;
 
 	if(type != 'user'){
-		sql = "select * from tbl_place_logins where email=?";
+		sql = "select email, parent from tbl_place_logins where email=? and deletado = 0";
 	} else {
-		sql = "select * from tbl_usuario where email=?";
+		sql = "select email from tbl_usuario where email=? and deletado = 0";
 	}
   const dataLogin = [email];
 
@@ -33,8 +33,13 @@ function verifyJWT(req, res, next){
 			return res.status(401).send({ message: 'Usuário não existe' });
 		}
 
-		req.infoUser = decoded.infoUser;
-
+		if(decoded.infoUser.userType == 'place'){
+			req.infoUser = decoded.infoUser;
+			req.infoUser.parent = user.parent
+		} else {
+			req.infoUser = decoded.infoUser;
+		}
+		
 		return next()
 	})
 
