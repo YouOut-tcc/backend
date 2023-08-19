@@ -62,7 +62,7 @@ async function loginUser(email, password) {
 
 async function getFavoritos(userid) {
   const sql =
-    "select * from tbl_favoritos where FK_usuario_id=?";
+    "select uuid_from_bin(b.uuid) uuid, a.criado from tbl_favoritos a join tbl_places b on a.FK_place_id = b.id where FK_usuario_id = ?;";
   const data = [userid];
 
   const conn = await database.connect();

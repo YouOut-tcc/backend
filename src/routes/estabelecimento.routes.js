@@ -16,7 +16,7 @@ routes.post('/cadastro', estabelecimento.placeCadastro);
 routes.use(verifyJWT);
 
 routes.get('/places', place.getPlaces)
-routes.use('places/:uuid', verifyUUID, uuidPlaces);
+routes.use('/places/:uuid', verifyUUID, uuidPlaces);
 
 routes.use(verifyifPlace)
 

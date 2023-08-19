@@ -1,7 +1,7 @@
 
 Usuario comum do sistema
 USUARIO:
-  FAVORITOS:
+  FAVORITOS: #FEITO
     favoritar um estabelecimento
     Visualizar favoritos
   LOGOUT:
@@ -11,13 +11,13 @@ USUARIO:
     Mudar imfomarções sobre o usuario:
       nome,
       telefone,
-  AVALIAÇOES:
+  AVALIAÇOES: #FEITO
     Avaliar um estabelecimento
-  LISTARPLACES:
-  DELETAR:
+  LISTARPLACES: #FEITO
+  DELETAR: #FEITO
     Requisição para deletar a conta até x dias
   USARCUPONS:
-  INFORMAÇOES:
+  INFORMAÇOES: #FEITO
 
 Usuario que tem o poder de gerenciar um estabelimentos e permissoes dos seus childs
 LOGINESTABELECIMENTOMAIN:
@@ -30,7 +30,7 @@ LOGINESTABELECIMENTOMAIN:
       telefone,
   DELETAR:
     Requisição para deletar a conta até x dias
-  INFORMAÇOES:
+  INFORMAÇOES: FEITO
     Visualisar todas as imformações do login
     Visualisar todas as imformações dos childs
 
@@ -38,13 +38,13 @@ LOGINESTABELECIMENTOCHILD:
 
 Fuções onde todos os login de tipo usuario poderam usar
 ESTABELECIMENTO:
-  FAVORITOS:
+  FAVORITOS: #FEITO
     favoritar o estabelecimento
-  AVALIAÇOES:
+  AVALIAÇOES: #FEITO
     Lista todas as avaliações ja feitas
-  CUPONS:
+  CUPONS: #FEITO
     Visualisar todos cupons
-  INFORMAÇOES:
+  INFORMAÇOES: #FEITO
     Visualisar todas a imformações do estabelecimento
   CHECKIN CHECKOUT:
     Fazer essa funçao que ainda não tem um nome definido
