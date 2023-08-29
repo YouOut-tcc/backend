@@ -120,6 +120,16 @@ async function criarFavorito(req, res) {
   }
 }
 
+async function favCount(req, res) {
+  try {
+    await service.favCount(req.place.id)
+    res.status(200).send({ message: "Concluido"})
+  } catch (error) {
+    console.log(error)
+    res.status(400).send({ message: error})
+  }
+}
+
 async function getPlaces(req, res) {
   console.log(req.query)
   try {
@@ -194,6 +204,7 @@ export default {
   avaliarPlace,
   getAvaliacoes,
   criarFavorito,
+  favCount,
   getPlaces,
   criarEventos,
   criarPromocao,
