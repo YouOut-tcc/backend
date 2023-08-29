@@ -128,6 +128,17 @@ async function criarFavorito(placeid, userid) {
   conn.end();
 }
 
+async function favCount(placeid) {
+  const sql =
+    "select count(*) as qntdFavoritos from tbl_favoritos where FK_place_id = ?";
+  const data = [placeid];
+
+  const conn = await database.connect();
+  await conn.query(sql, data);
+
+  conn.end();
+}
+
 async function getAllPlaces() {
   const sql =
     "select uuid_from_bin(uuid) uuid, nome, longitude, latitute from tbl_places where deletado=false";
@@ -207,6 +218,7 @@ export default {
   criarAvaliacao,
   getAvaliacoes,
   criarFavorito,
+  favCount,
   getAllPlaces,
   criarEventos,
   criarPromocao,
