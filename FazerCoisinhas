@@ -7,7 +7,7 @@ USUARIO:
   LOGOUT:
     Revogar o Oauth da conta
   REINICIARSENHA:
-  UPDATE:
+  UPDATE: #FEITO
     Mudar imfomarções sobre o usuario:
       nome,
       telefone,
@@ -51,11 +51,11 @@ ESTABELECIMENTO:
 
 Fuções de gerenciamento de um estabelecimento
 ESTABELECIMENTOMANAGER:
-  FAVORITOS:
+  FAVORITOS:  #Nop #Wesley
     Estabelecimento ver a quantidade de favoritos
-  INFORMAÇOES:
+  INFORMAÇOES:  #Nop #Wesley
     Visualisar todas as imformações do estabelecimento
-  UPDATE:
+  UPDATE:  #Nop #Wesley
     Mudar imfomarções sobre o estabelecimento:
       nome,
       telefone,
@@ -64,16 +64,16 @@ ESTABELECIMENTOMANAGER:
       horarios,
       site,
       tags
-  AVALIAÇOES:
+  AVALIAÇOES: #FEITO
     Lista todas as avaliações ja feitas
-  RESPOSTA:
+  RESPOSTA:  #Nop #Wesley
     Responter uma Avaliação
     Mostrar avaliações com resposta
     Mostrar avaliações sem resposta
-  DELETAR:
+  DELETAR:  #Nop #Wesley
     Requisição para deletar o estabelecimento até x dias
   CUPONS:
-    Adicionar cupons e seus requisitos
+    Adicionar cupons e seus requisitos #FEITO
     Deletar e Modificar cupons e seus requisitos
-    Visualisar todos cupons
+    Visualisar todos cupons #FEITO
 
