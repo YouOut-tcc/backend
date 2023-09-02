@@ -210,6 +210,16 @@ async function getCupons(placeid){
   return result;
 }
 
+async function setResposta(avaliacaoid, placeid, coment) {
+const sql = "Insert into tbl_respostas (fk_avaliacao_id, fk_place_logins_id, comentario) values(? ? ?)";
+const data =[avaliacaoid, placeid, coment);
+  
+const conn = await database.connect();
+await conn.query(sql, data);
+  
+conn end();
+}
+
 export default {
   sendRequest,
   createPlace,
