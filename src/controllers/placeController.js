@@ -198,6 +198,17 @@ async function getCupons(req, res) {
   }
 }
 
+async function setResposta(req, res) {
+try {
+await service.setResposta(req.avaliacaoid.id, req.placeid.id, req.coment);
+res.status(200).send({ message: "Concluido"});
+} catch (error) {
+console.log(error);
+res.status(400).send({ message: error});
+  }
+}
+
+
 export default {
   requestCreation,
   showInfo,
