@@ -40,10 +40,10 @@ async function usuarioDeletar(req, res){
 }
 
 async function usuarioUpdate(req, res){
-  const { id, name, email, password, telefone } = req.body;
+  const { name, email, password, telefone } = req.body;
 
   try {
-    await service.updateUser(id, name, email, password, telefone);
+    await service.updateUser(req.infoUser.id, name, email, password, telefone);
     res.status(200).send({ message: "Mudou com sucesso, nice" });
   } catch (error) {
     res.status(500).send({ message: error });

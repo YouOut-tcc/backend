@@ -25,9 +25,11 @@ function verifyJWT(req, res, next){
 	const token = helpers.valifyTokenFormat(req.headers);
 
 	jwt.verify(token, secret, async (err, decoded) => {
+		// usar try catch
 		if(err){
 			return res.status(401).send({ message: 'Usuário não autenticado' })
 		}
+		// sera que é nesscesario mantar o email do usuario, mudar isso para usar o id, talvez?
 		const user = await verifyEmailExist(decoded.infoUser.email, decoded.infoUser.userType)
 		if (!user) {
 			return res.status(401).send({ message: 'Usuário não existe' });

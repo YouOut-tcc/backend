@@ -178,8 +178,7 @@ create table tbl_cupons (
 select * from tbl_avaliacoes; 
 select * from tbl_favoritos;
 select * from tbl_place_logins;
-select * from tbl_places;
-delete from tbl_places where id != 13;
+select uuid_from_bin(uuid) from tbl_places;
 select cnpj, uuid_from_bin(uuid) from tbl_places;
 select * from tbl_logins_has_places;
 select * from tbl_avaliacoes where FK_place_id=1 and FK_usuario_id=1;

@@ -14,6 +14,9 @@ routes.get('/informacoes', places.showInfo)
 routes.post('/eventos', places.criarEventos)
 routes.post('/promocoes', places.criarPromocao)
 routes.post('/cupons', places.criarCupons)
+routes.put('/eventos', places.updateEventos);
+routes.put('/cupons', places.updateCupons);
+routes.put('/promocoes', places.updatePromocao);
 
 export default routes;
 

@@ -150,6 +150,16 @@ async function getEventos(req, res){
   }
 }
 
+async function updateEventos(req, res){
+  const {descricao, dt_inicio, dt_fim, eventoId} = req.body;
+  try{
+    await service.updateEventos(descricao, dt_inicio, dt_fim, eventoId);
+    res.status(200).send({Message: "Dados atualizados"});
+  } catch(error){
+    res.status(500).send({Message: error});
+  }
+}
+
 async function criarPromocao(req, res){
   const {dt_fim, descricao} = req.body;
   try{
@@ -166,6 +176,16 @@ async function getPromocao(req, res){
     res.status(200).send(result);
   } catch(error) {
     res.status(400).send({Message: error})
+  }
+}
+
+async function updatePromocao(req, res){
+  const {dt_fim, descricao, promocaoId} = req.body;
+  try{
+    await service.updatePromocao(dt_fim, descricao, promocaoId);
+    res.status(200).send({Message: "Dados atualizados"});
+  } catch(error){
+    res.status(500).send({Message: error})
   }
 }
 
@@ -188,6 +208,16 @@ async function getCupons(req, res) {
   }
 }
 
+async function updateCupons(req, res){
+  const {dt_vencimento, descricao, cupomId} = req.body;
+  try{
+    await service.updateCupons(dt_vencimento, descricao, cupomId);
+    res.status(200).send({Message: "Dados atualizados"})
+  } catch(error){
+    res.status(500).send({Message: error});
+  }
+}
+
 export default {
   requestCreation,
   showInfo,
@@ -201,4 +231,7 @@ export default {
   getEventos,
   getCupons,
   getPromocao,
+  updatePromocao,
+  updateEventos,
+  updateCupons,
 };
