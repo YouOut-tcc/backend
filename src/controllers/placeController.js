@@ -120,6 +120,16 @@ async function criarFavorito(req, res) {
   }
 }
 
+async function favCount(req, res) {
+  try {
+    await service.favCount(req.place.id)
+    res.status(200).send({ message: "Concluido"})
+  } catch (error) {
+    console.log(error)
+    res.status(400).send({ message: error})
+  }
+}
+
 async function getPlaces(req, res) {
   console.log(req.query)
   try {
@@ -218,12 +228,24 @@ async function updateCupons(req, res){
   }
 }
 
+async function setResposta(req, res) {
+try {
+await service.setResposta(req.avaliacaoid.id, req.placeid.id, req.coment);
+res.status(200).send({ message: "Concluido"});
+} catch (error) {
+console.log(error);
+res.status(400).send({ message: error});
+  }
+}
+
+
 export default {
   requestCreation,
   showInfo,
   avaliarPlace,
   getAvaliacoes,
   criarFavorito,
+  favCount,
   getPlaces,
   criarEventos,
   criarPromocao,
