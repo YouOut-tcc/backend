@@ -132,8 +132,14 @@ async function favCount(req, res) {
 
 async function getPlaces(req, res) {
   console.log(req.query)
+  let page = parseInt(req.query.page) || 0;
+  const limit = 20;
+
+  page = page * limit;
+
   try {
-    let result = await service.getAllPlaces()
+    let result = await service.getPlaces(limit, page)
+    console.log(result)
     res.status(200).send(result)
   } catch (error) {
     console.log(error)

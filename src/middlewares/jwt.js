@@ -12,14 +12,15 @@ async function verifyEmailExist(email, type=undefined){
 	}
   const dataLogin = [email];
 
-  const conn = await database.connect();
+  const conn = database.pool;
   const [[user]] = await conn.query(sql, dataLogin);
 
-  conn.end();
+  // conn.end();
   return user
 }
 
 function verifyJWT(req, res, next){
+	
 	const secret = "dsdasdas"
 	
 	const token = helpers.valifyTokenFormat(req.headers);

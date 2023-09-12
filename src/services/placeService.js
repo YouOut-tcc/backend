@@ -84,6 +84,7 @@ async function linkLogin(email, cnpj) {
 }
 
 async function getInfo(uuid) {
+  // cep, se ele é favoritado, lista de comentarios, eventos, cartapio, promoçoes, cunpons
   const sql = "select * from tbl_places where uuid=uuid_to_bin(?)";
   const data = [uuid];
 
@@ -110,10 +111,10 @@ async function getAvaliacoes(placeid, userid) {
     "select * from tbl_avaliacoes where FK_place_id=? and FK_usuario_id=?";
   const data = [placeid, userid];
 
-  const conn = await database.connect();
+  const conn = database.pool;
   const [result] = await conn.query(sql, data);
 
-  conn.end();
+  // conn.end();
   return result;
 }
 
@@ -139,12 +140,13 @@ async function favCount(placeid) {
   conn.end();
 }
 
-async function getAllPlaces() {
+async function getPlaces(limit, offset) {
+  // fazer com que esse select pegue se o estabelecimento é favoritado pelo usuario: talvez fazer isso
   const sql =
-    "select uuid_from_bin(uuid) uuid, nome, longitude, latitute from tbl_places where deletado=false";
+    "select uuid_from_bin(uuid) uuid, nome, longitude, latitute from tbl_places where deletado=false limit ? offset ?";
 
   const conn = await database.connect();
-  const [result] = await conn.query(sql);
+  const [result] = await conn.query(sql, [limit, offset]);
 
   conn.end();
   return result;
@@ -242,11 +244,12 @@ async function updateCupons(dt_vencimento, descricao, cupomId){
 
 async function setResposta(avaliacaoid, placeid, coment) {
 const sql = "Insert into tbl_respostas (fk_avaliacao_id, fk_place_logins_id, comentario) values(? ? ?)";
-const data =[avaliacaoid, placeid, coment];
+const data = [avaliacaoid, placeid, coment];
   
 const conn = await database.connect();
 await conn.query(sql, data);
   
+conn.end();
 conn.end();
 }
 
@@ -259,7 +262,7 @@ export default {
   getAvaliacoes,
   criarFavorito,
   favCount,
-  getAllPlaces,
+  getPlaces,
   criarEventos,
   criarPromocao,
   criarCupons,

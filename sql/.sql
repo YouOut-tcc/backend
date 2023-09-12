@@ -20,6 +20,9 @@ create table tbl_usuario(
 
 -- TODO: tags para pesquisa
 --       adicionar uma coluna de nota
+--       adcionar coluna de descrição
+--       adcionar uma coluna para banner
+--       remover as colunas de endereço, so deixar cep
 create table tbl_places(
 	id            integer auto_increment not null,
     uuid          binary(16) not null unique,
