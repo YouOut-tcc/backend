@@ -2,8 +2,6 @@ create database youout;
 use youout;
 -- drop database youout;
 
--- torma os email unicos para as duas tabelas
-
 create table tbl_usuario(
 	id           integer auto_increment not null,
     nome         varchar(65) not null,
@@ -18,36 +16,30 @@ create table tbl_usuario(
     primary key(id)
 );
 
--- TODO:
---       adicionar uma coluna de nota
---       adcionar coluna de descrição
---       adcionar uma coluna para banner
---       remover as colunas de endereço, so deixar cep
 create table tbl_places(
-	id            integer auto_increment not null,
-    uuid          binary(16) not null unique,
+	id               integer auto_increment not null,
+    uuid             binary(16) not null unique,
 
-    cnpj          int(18) unique not null,
-    nome_fantasia varchar(65) not null,
-    nome          varchar(255) not null,
-    telefone      int(15) default null,
-    celular       int(15) default null,
+    cnpj             char(18) unique not null,
+    nome_empresarial varchar(255) not null,
+    nome             varchar(255) not null,
+    telefone         char(20) default null,
+    celular          char(20) default null,
+
+    icon_url         varchar(255) default null,
+    descricao        text default null,
+    nota             decimal(3, 1) unsigned  not null,
 
     -- Endereço:
-    numero varchar(32) default null,
-    bairro varchar(65) not null,
-    cidade varchar(65) not null,
-    cep    int(15) not null,
-    uf     varchar(2) not null,
-    rua    varchar(65) not null,
+    numero           varchar(32) default null,
+    cep              char(12) not null,
 
     -- localização:
-    longitude int(22) not null,
-    latitute  int(22) not null,
+    coordenadas      geometry not null,
 
-    criado       datetime default now(),
-    deletado_dia date default null,
-    deletado     boolean not null default false,
+    criado           datetime default now(),
+    deletado_dia     date default null,
+    deletado         boolean not null default false,
     
     primary key(id)
 );
@@ -174,22 +166,3 @@ create table tbl_cupons (
     primary key(id),
     foreign key(fk_est) references tbl_places(id)
 );
-
--- drop table tbl_usuario;
--- drop database youout;
--- desc tbl_usuario;
-select * from tbl_avaliacoes; 
-select * from tbl_favoritos;
-select * from tbl_place_logins;
-select uuid_from_bin(uuid) from tbl_places;
-select cnpj, uuid_from_bin(uuid) from tbl_places;
-select * from tbl_logins_has_places;
-select * from tbl_avaliacoes where FK_place_id=1 and FK_usuario_id=1;
--- select uuid_from_bin(uuid_v5(uuid(), ''));
-
-select a.email, b.permissions, b.FK_place_id from tbl_place_logins a 
-	join tbl_logins_has_places b on a.id = b.FK_login_id where email='gerente.cartola@gmail.com' and deletado = 0;
-    
-select a.email, a.parent, bin(b.permissions) permissions from tbl_place_logins a join tbl_logins_has_places b on a.id = b.FK_login_id where email='carlos@gmail.com' and deletado = 0;
-
-select bin(b.permissions) permissions from tbl_place_logins a join tbl_logins_has_places b on a.id = b.FK_login_id where a.id=3 and b.FK_place_id=2 and deletado = 0;

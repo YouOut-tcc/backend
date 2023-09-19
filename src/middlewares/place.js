@@ -4,7 +4,7 @@ async function verifyUUID(req, res, next){
   // se o uuid estiver anormal o server morre
   const conn = database.pool;
 
-  let sql = "select * from tbl_places where uuid=uuid_to_bin(?)";
+  let sql = "select id, nome, telefone, celular, numero, cep, longitude, latitute, criado from tbl_places where uuid=uuid_to_bin(?) and deletado = 0";
   let data = [req.params.uuid];
   // colocar um regex para verificar se tem um padrao de uuid
 

@@ -4,32 +4,26 @@ import { isJSONEntriesNullorEmpty } from "../helpers/validation.js";
 async function requestCreation(req, res) {
   const {
     cnpj,
-    nome_fantasia,
+    nome_empresarial,
     nome,
     telefone,
     celular,
     numero,
-    bairro,
-    cidade,
     cep,
-    uf,
-    rua,
+    descricao,
     latitute,
     longitude,
   } = req.body;
 
   let boolTest = isJSONEntriesNullorEmpty({
     cnpj,
-    nome_fantasia,
+    nome_empresarial,
     nome,
     telefone,
     celular,
     numero,
-    bairro,
-    cidade,
     cep,
-    uf,
-    rua,
+    descricao,
     latitute,
     longitude,
   })
@@ -46,24 +40,21 @@ async function requestCreation(req, res) {
   try {
     await service.createPlace(
       cnpj,
-      nome_fantasia,
+      nome_empresarial,
       nome,
       telefone,
       celular,
       numero,
-      bairro,
-      cidade,
       cep,
-      uf,
-      rua,
+      descricao,
       latitute,
       longitude,
     )
     await service.linkLogin(req.infoUser.email, cnpj)
-    res.status(200).send({ message: "Salvo"})
+    return res.status(200).send({ message: "Salvo"})
   } catch (error) {
     console.log(error)
-    res.status(400).send({ message: error})
+    return res.status(400).send({ message: error})
   }
 
   // enviar request para um email ou sistema
@@ -133,17 +124,28 @@ async function favCount(req, res) {
 async function getPlaces(req, res) {
   console.log(req.query)
   let page = parseInt(req.query.page) || 0;
+  let location = [req.query.latitute|| 0, req.query.longitude|| 0]
   const limit = 20;
 
   page = page * limit;
 
   try {
-    let result = await service.getPlaces(limit, page)
+    let result = await service.getPlaces(limit, page, location)
     console.log(result)
+    result.forEach((element, index) => {
+      let parser = JSON.parse(element.coordenadas);
+      result[index].coordenadas = parser.coordinates;
+    })
     res.status(200).send(result)
   } catch (error) {
-    console.log(error)
-    res.status(400).send({ message: error})
+    console.log(error.constructor.name)
+    if (error instanceof SyntaxError){
+      
+      console.log(error.message)
+      return res.status(500).send({ message: "error com o json parser, talvez"})
+
+    }
+    return res.status(400).send({ message: error})
   }
 }
 

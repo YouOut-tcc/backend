@@ -16,33 +16,29 @@ async function sendRequest(email) {
 
 async function createPlace(
   cnpj,
-  nome_fantasia,
+  nome_empresarial,
   nome,
   telefone,
   celular,
   numero,
-  bairro,
-  cidade,
   cep,
-  uf,
-  rua,
+  descricao,
   latitute,
   longitude
 ) {
   const sql =
-    "insert into tbl_places(uuid,cnpj,nome_fantasia,nome,telefone,celular,numero,bairro,cidade,cep,uf,rua,latitute,longitude) values(uuid_v5(uuid(), ''),?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    `insert into tbl_places
+      (uuid,cnpj,nome_empresarial,nome,telefone,celular,numero,cep,nota,descricao,coordenadas) 
+      values(uuid_v5(uuid(), ''),?,?,?,?,?,?,?,0,?,point(?,?))`;
   const data = [
     cnpj,
-    nome_fantasia,
+    nome_empresarial,
     nome,
     telefone,
     celular,
     numero,
-    bairro,
-    cidade,
     cep,
-    uf,
-    rua,
+    descricao,
     latitute,
     longitude,
   ];
@@ -70,7 +66,7 @@ async function linkLogin(email, cnpj) {
   if (idUser == undefined || idPlace == undefined) {
     throw {
       message: "id invalido ou faltando",
-      code: 'INVALID_ID'
+      code: "INVALID_ID",
     };
   }
 
@@ -144,30 +140,38 @@ async function favCount(placeid) {
   conn.end();
 }
 
-async function getPlaces(limit, offset) {
+async function getPlaces(limit, offset, location) {
   // fazer com que esse select pegue se o estabelecimento é favoritado pelo usuario: talvez fazer isso
   const sql =
-    "select uuid_from_bin(uuid) uuid, nome, longitude, latitute from tbl_places where deletado=false limit ? offset ?";
+    `select uuid_from_bin(uuid) uuid, nome, ST_AsGeoJSON(coordenadas) coordenadas , 
+      ST_Distance_Sphere(
+        coordenadas,
+        point(?, ?)
+      ) distancia, nota
+      from tbl_places 
+        where deletado=false order by distancia limit ? offset ?`;
 
   const conn = await database.connect();
-  const [result] = await conn.query(sql, [limit, offset]);
+  const [result] = await conn.query(sql, [location[0], location[1], limit, offset ]);
 
   conn.end();
   return result;
 }
 
-async function criarEventos(descricao, inicio, fim, placeid){
-  const sql = "insert into tbl_eventos(descricao, dt_inicio, dt_fim, fk_est) values(?,?,?,?)";
+async function criarEventos(descricao, inicio, fim, placeid) {
+  const sql =
+    "insert into tbl_eventos(descricao, dt_inicio, dt_fim, fk_est) values(?,?,?,?)";
   const data = [descricao, inicio, fim, placeid];
 
   const conn = await database.connect();
-  await conn.query(sql,data);
+  await conn.query(sql, data);
 
-  conn.end()
+  conn.end();
 }
 
-async function getEventos(placeid){
-  const sql = "select descricao, dt_inicio, dt_fim from tbl_eventos where fk_est = ?";
+async function getEventos(placeid) {
+  const sql =
+    "select descricao, dt_inicio, dt_fim from tbl_eventos where fk_est = ?";
 
   const conn = await database.connect();
   const result = await conn.query(sql, placeid);
@@ -176,8 +180,9 @@ async function getEventos(placeid){
   return result;
 }
 
-async function updateEventos(descricao, dt_inicio, dt_fim, eventoId){
-  const sql = "update tbl_eventos set descricao = ?, dt_inicio = ?, dt_fim = ? where id = ?";
+async function updateEventos(descricao, dt_inicio, dt_fim, eventoId) {
+  const sql =
+    "update tbl_eventos set descricao = ?, dt_inicio = ?, dt_fim = ? where id = ?";
   const data = [descricao, dt_inicio, dt_fim, eventoId];
 
   const conn = await database.connect();
@@ -186,18 +191,20 @@ async function updateEventos(descricao, dt_inicio, dt_fim, eventoId){
   conn.end();
 }
 
-async function criarPromocao(placeid, dt_fim, descricao){
-  const sql = "insert into tbl_promocao(fk_est, dt_vencimento, descricao) values(?,?,?)";
+async function criarPromocao(placeid, dt_fim, descricao) {
+  const sql =
+    "insert into tbl_promocao(fk_est, dt_vencimento, descricao) values(?,?,?)";
   const data = [placeid, dt_fim, descricao];
 
   const conn = await database.connect();
-  await conn.query(sql, data)
+  await conn.query(sql, data);
 
   await conn.end();
 }
 
-async function getPromocao(placeid){
-  const sql = "select dt_criacao, dt_vencimento, descricao from tbl_promocao where fk_est = ?";
+async function getPromocao(placeid) {
+  const sql =
+    "select dt_criacao, dt_vencimento, descricao from tbl_promocao where fk_est = ?";
 
   const conn = await database.connect();
   const result = conn.query(sql, placeid);
@@ -206,8 +213,9 @@ async function getPromocao(placeid){
   return result;
 }
 
-async function updatePromocao(dt_fim, descricao, promocaoId){
-  const sql = "update tbl_promocao set dt_vencimento = ?, descricao = ? where id = ?";
+async function updatePromocao(dt_fim, descricao, promocaoId) {
+  const sql =
+    "update tbl_promocao set dt_vencimento = ?, descricao = ? where id = ?";
   const data = [dt_fim, descricao, promocaoId];
 
   const conn = await database.connect();
@@ -216,18 +224,20 @@ async function updatePromocao(dt_fim, descricao, promocaoId){
   conn.end();
 }
 
-async function criarCupons(placeid, vencimento, descricao){
-  const sql = "insert into tbl_cupons(fk_est, dt_vencimento, descricao) values(?,?,?)";
+async function criarCupons(placeid, vencimento, descricao) {
+  const sql =
+    "insert into tbl_cupons(fk_est, dt_vencimento, descricao) values(?,?,?)";
   const data = [placeid, vencimento, descricao];
 
   const conn = await database.connect();
-  await conn.query(sql,data);
+  await conn.query(sql, data);
 
   conn.end();
 }
 
-async function getCupons(placeid){
-  const sql = "select dt_criacao, dt_vencimento, descricao from tbl_cupons where fk_est = ?";
+async function getCupons(placeid) {
+  const sql =
+    "select dt_criacao, dt_vencimento, descricao from tbl_cupons where fk_est = ?";
 
   const conn = await database.connect();
   const result = conn.query(sql, placeid);
@@ -236,25 +246,27 @@ async function getCupons(placeid){
   return result;
 }
 
-async function updateCupons(dt_vencimento, descricao, cupomId){
-  const sql = "update tbl_cupons set dt_vencimento = ?, descricao = ? where id = ?";
+async function updateCupons(dt_vencimento, descricao, cupomId) {
+  const sql =
+    "update tbl_cupons set dt_vencimento = ?, descricao = ? where id = ?";
   const data = [dt_vencimento, descricao, cupomId];
 
   const conn = await database.connect();
-  conn.query(sql,data);
+  conn.query(sql, data);
 
   conn.end();
 }
 
 async function setResposta(avaliacaoid, placeid, coment) {
-const sql = "Insert into tbl_respostas (fk_avaliacao_id, fk_place_logins_id, comentario) values(? ? ?)";
-const data = [avaliacaoid, placeid, coment];
-  
-const conn = await database.connect();
-await conn.query(sql, data);
-  
-conn.end();
-conn.end();
+  const sql =
+    "Insert into tbl_respostas (fk_avaliacao_id, fk_place_logins_id, comentario) values(? ? ?)";
+  const data = [avaliacaoid, placeid, coment];
+
+  const conn = await database.connect();
+  await conn.query(sql, data);
+
+  conn.end();
+  conn.end();
 }
 
 export default {
@@ -276,4 +288,4 @@ export default {
   updatePromocao,
   updateEventos,
   updateCupons,
-}
+};
