@@ -60,9 +60,20 @@ async function loginUser(email, password) {
   return false;
 }
 
+// {
+//   "uuid": "8f243d99-022b-521b-a2e5-b4d061a299bb",
+//   "nome": "padaria do seu ze",
+//   "coordenadas": [
+//     -23.62389805386137,
+//     -46.81348113399987
+//   ],
+//   "distancia": 5689748.946719416,
+//   "nota": "0.0"
+// },
+
 async function getFavoritos(userid) {
   const sql =
-    "select uuid_from_bin(b.uuid) uuid, a.criado from tbl_favoritos a join tbl_places b on a.FK_place_id = b.id where FK_usuario_id = ?;";
+    "select uuid_from_bin(b.uuid) uuid,b.nome nome, b.coordenadas coordenadas, b.nota nota, a.criado from tbl_favoritos a join tbl_places b on a.FK_place_id = b.id where FK_usuario_id = ?;";
   const data = [userid];
 
   const conn = await database.connect();

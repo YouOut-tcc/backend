@@ -37,8 +37,23 @@ select bin(b.permissions) permissions from tbl_place_logins a join tbl_logins_ha
 -- SELECT ST_AsText(coordenadas) coordenadas FROM localizacao;
 
 -- -------------------------------------------------
+select uuid_from_bin(uuid) from tbl_places;
+select a.pontuacao, a.comentario, a.criado, b.nome from tbl_avaliacoes a
+join tbl_usuario b on b.id = a.FK_usuario_id 
+	where FK_place_id=1;
 
+select * from tbl_places where uuid=uuid_to_bin('8f243d99-022b-521b-a2e5-b4d061a299bb');
+
+select * from tbl_avaliacoes;
+select uuid_from_bin(uuid) from tbl_places;
+select * from tbl_usuario;
+select * from tbl_favoritos where FK_usuario_id = 1 and FK_place_id = 1;
+select * from tbl_favoritos;
 use zero;
 select ST_AsGeoJSON(coordenadas) from localizacao;
+
+delete from tbl_favoritos where FK_usuario_id = 1 and FK_place_id = 1;
+
+delete from tbl_favoritos;
 
 

@@ -102,9 +102,31 @@ async function getAvaliacoes(req, res) {
 }
 
 async function criarFavorito(req, res) {
+console.log("aaaaaaaaaaaaa")
   try {
     await service.criarFavorito(req.place.id, req.infoUser.id)
     res.status(200).send({ message: "Salvo"})
+  } catch (error) {
+    console.log(error)
+    res.status(400).send({ message: error})
+  }
+}
+
+async function deletarFavorito(req, res) {
+  try {
+    await service.deletarFavorito(req.place.id, req.infoUser.id)
+    res.status(200).send({ message: "Apagado"})
+  } catch (error) {
+    console.log(error)
+    res.status(400).send({ message: error})
+  }
+}
+
+async function getFavorito(req, res) {
+  try {
+    let result = await service.getFavorito(req.place.id, req.infoUser.id)
+    let message = result? true: false;
+    res.status(200).send({ message: message})
   } catch (error) {
     console.log(error)
     res.status(400).send({ message: error})
@@ -253,6 +275,8 @@ export default {
   avaliarPlace,
   getAvaliacoes,
   criarFavorito,
+  getFavorito,
+  deletarFavorito,
   favCount,
   getPlaces,
   criarEventos,
