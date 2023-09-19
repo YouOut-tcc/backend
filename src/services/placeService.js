@@ -108,7 +108,9 @@ async function criarAvaliacao(comentario, nota, placeid, userid) {
 
 async function getAvaliacoes(placeid, userid) {
   const sql =
-    "select * from tbl_avaliacoes where FK_place_id=? and FK_usuario_id=?";
+    `select a.id id, a.pontuacao, a.comentario, a.criado, b.nome from tbl_avaliacoes a
+    join tbl_usuario b on b.id = a.FK_usuario_id 
+      where FK_place_id=?`;
   const data = [placeid, userid];
 
   const conn = database.pool;
@@ -129,6 +131,29 @@ async function criarFavorito(placeid, userid) {
   conn.end();
 }
 
+async function deletarFavorito(placeid, userid) {
+  const sql =
+    "delete from tbl_favoritos where FK_place_id = ? and FK_usuario_id = ?";
+  const data = [placeid, userid];
+
+  const conn = await database.connect();
+  await conn.query(sql, data);
+
+  conn.end();
+}
+
+async function getFavorito(placeid, userid) {
+  const sql =
+    "select * from tbl_favoritos where FK_usuario_id = ? and FK_place_id = ?";
+  const data = [userid, placeid];
+
+  const conn = await database.connect();
+  let [[result]] = await conn.query(sql, data);
+
+  conn.end();
+  return result;
+}
+
 async function favCount(placeid) {
   const sql =
     "select count(*) as qntdFavoritos from tbl_favoritos where FK_place_id = ?";
@@ -143,7 +168,7 @@ async function favCount(placeid) {
 async function getPlaces(limit, offset, location) {
   // fazer com que esse select pegue se o estabelecimento é favoritado pelo usuario: talvez fazer isso
   const sql =
-    `select uuid_from_bin(uuid) uuid, nome, ST_AsGeoJSON(coordenadas) coordenadas , 
+    `select id, uuid_from_bin(uuid) uuid, nome, ST_AsGeoJSON(coordenadas) coordenadas , 
       ST_Distance_Sphere(
         coordenadas,
         point(?, ?)
@@ -277,6 +302,8 @@ export default {
   criarAvaliacao,
   getAvaliacoes,
   criarFavorito,
+  deletarFavorito,
+  getFavorito,
   favCount,
   getPlaces,
   criarEventos,
