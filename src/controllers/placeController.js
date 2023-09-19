@@ -149,6 +149,9 @@ async function getPlaces(req, res) {
 
 async function criarEventos(req, res){
   const {descricao, inicio, fim} = req.body;
+  if (descricao.lengh > 150) {
+    return res.status(400).send({message: "Tamanho da descrição é maior que o limite permitido"})
+  }
   try{
     await service.criarEventos(descricao, inicio, fim, req.place.id);
     res.status(200).send({message: "Evento criado"});
@@ -162,22 +165,31 @@ async function getEventos(req, res){
     const [result] = await service.getEventos(req.place.id);
     res.status(200).send(result);
   } catch(error){
-    res.status(400).send({Message: error})
+    res.status(400).send({message: error})
   }
 }
 
 async function updateEventos(req, res){
   const {descricao, dt_inicio, dt_fim, eventoId} = req.body;
+  if (descricao.lengh > 150) {
+    return res.status(400).send({message: "Tamanho da descrição é maior que o limite permitido"})
+  }
+  if (typeof eventoId != "number") {
+    return res.status(400).send({message: "id inválido"})
+  }
   try{
     await service.updateEventos(descricao, dt_inicio, dt_fim, eventoId);
-    res.status(200).send({Message: "Dados atualizados"});
+    res.status(200).send({message: "Dados atualizados"});
   } catch(error){
-    res.status(500).send({Message: error});
+    res.status(500).send({message: error});
   }
 }
 
 async function criarPromocao(req, res){
   const {dt_fim, descricao} = req.body;
+  if (descricao.lengh > 150) {
+    return res.status(400).send({message: "Tamanho da descrição é maior que o limite permitido"});
+  }
   try{
     await service.criarPromocao(req.place.id, dt_fim, descricao);
     res.status(200).send({message: "Promoção criada"});
@@ -191,27 +203,36 @@ async function getPromocao(req, res){
     const [result] = await service.getPromocao(req.place.id);
     res.status(200).send(result);
   } catch(error) {
-    res.status(400).send({Message: error})
+    res.status(400).send({message: error})
   }
 }
 
 async function updatePromocao(req, res){
   const {dt_fim, descricao, promocaoId} = req.body;
+  if (descricao.lengh > 150) {
+    return res.status(400).send({message: "Tamanho da descrição é maior que o limite permitido"});
+  }
+  if (typeof promocaoId != "number") {
+    return res.status(400).send({message: "id inválido"});
+  }
   try{
     await service.updatePromocao(dt_fim, descricao, promocaoId);
-    res.status(200).send({Message: "Dados atualizados"});
+    res.status(200).send({message: "Dados atualizados"});
   } catch(error){
-    res.status(500).send({Message: error})
+    res.status(500).send({message: error})
   }
 }
 
 async function criarCupons(req, res) {
   const {vencimento, descricao} = req.body;
+  if (descricao.lengh > 30) {
+    return res.status(400).send({message: "Tamanho da descrição é maior que o limite permitido"});
+  }
   try{
     await service.criarCupons(req.place.id, vencimento, descricao);
     res.status(200).send({message: "Cupon criado com sucesso"});
   } catch(error) {
-    res.status(400).send({Message: error});
+    res.status(400).send({message: error});
   }
 }
 
@@ -220,17 +241,23 @@ async function getCupons(req, res) {
   const [result] = await service.getCupons(req.place.id);
   res.status(200).send(result)
   } catch(error) {
-    res.status(400).send({Message: error})
+    res.status(400).send({message: error})
   }
 }
 
 async function updateCupons(req, res){
   const {dt_vencimento, descricao, cupomId} = req.body;
+  if (descricao.lengh > 30) {
+    return res.status(400).send({message: "Tamanho da descrição é maior que o limite permitido"});
+  }
+  if (typeof cupomId != "number") {
+    return res.status(400).send({message: "id inválido"})
+  }
   try{
     await service.updateCupons(dt_vencimento, descricao, cupomId);
-    res.status(200).send({Message: "Dados atualizados"})
+    res.status(200).send({message: "Dados atualizados"})
   } catch(error){
-    res.status(500).send({Message: error});
+    res.status(500).send({message: error});
   }
 }
 

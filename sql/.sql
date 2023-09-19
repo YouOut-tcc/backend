@@ -18,7 +18,7 @@ create table tbl_usuario(
     primary key(id)
 );
 
--- TODO: tags para pesquisa
+-- TODO:
 --       adicionar uma coluna de nota
 --       adcionar coluna de descrição
 --       adcionar uma coluna para banner

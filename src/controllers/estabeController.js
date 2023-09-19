@@ -15,6 +15,16 @@ async function placeCadastro(req, res){
 
   boolTest = verifyEntries({name,email})
 
+if (typeof name != "string") {
+  return res.status(400).send({message: "nome no formato incorreto"});
+}
+if (typeof password != "string") {
+  return res.status(400).send({message: "senha no formato incorreto"});
+}
+if (telefone != undefined && typeof telefone != "number") {
+  return res.status(400).send({message: "telefone no formato incorreto"});
+}
+
   if(boolTest){
     return res.status(400).send({ message: `${boolTest} esta vazio` });
   }
@@ -45,6 +55,18 @@ async function placeDeletar(req, res){
 async function placeUpdate(req, res){
   const { id, name, email, password, telefone } = req.body;
 
+  if (typeof name != "string") {
+    return res.status(400).send({message: "nome no formato incorreto"});
+  }
+  if (typeof password != "string") {
+    return res.status(400).send({message: "senha no formato incorreto"});
+  }
+  if (telefone != undefined && typeof telefone != "number") {
+    return res.status(400).send({message: "telefone no formato incorreto"});
+  }
+  if (typeof id != "number") {
+    return res.status(400).send({message: "id no formato incorreto"});
+  }
   try {
     await service.updateLogin(id, name, email, password, telefone);
     res.status(200).send({ message: "Mudou com sucesso, nice" });
@@ -55,6 +77,9 @@ async function placeUpdate(req, res){
 
 async function placeLogin(req, res){
 	const {email, password} = req.body;
+  if (typeof password != "string") {
+    return res.status(400).send({message: "Senha no formato incorreto"})
+  }
 
 	try {
 		const users = await service.loginPlace(email, password);

@@ -22,8 +22,8 @@ const pool = mysql2.createPool({
   port:     process.env.BDPORT,
   database: process.env.DATABASE,
   waitForConnections: true,
-  connectionLimit: 90,
-  maxIdle: 90, // max idle connections, the default value is the same as `connectionLimit`
+  connectionLimit: 50,
+  maxIdle: 50, // max idle connections, the default value is the same as `connectionLimit`
   idleTimeout: 60000, // idle connections timeout, in milliseconds, the default value 60000
   queueLimit: 0,
   enableKeepAlive: true,

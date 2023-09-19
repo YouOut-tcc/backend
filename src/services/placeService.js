@@ -49,10 +49,10 @@ async function createPlace(
 
   // TODO: em caso de duplicação do uuid, tenta de novo ate pegar um não usado
 
-  const conn = await database.connect();
+  const conn = database.pool;
   await conn.query(sql, data);
 
-  conn.end();
+  // conn.end();
 }
 
 async function linkLogin(email, cnpj) {
@@ -101,6 +101,10 @@ async function criarAvaliacao(comentario, nota, placeid, userid) {
   const data = [nota, comentario, placeid, userid];
 
   const conn = await database.connect();
+
+
+
+
   await conn.query(sql, data);
 
   conn.end();
