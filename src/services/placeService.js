@@ -165,19 +165,19 @@ async function favCount(placeid) {
   conn.end();
 }
 
-async function getPlaces(limit, offset, location) {
+async function getPlaces(limit, offset, location, idUser) {
   // fazer com que esse select pegue se o estabelecimento é favoritado pelo usuario: talvez fazer isso
   const sql =
-    `select id, uuid_from_bin(uuid) uuid, nome, ST_AsGeoJSON(coordenadas) coordenadas , 
-      ST_Distance_Sphere(
-        coordenadas,
-        point(?, ?)
-      ) distancia, nota
-      from tbl_places 
-        where deletado=false order by distancia limit ? offset ?`;
+    `select a.id, uuid_from_bin(uuid) uuid, a.nome, ST_AsGeoJSON(coordenadas) coordenadas , 
+    ST_Distance_Sphere(
+      coordenadas,
+      point(?, ?)
+    ) distancia, nota, (CASE WHEN b.FK_usuario_id is NOT NULL THEN true ELSE false END) AS favorito
+    from tbl_places a left join tbl_favoritos b on b.FK_place_id = a.id
+      and b.FK_usuario_id = ? where a.deletado = false order by distancia limit ? offset ?;`;
 
   const conn = await database.connect();
-  const [result] = await conn.query(sql, [location[0], location[1], limit, offset ]);
+  const [result] = await conn.query(sql, [location[0], location[1], idUser, limit, offset ]);
 
   conn.end();
   return result;

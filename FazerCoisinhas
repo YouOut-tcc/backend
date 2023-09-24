@@ -30,7 +30,7 @@ LOGINESTABELECIMENTOMAIN:
       telefone,
   DELETAR:
     Requisição para deletar a conta até x dias
-  INFORMAÇOES: FEITO
+  INFORMAÇOES:
     Visualisar todas as imformações do login
     Visualisar todas as imformações dos childs
 
@@ -51,10 +51,10 @@ ESTABELECIMENTO:
 
 Fuções de gerenciamento de um estabelecimento
 ESTABELECIMENTOMANAGER:
-  FAVORITOS:  #Nop #Wesley
+  FAVORITOS:  #FEITO
     Estabelecimento ver a quantidade de favoritos
-  INFORMAÇOES:  #Nop #Wesley
-    Visualisar todas as imformações do estabelecimento
+  INFORMAÇOES:  #FEITO
+    Visualisar todas as informações do estabelecimento
   UPDATE:  #Nop #Wesley
     Mudar imfomarções sobre o estabelecimento:
       nome,
@@ -67,13 +67,13 @@ ESTABELECIMENTOMANAGER:
   AVALIAÇOES: #FEITO
     Lista todas as avaliações ja feitas
   RESPOSTA:  #Nop #Wesley
-    Responter uma Avaliação
+    Responter uma Avaliação #FEITO
     Mostrar avaliações com resposta
     Mostrar avaliações sem resposta
   DELETAR:  #Nop #Wesley
     Requisição para deletar o estabelecimento até x dias
   CUPONS:
     Adicionar cupons e seus requisitos #FEITO
-    Deletar e Modificar cupons e seus requisitos
+    Deletar e Modificar cupons e seus requisitos #MEIO FEiTO
     Visualisar todos cupons #FEITO
 

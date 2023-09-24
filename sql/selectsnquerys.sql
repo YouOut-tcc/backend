@@ -11,6 +11,7 @@ select id, nome, telefone, celular, numero, cep, longitude, latitute, criado
         and deletado = 0;
         
 select * from tbl_places;
+update tbl_places set nota = 4.0 where id = 1;
 select cnpj, uuid_from_bin(uuid) from tbl_places;
 select * from tbl_logins_has_places;
 select * from tbl_avaliacoes where FK_place_id=1 and FK_usuario_id=1;
@@ -52,8 +53,18 @@ select * from tbl_favoritos;
 use zero;
 select ST_AsGeoJSON(coordenadas) from localizacao;
 
-delete from tbl_favoritos where FK_usuario_id = 1 and FK_place_id = 1;
+delete from tbl_favoritos;
 
 delete from tbl_favoritos;
 
+select a.id, uuid_from_bin(uuid) uuid, a.nome, ST_AsGeoJSON(coordenadas) coordenadas , 
+      ST_Distance_Sphere(
+        coordenadas,
+        point(0, 0)
+      ) distancia, nota, (CASE WHEN b.FK_usuario_id is NOT NULL THEN true ELSE false END) AS favorito
+      from tbl_places a left join tbl_favoritos b on b.FK_place_id = a.id 
+        and b.FK_usuario_id = 1 where a.deletado = false order by distancia limit 100 offset 0;
 
+select * from tbl_favoritos;
+
+insert into tbl_favoritos(FK_usuario_id, FK_place_id) values(1,3); 

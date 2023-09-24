@@ -77,6 +77,14 @@ async function avaliarPlace(req, res){
     return res.status(400).send({ message: "Invalido, nota não é uma numero"})
   }
 
+  if (typeof comentario != "string") {
+    return res.status(400).send({message: "Inválido, comentário não está no formato string"})
+  }
+
+  if (comentario.length > 255) {
+    return res.status(400).send({message: "Tamanho do comentário é maior que o limite permitido"})
+  }
+
   if(nota < 0 || nota > 5){
     return res.status(400).send({ message: "Invalido, nota vai de 0 á 5"})
   }
@@ -102,7 +110,6 @@ async function getAvaliacoes(req, res) {
 }
 
 async function criarFavorito(req, res) {
-console.log("aaaaaaaaaaaaa")
   try {
     await service.criarFavorito(req.place.id, req.infoUser.id)
     res.status(200).send({ message: "Salvo"})
@@ -144,16 +151,17 @@ async function favCount(req, res) {
 }
 
 async function getPlaces(req, res) {
-  console.log(req.query)
+  // console.log(req.query)
   let page = parseInt(req.query.page) || 0;
   let location = [req.query.latitute|| 0, req.query.longitude|| 0]
   const limit = 20;
 
   page = page * limit;
+  console.log(location)
 
   try {
-    let result = await service.getPlaces(limit, page, location)
-    console.log(result)
+    let result = await service.getPlaces(limit, page, location, req.infoUser.id)
+    // console.log(result)
     result.forEach((element, index) => {
       let parser = JSON.parse(element.coordenadas);
       result[index].coordenadas = parser.coordinates;
@@ -173,7 +181,7 @@ async function getPlaces(req, res) {
 
 async function criarEventos(req, res){
   const {descricao, inicio, fim} = req.body;
-  if (descricao.lengh > 150) {
+  if (descricao.length > 150) {
     return res.status(400).send({message: "Tamanho da descrição é maior que o limite permitido"})
   }
   try{
@@ -195,7 +203,7 @@ async function getEventos(req, res){
 
 async function updateEventos(req, res){
   const {descricao, dt_inicio, dt_fim, eventoId} = req.body;
-  if (descricao.lengh > 150) {
+  if (descricao.length > 150) {
     return res.status(400).send({message: "Tamanho da descrição é maior que o limite permitido"})
   }
   if (typeof eventoId != "number") {
@@ -211,7 +219,7 @@ async function updateEventos(req, res){
 
 async function criarPromocao(req, res){
   const {dt_fim, descricao} = req.body;
-  if (descricao.lengh > 150) {
+  if (descricao.length > 150) {
     return res.status(400).send({message: "Tamanho da descrição é maior que o limite permitido"});
   }
   try{
@@ -233,7 +241,7 @@ async function getPromocao(req, res){
 
 async function updatePromocao(req, res){
   const {dt_fim, descricao, promocaoId} = req.body;
-  if (descricao.lengh > 150) {
+  if (descricao.length > 150) {
     return res.status(400).send({message: "Tamanho da descrição é maior que o limite permitido"});
   }
   if (typeof promocaoId != "number") {
@@ -249,7 +257,7 @@ async function updatePromocao(req, res){
 
 async function criarCupons(req, res) {
   const {vencimento, descricao} = req.body;
-  if (descricao.lengh > 30) {
+  if (descricao.length > 30) {
     return res.status(400).send({message: "Tamanho da descrição é maior que o limite permitido"});
   }
   try{
@@ -271,7 +279,7 @@ async function getCupons(req, res) {
 
 async function updateCupons(req, res){
   const {dt_vencimento, descricao, cupomId} = req.body;
-  if (descricao.lengh > 30) {
+  if (descricao.length > 30) {
     return res.status(400).send({message: "Tamanho da descrição é maior que o limite permitido"});
   }
   if (typeof cupomId != "number") {
