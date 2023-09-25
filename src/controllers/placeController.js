@@ -62,8 +62,8 @@ async function requestCreation(req, res) {
 
 }
 
-function showInfo(req, res){
-  return res.status(200).send({message: req.place})
+function getInfo(req, res){
+  return res.status(200).send(req.place)
 }
 
 async function avaliarPlace(req, res){
@@ -306,7 +306,7 @@ res.status(400).send({ message: error});
 
 export default {
   requestCreation,
-  showInfo,
+  showInfo: getInfo,
   avaliarPlace,
   getAvaliacoes,
   criarFavorito,
