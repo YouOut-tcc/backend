@@ -15,6 +15,40 @@ async function requestCreation(req, res) {
     longitude,
   } = req.body;
 
+  if (typeof nome_empresarial != "string") {
+    return res.status(400).send({message: "Nome empresarial no formato inválido"})
+  }
+  if (nome_empresarial.length > 255) {
+    return res.status(400).send({message: "Nome empresarial maior que o tamanho permitido"})
+  }
+  if (typeof nome != "string") {
+    return res.status(400).send({message: "Nome no formato inválido"})
+  }
+  if (nome.length > 255) {
+    return res.status(400).send({message: "Nome maior que o tamanho permitido"})
+  }
+  if (typeof telefone != "string") {
+    return res.status(400).send({message: "telefone no formato inválido"})
+  }
+  if (telefone.length > 20) {
+    return res.status(400).send({message: "Telefone maior que o tamanho permitido"})
+  }
+  if (typeof celular != "string") {
+    return res.status(400).send({message: "Celular no formato inválido"})
+  }
+  if (celular.length > 20) {
+    return res.status(400).send({message: "Celular maior que o tamanho permitido"})
+  }
+  if (typeof numero != "string") {
+    return res.status(400).send({message: "Número no formato inválido"})
+  }
+  if (numero.length > 32) {
+    return res.status(400).send({message: "Numero maior que o tamanho permitido"})
+  }
+  if (typeof descricao != "string") {
+    return res.status(400).send({message: "Descrição no formato inválido"})
+  }
+  
   let boolTest = isJSONEntriesNullorEmpty({
     cnpj,
     nome_empresarial,
@@ -62,8 +96,8 @@ async function requestCreation(req, res) {
 
 }
 
-function getInfo(req, res){
-  return res.status(200).send(req.place)
+function showInfo(req, res){
+  return res.status(200).send({message: req.place})
 }
 
 async function avaliarPlace(req, res){
@@ -181,6 +215,9 @@ async function getPlaces(req, res) {
 
 async function criarEventos(req, res){
   const {descricao, inicio, fim} = req.body;
+  if (typeof descricao != "string") {
+    return res.status(400).send({message: "Formato de descrição inválido"});
+  }
   if (descricao.length > 150) {
     return res.status(400).send({message: "Tamanho da descrição é maior que o limite permitido"})
   }
@@ -203,6 +240,9 @@ async function getEventos(req, res){
 
 async function updateEventos(req, res){
   const {descricao, dt_inicio, dt_fim, eventoId} = req.body;
+  if (typeof descricao != "string") {
+    return res.status(400).send({message: "Formato de descrição inválido"});
+  }
   if (descricao.length > 150) {
     return res.status(400).send({message: "Tamanho da descrição é maior que o limite permitido"})
   }
@@ -219,6 +259,9 @@ async function updateEventos(req, res){
 
 async function criarPromocao(req, res){
   const {dt_fim, descricao} = req.body;
+  if (typeof descricao != "string") {
+    return res.status(400).send({message: "Formato de descrição inválido"});
+  }
   if (descricao.length > 150) {
     return res.status(400).send({message: "Tamanho da descrição é maior que o limite permitido"});
   }
@@ -241,6 +284,9 @@ async function getPromocao(req, res){
 
 async function updatePromocao(req, res){
   const {dt_fim, descricao, promocaoId} = req.body;
+  if (typeof descricao != "string") {
+    return res.status(400).send({message: "Formato de descrição inválido"});
+  }
   if (descricao.length > 150) {
     return res.status(400).send({message: "Tamanho da descrição é maior que o limite permitido"});
   }
@@ -257,6 +303,9 @@ async function updatePromocao(req, res){
 
 async function criarCupons(req, res) {
   const {vencimento, descricao} = req.body;
+  if (typeof descricao != "string") {
+    return res.status(400).send({message: "Formato de descrição inválido"});
+  }
   if (descricao.length > 30) {
     return res.status(400).send({message: "Tamanho da descrição é maior que o limite permitido"});
   }
@@ -279,6 +328,9 @@ async function getCupons(req, res) {
 
 async function updateCupons(req, res){
   const {dt_vencimento, descricao, cupomId} = req.body;
+  if (typeof descricao != "string") {
+    return res.status(400).send({message: "Formato de descrição inválido"});
+  }
   if (descricao.length > 30) {
     return res.status(400).send({message: "Tamanho da descrição é maior que o limite permitido"});
   }
@@ -306,7 +358,7 @@ res.status(400).send({ message: error});
 
 export default {
   requestCreation,
-  showInfo: getInfo,
+  showInfo,
   avaliarPlace,
   getAvaliacoes,
   criarFavorito,

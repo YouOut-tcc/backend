@@ -10,6 +10,24 @@ async function usuarioCadastro(req, res){
   const { name, email, password, telefone } = req.body;
   let hash
 
+  if (typeof name != "string"){
+    return res.status(400).send({message: "Nome no formato inválido"})
+  }
+  if (name.length > 65) {
+    return res.status(400).send({message: "Nome maior que o permitido"})
+  }
+  if (typeof email != "string"){
+    return res.status(400).send({message: "Email no formato inválido"})
+  }
+  if (email.length > 65) {
+    return res.status(400).send({message: "Email maior que o permitido"})
+  }
+  if (typeof telefone != "number"){
+    return res.status(400).send({message: "Telefone no formato inválido"})
+  }
+  if (telefone.toString().length > 15) {
+    return res.status(400).send({message: "Telefone maior que o permitido"})
+  }
   if(email == undefined || name == undefined){
     return res.status(400).send({ message: 'nome e/ou email vazios' });
   }
@@ -41,6 +59,25 @@ async function usuarioDeletar(req, res){
 
 async function usuarioUpdate(req, res){
   const { name, email, password, telefone } = req.body;
+
+  if (typeof name != "string"){
+    return res.status(400).send({message: "Nome no formato inválido"})
+  }
+  if (name.length > 65) {
+    return res.status(400).send({message: "Nome maior que o permitido"})
+  }
+  if (typeof email != "string"){
+    return res.status(400).send({message: "Email no formato inválido"})
+  }
+  if (email.length > 65) {
+    return res.status(400).send({message: "Email maior que o permitido"})
+  }
+  if (typeof telefone != "number"){
+    return res.status(400).send({message: "Telefone no formato inválido"})
+  }
+  if (telefone.length > 15) {
+    return res.status(400).send({message: "Telefone maior que o permitido"})
+  }
 
   try {
     await service.updateUser(req.infoUser.id, name, email, password, telefone);
