@@ -26,8 +26,7 @@ async function createPlace(
   latitute,
   longitude
 ) {
-  const sql =
-    `insert into tbl_places
+  const sql = `insert into tbl_places
       (uuid,cnpj,nome_empresarial,nome,telefone,celular,numero,cep,nota,descricao,coordenadas) 
       values(uuid_v5(uuid(), ''),?,?,?,?,?,?,?,0,?,point(?,?))`;
   const data = [
@@ -98,17 +97,13 @@ async function criarAvaliacao(comentario, nota, placeid, userid) {
 
   const conn = await database.connect();
 
-
-
-
   await conn.query(sql, data);
 
   conn.end();
 }
 
 async function getAvaliacoes(placeid, userid) {
-  const sql =
-    `select a.id id, a.pontuacao, a.comentario, a.criado, b.nome from tbl_avaliacoes a
+  const sql = `select a.id id, a.pontuacao, a.comentario, a.criado, b.nome from tbl_avaliacoes a
     join tbl_usuario b on b.id = a.FK_usuario_id 
       where FK_place_id=?`;
   const data = [placeid, userid];
@@ -167,8 +162,7 @@ async function favCount(placeid) {
 
 async function getPlaces(limit, offset, location, idUser) {
   // fazer com que esse select pegue se o estabelecimento é favoritado pelo usuario: talvez fazer isso
-  const sql =
-    `select a.id, uuid_from_bin(uuid) uuid, a.nome, ST_AsGeoJSON(coordenadas) coordenadas , 
+  const sqlbackup = `select a.id, uuid_from_bin(uuid) uuid, a.nome, ST_AsGeoJSON(coordenadas) coordenadas , 
     ST_Distance_Sphere(
       coordenadas,
       point(?, ?)
@@ -176,8 +170,29 @@ async function getPlaces(limit, offset, location, idUser) {
     from tbl_places a left join tbl_favoritos b on b.FK_place_id = a.id
       and b.FK_usuario_id = ? where a.deletado = false order by distancia limit ? offset ?;`;
 
+  const sql = `select a.id, uuid_from_bin(uuid) uuid, a.nome, coordenadas,
+      ST_Distance_Sphere(
+        coordenadas,
+        point(?, ?)
+      ) distancia, 
+      coalesce(c.nota, 0) nota, 
+      (b.FK_usuario_id IS NOT NULL) favorito
+      from tbl_places a
+      left join vw_notas c on c.id = a.id
+      left join tbl_favoritos b on b.FK_place_id = a.id
+      and b.FK_usuario_id = ?
+      where a.deletado = false
+      order by distancia
+      limit ? offset ?;`;
+
   const conn = await database.connect();
-  const [result] = await conn.query(sql, [location[0], location[1], idUser, limit, offset ]);
+  const [result] = await conn.query(sql, [
+    location[0],
+    location[1],
+    idUser,
+    limit,
+    offset,
+  ]);
 
   conn.end();
   return result;

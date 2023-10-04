@@ -5,11 +5,28 @@ select * from tbl_avaliacoes;
 select * from tbl_favoritos;
 select * from tbl_place_logins;
 
+select * from vw_notas;
+select FK_place_id id, round(avg(pontuacao), 1) nota 
+    from tbl_avaliacoes 
+    group by FK_place_id;
+
 select id, nome, telefone, celular, numero, cep, longitude, latitute, criado 
 	from tbl_places 
 		where uuid=uuid_to_bin('00036686-9ac5-51e1-b8cc-cc301829b797') 
         and deletado = 0;
         
+        
+select uuid_from_bin(b.uuid) uuid,b.nome nome, b.coordenadas coordenadas, a.criado criado,
+	ST_Distance_Sphere(
+        coordenadas,
+        point(0, 0)
+      ) distancia,
+      coalesce(c.nota, 0) nota
+    from tbl_favoritos a 
+    join tbl_places b on a.FK_place_id = b.id 
+     left join vw_notas c on c.id = b.id
+    where FK_usuario_id = 1;
+
 select * from tbl_places;
 update tbl_places set nota = 4.0 where id = 1;
 select cnpj, uuid_from_bin(uuid) from tbl_places;
@@ -61,9 +78,26 @@ select a.id, uuid_from_bin(uuid) uuid, a.nome, ST_AsGeoJSON(coordenadas) coorden
       ST_Distance_Sphere(
         coordenadas,
         point(0, 0)
-      ) distancia, nota, (CASE WHEN b.FK_usuario_id is NOT NULL THEN true ELSE false END) AS favorito
-      from tbl_places a left join tbl_favoritos b on b.FK_place_id = a.id 
+      ) distancia, c.nota, (CASE WHEN b.FK_usuario_id is NOT NULL THEN true ELSE false END) AS favorito
+      from tbl_places a 
+      join vw_notas c on c.id = a.id
+      left join tbl_favoritos b on b.FK_place_id = a.id
         and b.FK_usuario_id = 1 where a.deletado = false order by distancia limit 100 offset 0;
+        
+select a.id, uuid_from_bin(uuid) uuid, a.nome, coordenadas,
+      ST_Distance_Sphere(
+        coordenadas,
+        point(0, 0)
+      ) distancia, 
+      coalesce(c.nota, 0) nota, 
+      (b.FK_usuario_id IS NOT NULL) favorito
+      from tbl_places a
+      left join vw_notas c on c.id = a.id
+      left join tbl_favoritos b on b.FK_place_id = a.id
+      and b.FK_usuario_id = 1
+      where a.deletado = false
+      order by distancia
+      limit 100 offset 0;
 
 select * from tbl_favoritos;
 
