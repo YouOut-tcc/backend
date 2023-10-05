@@ -1,8 +1,10 @@
-create database youout;
+create database if not exists youout;
 use youout;
 -- drop database youout;
 
-create table tbl_usuario(
+-- eu carlos, não sei escrever respostas
+
+create table if not exists tbl_usuario(
 	id           integer auto_increment not null,
     nome         varchar(65) not null,
     email        varchar(65) unique not null,
@@ -17,7 +19,7 @@ create table tbl_usuario(
 );
 
 -- Tirar a columas notas
-create table tbl_places(
+create table if not exists tbl_places(
 	id               integer auto_increment not null,
     uuid             binary(16) not null unique,
 
@@ -38,20 +40,21 @@ create table tbl_places(
     -- localização:
     coordenadas      geometry not null,
 
+	denunciado       bool     default false,
     criado           datetime default now(),
-    deletado_dia     date default null,
-    deletado         boolean not null default false,
+    deletado_dia     date     default null,
+    deletado         boolean  not null default false,
     
     primary key(id)
 );
 
-create table tbl_tags(
+create table if not exists tbl_tags(
     id  integer auto_increment not null,
     tag varchar(255) not null,
     primary key(id)
 );
 
-create table tbl_place_has_tags(
+create table if not exists tbl_place_has_tags(
     id          integer auto_increment not null,
     tag         varchar(255) not null,
     FK_place_id integer not null,
@@ -59,7 +62,7 @@ create table tbl_place_has_tags(
     foreign key(FK_place_id) references tbl_places(id)
 );
 
-create table tbl_place_logins(
+create table if not exists tbl_place_logins(
 	id       integer auto_increment not null,
     nome     varchar(65) not null,
     email    varchar(65) unique not null,
@@ -79,7 +82,7 @@ create table tbl_place_logins(
 CREATE INDEX parent_index ON tbl_place_logins (parent);
 
 -- colocar um sistema de permissoes
-create table tbl_logins_has_places(
+create table if not exists tbl_logins_has_places(
     id          integer auto_increment not null,
     FK_place_id integer not null,
     FK_login_id integer not null,
@@ -93,7 +96,7 @@ create table tbl_logins_has_places(
 );
 
 -- adicionar columa de denunciado
-create table tbl_avaliacoes(
+create table if not exists tbl_avaliacoes(
     id            integer auto_increment not null,
     FK_usuario_id integer not null,
     FK_place_id   integer not null,
@@ -101,6 +104,8 @@ create table tbl_avaliacoes(
     pontuacao  decimal(3, 1) unsigned  NOT NULL,
     -- comentario_null 
     comentario varchar(255) default '',
+    
+    denunciado bool     default false,
     criado     datetime default now(),
 
     primary key(id),
@@ -110,11 +115,13 @@ create table tbl_avaliacoes(
 
 -- fazendo essa tabela dessa forma, deixa possivel uma avaliação receber varios comentarios
 -- algo indesejado, tratar isso na logica do backend, mas mander por motivos de compatibilidade
-create table tbl_respotas(
+create table if not exists tbl_respotas(
     id              integer auto_increment not null,
     FK_avaliacao_id integer not null,
 	fk_place_logins_id  integer not null,
     -- comentario_null 
+    
+    denunciado bool         default false,
     comentario varchar(255) default '',
     criado     datetime default now(),
 
@@ -123,7 +130,7 @@ create table tbl_respotas(
     foreign key(fk_place_logins_id) references tbl_place_logins(id)
 );
 
-create table tbl_favoritos(
+create table if not exists tbl_favoritos(
     id            integer auto_increment not null,
     FK_usuario_id integer not null,
     FK_place_id   integer not null,
@@ -134,7 +141,7 @@ create table tbl_favoritos(
     UNIQUE (FK_usuario_id, FK_place_id)
 );
 
-create table tbl_promocao(
+create table if not exists tbl_promocao(
     id int auto_increment not null,
     fk_est int not null,
     dt_criacao datetime default now(),
@@ -145,7 +152,7 @@ create table tbl_promocao(
     foreign key(fk_est) references tbl_places(id)
 );
 -- colocar nome para eventos
-create table tbl_eventos(
+create table if not exists tbl_eventos(
 	id int auto_increment not null,
     deletado boolean default null,
     dt_criacao datetime default now(),
@@ -158,7 +165,7 @@ create table tbl_eventos(
     foreign key(fk_est) references tbl_places(id)
 );
 
-create table tbl_cupons (
+create table if not exists tbl_cupons (
 	id int auto_increment not null,
     fk_est int not null,
     dt_criacao datetime default now(),
@@ -169,7 +176,42 @@ create table tbl_cupons (
     foreign key(fk_est) references tbl_places(id)
 );
 
-create view vw_notas as
+create table if not exists tbl_places_denuncias (
+	id          integer auto_increment,
+    fk_place_id integer,
+    motivo      varchar(255),
+    
+    criado      datetime default now(),
+    
+    primary key(id),
+    foreign key(fk_place_id) references tbl_places(id)
+);
+
+create table if not exists tbl_avaliacoes_denuncias (
+	id               integer auto_increment,
+    fk_avaliacoes_id integer,
+    motivo           varchar(255),
+    
+    criado           datetime default now(),
+    
+    primary key(id),
+    foreign key(fk_avaliacoes_id) references tbl_avaliacoes(id)
+);
+
+create table if not exists tbl_respotas_denuncias (
+	id               integer auto_increment,
+    fk_respotas_id   integer,
+    motivo           varchar(255),
+    
+    criado           datetime default now(),
+    
+    primary key(id),
+    foreign key(fk_respotas_id) references tbl_respotas(id)
+);
+
+create or replace view vw_notas as
 select FK_place_id id, round(avg(pontuacao), 1) nota 
     from tbl_avaliacoes 
     group by FK_place_id;
+    
+

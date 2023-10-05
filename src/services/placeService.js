@@ -1,3 +1,4 @@
+import { analytics } from "googleapis/build/src/apis/analytics/index.js";
 import database from "../models/connection.js";
 
 // isso é um placeholder, por questoes de segurança e confiabilidade
@@ -103,7 +104,7 @@ async function criarAvaliacao(comentario, nota, placeid, userid) {
 }
 
 async function getAvaliacoes(placeid, userid) {
-  const sql = `select a.id id, a.pontuacao, a.comentario, a.criado, b.nome from tbl_avaliacoes a
+  const sql = `select a.id id, a.denunciado ,a.pontuacao, a.comentario, a.criado, b.nome from tbl_avaliacoes a
     join tbl_usuario b on b.id = a.FK_usuario_id 
       where FK_place_id=?`;
   const data = [placeid, userid];
@@ -170,7 +171,7 @@ async function getPlaces(limit, offset, location, idUser) {
     from tbl_places a left join tbl_favoritos b on b.FK_place_id = a.id
       and b.FK_usuario_id = ? where a.deletado = false order by distancia limit ? offset ?;`;
 
-  const sql = `select a.id, uuid_from_bin(uuid) uuid, a.nome, coordenadas,
+  const sql = `select a.id, a.denunciado, uuid_from_bin(uuid) uuid, a.nome, coordenadas,
       ST_Distance_Sphere(
         coordenadas,
         point(?, ?)
@@ -283,7 +284,6 @@ async function deletePromocao(promocaoId) {
   conn.end();
 }
 
-
 async function criarCupons(placeid, vencimento, descricao) {
   const sql =
     "insert into tbl_cupons(fk_est, dt_vencimento, descricao) values(?,?,?)";
@@ -337,6 +337,33 @@ async function setResposta(avaliacaoid, placeid, coment) {
   conn.end();
 }
 
+async function denunciarPlace(placeid, motivo) {
+  const sql =
+    "insert into tbl_places_denuncias(fk_place_id, motivo) values(?,?)";
+  const data = [placeid, motivo];
+
+  const conn = await database.connect();
+  await conn.query(sql, data);
+}
+
+async function denunciarAvaliacao(avaliacaoid, motivo) {
+  const sql =
+    "insert into tbl_avaliacoes_denuncias(fk_avaliacoes_id, motivo) values(?,?)";
+  const data = [avaliacaoid, motivo];
+
+  const conn = await database.connect();
+  await conn.query(sql, data);
+}
+
+async function denunciarResposta(respotaid, motivo) {
+  const sql =
+    "insert into tbl_respota_denuncias(fk_respotas_id, motivo) values(?,?)";
+  const data = [respotaid, motivo];
+
+  const conn = await database.connect();
+  await conn.query(sql, data);
+}
+
 export default {
   sendRequest,
   createPlace,
@@ -358,6 +385,9 @@ export default {
   updatePromocao,
   updateEventos,
   updateCupons,
+  denunciarPlace,
+  denunciarAvaliacao,
+  denunciarResposta,
   deleteCupons,
   deleteEventos,
   deletePromocao

@@ -73,7 +73,7 @@ async function loginUser(email, password) {
 
 async function getFavoritos(userid) {
   const sql =
-    `select uuid_from_bin(b.uuid) uuid,b.nome nome, b.coordenadas coordenadas, a.criado criado,
+    `select uuid_from_bin(b.uuid) uuid, b.denunciado, b.nome nome, b.coordenadas coordenadas, a.criado criado,
     ST_Distance_Sphere(
           coordenadas,
           point(0, 0)

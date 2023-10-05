@@ -1,5 +1,5 @@
 import service from "../services/placeService.js";
-import { isJSONEntriesNullorEmpty } from "../helpers/validation.js"; 
+import { isJSONEntriesNullorEmpty } from "../helpers/validation.js";
 
 async function requestCreation(req, res) {
   const {
@@ -16,39 +16,51 @@ async function requestCreation(req, res) {
   } = req.body;
 
   if (typeof nome_empresarial != "string") {
-    return res.status(400).send({message: "Nome empresarial no formato inválido"})
+    return res
+      .status(400)
+      .send({ message: "Nome empresarial no formato inválido" });
   }
   if (nome_empresarial.length > 255) {
-    return res.status(400).send({message: "Nome empresarial maior que o tamanho permitido"})
+    return res
+      .status(400)
+      .send({ message: "Nome empresarial maior que o tamanho permitido" });
   }
   if (typeof nome != "string") {
-    return res.status(400).send({message: "Nome no formato inválido"})
+    return res.status(400).send({ message: "Nome no formato inválido" });
   }
   if (nome.length > 255) {
-    return res.status(400).send({message: "Nome maior que o tamanho permitido"})
+    return res
+      .status(400)
+      .send({ message: "Nome maior que o tamanho permitido" });
   }
   if (typeof telefone != "string") {
-    return res.status(400).send({message: "telefone no formato inválido"})
+    return res.status(400).send({ message: "telefone no formato inválido" });
   }
   if (telefone.length > 20) {
-    return res.status(400).send({message: "Telefone maior que o tamanho permitido"})
+    return res
+      .status(400)
+      .send({ message: "Telefone maior que o tamanho permitido" });
   }
   if (typeof celular != "string") {
-    return res.status(400).send({message: "Celular no formato inválido"})
+    return res.status(400).send({ message: "Celular no formato inválido" });
   }
   if (celular.length > 20) {
-    return res.status(400).send({message: "Celular maior que o tamanho permitido"})
+    return res
+      .status(400)
+      .send({ message: "Celular maior que o tamanho permitido" });
   }
   if (typeof numero != "string") {
-    return res.status(400).send({message: "Número no formato inválido"})
+    return res.status(400).send({ message: "Número no formato inválido" });
   }
   if (numero.length > 32) {
-    return res.status(400).send({message: "Numero maior que o tamanho permitido"})
+    return res
+      .status(400)
+      .send({ message: "Numero maior que o tamanho permitido" });
   }
   if (typeof descricao != "string") {
-    return res.status(400).send({message: "Descrição no formato inválido"})
+    return res.status(400).send({ message: "Descrição no formato inválido" });
   }
-  
+
   let boolTest = isJSONEntriesNullorEmpty({
     cnpj,
     nome_empresarial,
@@ -60,10 +72,10 @@ async function requestCreation(req, res) {
     descricao,
     latitute,
     longitude,
-  })
+  });
 
-  if(boolTest){
-    return res.status(400).send({ message: `${boolTest} esta faltando`})
+  if (boolTest) {
+    return res.status(400).send({ message: `${boolTest} esta faltando` });
   }
 
   // validar dados
@@ -82,178 +94,197 @@ async function requestCreation(req, res) {
       cep,
       descricao,
       latitute,
-      longitude,
-    )
-    await service.linkLogin(req.infoUser.email, cnpj)
-    return res.status(200).send({ message: "Salvo"})
+      longitude
+    );
+    await service.linkLogin(req.infoUser.email, cnpj);
+    return res.status(200).send({ message: "Salvo" });
   } catch (error) {
-    console.log(error)
-    return res.status(400).send({ message: error})
+    console.log(error);
+    return res.status(400).send({ message: error });
   }
 
   // enviar request para um email ou sistema
   // message de sucesso ou falha
-
 }
 
-function showInfo(req, res){
-  return res.status(200).send({message: req.place})
+function showInfo(req, res) {
+  return res.status(200).send({ message: req.place });
 }
 
-async function avaliarPlace(req, res){
-  const {comentario, nota} = req.body;
+async function avaliarPlace(req, res) {
+  const { comentario, nota } = req.body;
 
-  if(comentario == undefined || nota == undefined){
-    return res.status(400).send({ message: "Invalido, falta imformaçao"})
+  if (comentario == undefined || nota == undefined) {
+    return res.status(400).send({ message: "Invalido, falta imformaçao" });
   }
 
-  if(typeof nota != 'number'){
-    return res.status(400).send({ message: "Invalido, nota não é uma numero"})
+  if (typeof nota != "number") {
+    return res.status(400).send({ message: "Invalido, nota não é uma numero" });
   }
 
   if (typeof comentario != "string") {
-    return res.status(400).send({message: "Inválido, comentário não está no formato string"})
+    return res
+      .status(400)
+      .send({ message: "Inválido, comentário não está no formato string" });
   }
 
   if (comentario.length > 255) {
-    return res.status(400).send({message: "Tamanho do comentário é maior que o limite permitido"})
+    return res
+      .status(400)
+      .send({
+        message: "Tamanho do comentário é maior que o limite permitido",
+      });
   }
 
-  if(nota < 0 || nota > 5){
-    return res.status(400).send({ message: "Invalido, nota vai de 0 á 5"})
+  if (nota < 0 || nota > 5) {
+    return res.status(400).send({ message: "Invalido, nota vai de 0 á 5" });
   }
 
   try {
-    await service.criarAvaliacao(comentario, nota, req.place.id, req.infoUser.id)
-    res.status(200).send({ message: "Salvo"})
+    await service.criarAvaliacao(
+      comentario,
+      nota,
+      req.place.id,
+      req.infoUser.id
+    );
+    res.status(200).send({ message: "Salvo" });
   } catch (error) {
-    console.log(error)
-    res.status(400).send({ message: error})
+    console.log(error);
+    res.status(400).send({ message: error });
   }
 }
 
 // TODO: tirar as FK do resultado
 async function getAvaliacoes(req, res) {
   try {
-    let result = await service.getAvaliacoes(req.place.id, req.infoUser.id)
-    res.status(200).send(result)
+    let result = await service.getAvaliacoes(req.place.id, req.infoUser.id);
+    res.status(200).send(result);
   } catch (error) {
-    console.log(error)
-    res.status(400).send({ message: error})
+    console.log(error);
+    res.status(400).send({ message: error });
   }
 }
 
 async function criarFavorito(req, res) {
   try {
-    await service.criarFavorito(req.place.id, req.infoUser.id)
-    res.status(200).send({ message: "Salvo"})
+    await service.criarFavorito(req.place.id, req.infoUser.id);
+    res.status(200).send({ message: "Salvo" });
   } catch (error) {
-    console.log(error)
-    res.status(400).send({ message: error})
+    console.log(error);
+    res.status(400).send({ message: error });
   }
 }
 
 async function deletarFavorito(req, res) {
   try {
-    await service.deletarFavorito(req.place.id, req.infoUser.id)
-    res.status(200).send({ message: "Apagado"})
+    await service.deletarFavorito(req.place.id, req.infoUser.id);
+    res.status(200).send({ message: "Apagado" });
   } catch (error) {
-    console.log(error)
-    res.status(400).send({ message: error})
+    console.log(error);
+    res.status(400).send({ message: error });
   }
 }
 
 async function getFavorito(req, res) {
   try {
-    let result = await service.getFavorito(req.place.id, req.infoUser.id)
-    let message = result? true: false;
-    res.status(200).send({ message: message})
+    let result = await service.getFavorito(req.place.id, req.infoUser.id);
+    let message = result ? true : false;
+    res.status(200).send({ message: message });
   } catch (error) {
-    console.log(error)
-    res.status(400).send({ message: error})
+    console.log(error);
+    res.status(400).send({ message: error });
   }
 }
 
 async function favCount(req, res) {
   try {
-    await service.favCount(req.place.id)
-    res.status(200).send({ message: "Concluido"})
+    await service.favCount(req.place.id);
+    res.status(200).send({ message: "Concluido" });
   } catch (error) {
-    console.log(error)
-    res.status(400).send({ message: error})
+    console.log(error);
+    res.status(400).send({ message: error });
   }
 }
 
 async function getPlaces(req, res) {
   // console.log(req.query)
   let page = parseInt(req.query.page) || 0;
-  let location = [req.query.latitute|| 0, req.query.longitude|| 0]
+  let location = [req.query.latitute || 0, req.query.longitude || 0];
   const limit = 20;
 
   page = page * limit;
-  console.log(location)
+  console.log(location);
 
   try {
-    let result = await service.getPlaces(limit, page, location, req.infoUser.id)
+    let result = await service.getPlaces(
+      limit,
+      page,
+      location,
+      req.infoUser.id
+    );
     // console.log(result)
     // result.forEach((element, index) => {
     //   let parser = JSON.parse(element.coordenadas);
     //   result[index].coordenadas = parser.coordinates;
     // })
-    res.status(200).send(result)
+    res.status(200).send(result);
   } catch (error) {
-    console.log(error.constructor.name)
-    if (error instanceof SyntaxError){
-      
-      console.log(error.message)
-      return res.status(500).send({ message: "error com o json parser, talvez"})
-
+    console.log(error.constructor.name);
+    if (error instanceof SyntaxError) {
+      console.log(error.message);
+      return res
+        .status(500)
+        .send({ message: "error com o json parser, talvez" });
     }
-    return res.status(400).send({ message: error})
+    return res.status(400).send({ message: error });
   }
 }
 
-async function criarEventos(req, res){
-  const {descricao, inicio, fim} = req.body;
+async function criarEventos(req, res) {
+  const { descricao, inicio, fim } = req.body;
   if (typeof descricao != "string") {
-    return res.status(400).send({message: "Formato de descrição inválido"});
+    return res.status(400).send({ message: "Formato de descrição inválido" });
   }
   if (descricao.length > 150) {
-    return res.status(400).send({message: "Tamanho da descrição é maior que o limite permitido"})
+    return res
+      .status(400)
+      .send({ message: "Tamanho da descrição é maior que o limite permitido" });
   }
-  try{
+  try {
     await service.criarEventos(descricao, inicio, fim, req.place.id);
-    res.status(200).send({message: "Evento criado"});
-  } catch(error) {
-    res.status(400).send({message: error});
+    res.status(200).send({ message: "Evento criado" });
+  } catch (error) {
+    res.status(400).send({ message: error });
   }
 }
 
-async function getEventos(req, res){
-  try{
+async function getEventos(req, res) {
+  try {
     const [result] = await service.getEventos(req.place.id);
     res.status(200).send(result);
-  } catch(error){
-    res.status(400).send({message: error})
+  } catch (error) {
+    res.status(400).send({ message: error });
   }
 }
 
-async function updateEventos(req, res){
-  const {descricao, dt_inicio, dt_fim, eventoId} = req.body;
+async function updateEventos(req, res) {
+  const { descricao, dt_inicio, dt_fim, eventoId } = req.body;
   if (typeof descricao != "string") {
-    return res.status(400).send({message: "Formato de descrição inválido"});
+    return res.status(400).send({ message: "Formato de descrição inválido" });
   }
   if (descricao.length > 150) {
-    return res.status(400).send({message: "Tamanho da descrição é maior que o limite permitido"})
+    return res
+      .status(400)
+      .send({ message: "Tamanho da descrição é maior que o limite permitido" });
   }
   if (typeof eventoId != "number") {
-    return res.status(400).send({message: "id inválido"})
+    return res.status(400).send({ message: "id inválido" });
   }
-  try{
+  try {
     await service.updateEventos(descricao, dt_inicio, dt_fim, eventoId);
-    res.status(200).send({message: "Dados atualizados"});
-  } catch(error){
-    res.status(500).send({message: error});
+    res.status(200).send({ message: "Dados atualizados" });
+  } catch (error) {
+    res.status(500).send({ message: error });
   }
 }
 
@@ -267,46 +298,70 @@ async function deleteEventos(req, res) {
   }
 }
 
-async function criarPromocao(req, res){
-  const {dt_fim, descricao} = req.body;
-  if (typeof descricao != "string") {
-    return res.status(400).send({message: "Formato de descrição inválido"});
-  }
-  if (descricao.length > 150) {
-    return res.status(400).send({message: "Tamanho da descrição é maior que o limite permitido"});
-  }
+async function deleteEventos(req, res) {
   try{
-    await service.criarPromocao(req.place.id, dt_fim, descricao);
-    res.status(200).send({message: "Promoção criada"});
+    const {eventoId} = req.params;
+    await service.deleteEventos(parseInt(eventoId));
+    res.status(200).send({message: "Apagado"})
   } catch(error) {
-    res.status(400).send({message: error})
+    res.status(500).send({message: error})
   }
 }
 
-async function getPromocao(req, res){
-  try{
+async function criarPromocao(req, res) {
+  const { dt_fim, descricao } = req.body;
+  if (typeof descricao != "string") {
+    return res.status(400).send({ message: "Formato de descrição inválido" });
+  }
+  if (descricao.length > 150) {
+    return res
+      .status(400)
+      .send({ message: "Tamanho da descrição é maior que o limite permitido" });
+  }
+  try {
+    await service.criarPromocao(req.place.id, dt_fim, descricao);
+    res.status(200).send({ message: "Promoção criada" });
+  } catch (error) {
+    res.status(400).send({ message: error });
+  }
+}
+
+async function getPromocao(req, res) {
+  try {
     const [result] = await service.getPromocao(req.place.id);
     res.status(200).send(result);
-  } catch(error) {
-    res.status(400).send({message: error})
+  } catch (error) {
+    res.status(400).send({ message: error });
   }
 }
 
-async function updatePromocao(req, res){
-  const {dt_fim, descricao, promocaoId} = req.body;
+async function updatePromocao(req, res) {
+  const { dt_fim, descricao, promocaoId } = req.body;
   if (typeof descricao != "string") {
-    return res.status(400).send({message: "Formato de descrição inválido"});
+    return res.status(400).send({ message: "Formato de descrição inválido" });
   }
   if (descricao.length > 150) {
-    return res.status(400).send({message: "Tamanho da descrição é maior que o limite permitido"});
+    return res
+      .status(400)
+      .send({ message: "Tamanho da descrição é maior que o limite permitido" });
   }
   if (typeof promocaoId != "number") {
-    return res.status(400).send({message: "id inválido"});
+    return res.status(400).send({ message: "id inválido" });
   }
-  try{
+  try {
     await service.updatePromocao(dt_fim, descricao, promocaoId);
-    res.status(200).send({message: "Dados atualizados"});
-  } catch(error){
+    res.status(200).send({ message: "Dados atualizados" });
+  } catch (error) {
+    res.status(500).send({ message: error });
+  }
+}
+
+async function deletePromocao(req, res) {
+  try{
+    const {promocaoId} = req.params;
+    await service.deletePromocao(parseInt(promocaoId));
+    res.status(200).send({message: "Apagado"})
+  } catch(error) {
     res.status(500).send({message: error})
   }
 }
@@ -322,46 +377,50 @@ async function deletePromocao(req, res) {
 }
 
 async function criarCupons(req, res) {
-  const {vencimento, descricao} = req.body;
+  const { vencimento, descricao } = req.body;
   if (typeof descricao != "string") {
-    return res.status(400).send({message: "Formato de descrição inválido"});
+    return res.status(400).send({ message: "Formato de descrição inválido" });
   }
   if (descricao.length > 30) {
-    return res.status(400).send({message: "Tamanho da descrição é maior que o limite permitido"});
+    return res
+      .status(400)
+      .send({ message: "Tamanho da descrição é maior que o limite permitido" });
   }
-  try{
+  try {
     await service.criarCupons(req.place.id, vencimento, descricao);
-    res.status(200).send({message: "Cupon criado com sucesso"});
-  } catch(error) {
-    res.status(400).send({message: error});
+    res.status(200).send({ message: "Cupon criado com sucesso" });
+  } catch (error) {
+    res.status(400).send({ message: error });
   }
 }
 
 async function getCupons(req, res) {
   try {
-  const [result] = await service.getCupons(req.place.id);
-  res.status(200).send(result)
-  } catch(error) {
-    res.status(400).send({message: error})
+    const [result] = await service.getCupons(req.place.id);
+    res.status(200).send(result);
+  } catch (error) {
+    res.status(400).send({ message: error });
   }
 }
 
-async function updateCupons(req, res){
-  const {dt_vencimento, descricao, cupomId} = req.body;
+async function updateCupons(req, res) {
+  const { dt_vencimento, descricao, cupomId } = req.body;
   if (typeof descricao != "string") {
-    return res.status(400).send({message: "Formato de descrição inválido"});
+    return res.status(400).send({ message: "Formato de descrição inválido" });
   }
   if (descricao.length > 30) {
-    return res.status(400).send({message: "Tamanho da descrição é maior que o limite permitido"});
+    return res
+      .status(400)
+      .send({ message: "Tamanho da descrição é maior que o limite permitido" });
   }
   if (typeof cupomId != "number") {
-    return res.status(400).send({message: "id inválido"})
+    return res.status(400).send({ message: "id inválido" });
   }
-  try{
+  try {
     await service.updateCupons(dt_vencimento, descricao, cupomId);
-    res.status(200).send({message: "Dados atualizados"})
-  } catch(error){
-    res.status(500).send({message: error});
+    res.status(200).send({ message: "Dados atualizados" });
+  } catch (error) {
+    res.status(500).send({ message: error });
   }
 }
 
@@ -375,16 +434,50 @@ async function deleteCupons(req, res) {
   }
 }
 
-async function setResposta(req, res) {
-try {
-await service.setResposta(req.avaliacaoid.id, req.placeid.id, req.coment);
-res.status(200).send({ message: "Concluido"});
-} catch (error) {
-console.log(error);
-res.status(400).send({ message: error});
+async function deleteCupons(req, res) {
+  try{
+    const {cupomId} = req.params
+    await service.deleteCupons(parseInt(cupomId));
+    res.status(200).send({message: "deletado"});
+  } catch(error){
+    res.status(400).send({message: error})
   }
 }
 
+async function denunciarAvaliacao(req, res) {
+  const { motivo } = req.body;
+  const avaliacaoid = req.params.id;
+  try {
+    await service.denunciarAvaliacao(avaliacaoid, motivo);
+    res.status(200).send({ message: "Denunciado" });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({ message: error });
+  }
+}
+
+async function denunciarResposta(req, res) {
+  const { motivo } = req.body;
+  const respostaid = req.params.id;
+  try {
+    await service.denunciarResposta(respostaid, motivo);
+    res.status(200).send({ message: "Denunciado" });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({ message: error });
+  }
+}
+
+async function denunciarPlace(req, res) {
+  const { motivo } = req.body;
+  try {
+    await service.denunciarPlace(req.place.id, motivo);
+    res.status(200).send({ message: "Denunciado" });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({ message: error });
+  }
+}
 
 export default {
   requestCreation,
@@ -408,4 +501,7 @@ export default {
   deleteCupons,
   deleteEventos,
   deletePromocao,
+  denunciarPlace,
+  denunciarAvaliacao,
+  denunciarResposta,
 };
