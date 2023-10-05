@@ -73,7 +73,16 @@ async function loginUser(email, password) {
 
 async function getFavoritos(userid) {
   const sql =
-    "select uuid_from_bin(b.uuid) uuid,b.nome nome, b.coordenadas coordenadas, b.nota nota, a.criado from tbl_favoritos a join tbl_places b on a.FK_place_id = b.id where FK_usuario_id = ?;";
+    `select uuid_from_bin(b.uuid) uuid,b.nome nome, b.coordenadas coordenadas, a.criado criado,
+    ST_Distance_Sphere(
+          coordenadas,
+          point(0, 0)
+        ) distancia,
+        coalesce(c.nota, 0) nota
+      from tbl_favoritos a 
+      join tbl_places b on a.FK_place_id = b.id 
+       left join vw_notas c on c.id = b.id
+      where FK_usuario_id = ?;`;
   const data = [userid];
 
   const conn = await database.connect();

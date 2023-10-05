@@ -196,10 +196,10 @@ async function getPlaces(req, res) {
   try {
     let result = await service.getPlaces(limit, page, location, req.infoUser.id)
     // console.log(result)
-    result.forEach((element, index) => {
-      let parser = JSON.parse(element.coordenadas);
-      result[index].coordenadas = parser.coordinates;
-    })
+    // result.forEach((element, index) => {
+    //   let parser = JSON.parse(element.coordenadas);
+    //   result[index].coordenadas = parser.coordinates;
+    // })
     res.status(200).send(result)
   } catch (error) {
     console.log(error.constructor.name)

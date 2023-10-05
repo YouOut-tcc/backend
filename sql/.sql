@@ -16,6 +16,7 @@ create table tbl_usuario(
     primary key(id)
 );
 
+-- Tirar a columas notas
 create table tbl_places(
 	id               integer auto_increment not null,
     uuid             binary(16) not null unique,
@@ -91,6 +92,7 @@ create table tbl_logins_has_places(
     unique(FK_place_id, FK_login_id)
 );
 
+-- adicionar columa de denunciado
 create table tbl_avaliacoes(
     id            integer auto_increment not null,
     FK_usuario_id integer not null,
@@ -166,3 +168,8 @@ create table tbl_cupons (
     primary key(id),
     foreign key(fk_est) references tbl_places(id)
 );
+
+create view vw_notas as
+select FK_place_id id, round(avg(pontuacao), 1) nota 
+    from tbl_avaliacoes 
+    group by FK_place_id;
