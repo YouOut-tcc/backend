@@ -257,6 +257,16 @@ async function updateEventos(req, res){
   }
 }
 
+async function deleteEventos(req, res) {
+  try{
+    const {eventoId} = req.params;
+    await service.deleteEventos(parseInt(eventoId));
+    res.status(200).send({message: "Apagado"})
+  } catch(error) {
+    res.status(500).send({message: error})
+  }
+}
+
 async function criarPromocao(req, res){
   const {dt_fim, descricao} = req.body;
   if (typeof descricao != "string") {
@@ -297,6 +307,16 @@ async function updatePromocao(req, res){
     await service.updatePromocao(dt_fim, descricao, promocaoId);
     res.status(200).send({message: "Dados atualizados"});
   } catch(error){
+    res.status(500).send({message: error})
+  }
+}
+
+async function deletePromocao(req, res) {
+  try{
+    const {promocaoId} = req.params;
+    await service.deletePromocao(parseInt(promocaoId));
+    res.status(200).send({message: "Apagado"})
+  } catch(error) {
     res.status(500).send({message: error})
   }
 }
@@ -345,6 +365,16 @@ async function updateCupons(req, res){
   }
 }
 
+async function deleteCupons(req, res) {
+  try{
+    const {cupomId} = req.params
+    await service.deleteCupons(parseInt(cupomId));
+    res.status(200).send({message: "deletado"});
+  } catch(error){
+    res.status(400).send({message: error})
+  }
+}
+
 async function setResposta(req, res) {
 try {
 await service.setResposta(req.avaliacaoid.id, req.placeid.id, req.coment);
@@ -375,4 +405,7 @@ export default {
   updatePromocao,
   updateEventos,
   updateCupons,
+  deleteCupons,
+  deleteEventos,
+  deletePromocao,
 };

@@ -46,10 +46,8 @@ async function usuarioCadastro(req, res){
 }
 
 async function usuarioDeletar(req, res){
-  const { id } = req.params;
-
   try {
-    await service.deleteUser(id);
+    await service.deleteUser(req.infoUser.id);
     res.status(200).send({message: "apagado"});
   } catch (error) {
     res.status(500).send({message: error});
@@ -89,6 +87,19 @@ async function usuarioUpdate(req, res){
 
 async function usuarioLogin(req, res){
 	const {email, password} = req.body;
+
+  if (typeof email != "string"){
+    return res.status(400).send({message: "Email no formato inválido"})
+  }
+  if (email.length > 65) {
+    return res.status(400).send({message: "Email maior que o permitido"})
+  }
+  if (typeof password != "string"){
+    return res.status(400).send({message: "Senha no formato inválido"})
+  }
+  if (password.length > 1000) {
+    return res.status(400).send({message: "Senha maior que o permitido"})
+  }
 
 	try {
 		const users = await service.loginUser(email, password);

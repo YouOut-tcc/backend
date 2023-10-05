@@ -17,6 +17,9 @@ routes.post('/cupons', places.criarCupons)
 routes.put('/eventos', places.updateEventos);
 routes.put('/cupons', places.updateCupons);
 routes.put('/promocoes', places.updatePromocao);
+routes.delete('/eventos/:eventoId', places.deleteEventos);
+routes.delete('/cupons/:cupomId', places.deleteCupons);
+routes.delete('/promocoes/:promocaoId', places.deletePromocao);
 
 export default routes;
 

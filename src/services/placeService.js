@@ -216,6 +216,16 @@ async function updateEventos(descricao, dt_inicio, dt_fim, eventoId) {
   conn.end();
 }
 
+async function deleteEventos(eventoId) {
+  const sql = "delete from tbl_eventos where id = ?";
+  // const sql = "insert into tbl_eventos(deletado) values(true) where id = ? and deletado = false";
+  const conn = await database.connect();
+  conn.query(sql, eventoId);
+
+  conn.end();
+}
+
+
 async function criarPromocao(placeid, dt_fim, descricao) {
   const sql =
     "insert into tbl_promocao(fk_est, dt_vencimento, descricao) values(?,?,?)";
@@ -248,6 +258,16 @@ async function updatePromocao(dt_fim, descricao, promocaoId) {
 
   conn.end();
 }
+
+async function deletePromocao(promocaoId) {
+  const sql = "delete from tbl_promocao where id = ?";
+  // const sql = "insert into tbl_promocao(deletado) values(true) where id = ? and deletado = false";
+  const conn = await database.connect();
+  conn.query(sql, promocaoId);
+
+  conn.end();
+}
+
 
 async function criarCupons(placeid, vencimento, descricao) {
   const sql =
@@ -282,6 +302,15 @@ async function updateCupons(dt_vencimento, descricao, cupomId) {
   conn.end();
 }
 
+async function deleteCupons(cupomId) {
+  const sql = "delete from tbl_cupons where id = ?";
+  // const sql = "insert into tbl_cupons(deletado) values(true) where id = ? and deletado = false";
+  const conn = await database.connect();
+  conn.query(sql, cupomId);
+
+  conn.end();
+}
+
 async function setResposta(avaliacaoid, placeid, coment) {
   const sql =
     "Insert into tbl_respostas (fk_avaliacao_id, fk_place_logins_id, comentario) values(? ? ?)";
@@ -290,7 +319,6 @@ async function setResposta(avaliacaoid, placeid, coment) {
   const conn = await database.connect();
   await conn.query(sql, data);
 
-  conn.end();
   conn.end();
 }
 
@@ -315,4 +343,7 @@ export default {
   updatePromocao,
   updateEventos,
   updateCupons,
+  deleteCupons,
+  deleteEventos,
+  deletePromocao
 };
