@@ -298,16 +298,6 @@ async function deleteEventos(req, res) {
   }
 }
 
-async function deleteEventos(req, res) {
-  try{
-    const {eventoId} = req.params;
-    await service.deleteEventos(parseInt(eventoId));
-    res.status(200).send({message: "Apagado"})
-  } catch(error) {
-    res.status(500).send({message: error})
-  }
-}
-
 async function criarPromocao(req, res) {
   const { dt_fim, descricao } = req.body;
   if (typeof descricao != "string") {
@@ -366,16 +356,6 @@ async function deletePromocao(req, res) {
   }
 }
 
-async function deletePromocao(req, res) {
-  try{
-    const {promocaoId} = req.params;
-    await service.deletePromocao(parseInt(promocaoId));
-    res.status(200).send({message: "Apagado"})
-  } catch(error) {
-    res.status(500).send({message: error})
-  }
-}
-
 async function criarCupons(req, res) {
   const { vencimento, descricao } = req.body;
   if (typeof descricao != "string") {
@@ -421,16 +401,6 @@ async function updateCupons(req, res) {
     res.status(200).send({ message: "Dados atualizados" });
   } catch (error) {
     res.status(500).send({ message: error });
-  }
-}
-
-async function deleteCupons(req, res) {
-  try{
-    const {cupomId} = req.params
-    await service.deleteCupons(parseInt(cupomId));
-    res.status(200).send({message: "deletado"});
-  } catch(error){
-    res.status(400).send({message: error})
   }
 }
 

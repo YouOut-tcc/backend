@@ -4,11 +4,15 @@ use youout;
 select * from tbl_avaliacoes; 
 select * from tbl_favoritos;
 select * from tbl_place_logins;
+select * from tbl_eventos;
+
+delete from tbl_eventos where id = 1;
 
 select * from vw_notas;
 select FK_place_id id, round(avg(pontuacao), 1) nota 
     from tbl_avaliacoes 
     group by FK_place_id;
+
 
 select id, nome, telefone, celular, numero, cep, longitude, latitute, criado 
 	from tbl_places 

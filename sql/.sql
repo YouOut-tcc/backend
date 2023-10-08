@@ -154,7 +154,7 @@ create table if not exists tbl_promocao(
 -- colocar nome para eventos
 create table if not exists tbl_eventos(
 	id int auto_increment not null,
-    deletado boolean default null,
+    deletado boolean default false,
     dt_criacao datetime default now(),
     nome varchar(150) not null,
     descricao varchar(150),
