@@ -364,6 +364,34 @@ async function denunciarResposta(respotaid, motivo) {
   await conn.query(sql, data);
 }
 
+async function updatePlaces(nome, nome_empresarial, telefone, celular, descricao, id) {
+  const sql = "update tbl_places set nome=?, nome_empresarial=?, telefone=?, celular=?, descricao=? where id = ? ";
+  const data = [nome, nome_empresarial, telefone, celular, descricao, id];
+
+  const conn = await database.connect();
+  await conn.query(sql,data);
+
+  conn.end();
+}
+
+async function deletarPlace(id) {
+  const sql = "update tbl_places set deletado = true, deletado_dia = now() where id = ?";
+
+  const conn = await database.connect();
+  await conn.query(sql, id);
+
+  conn.end();
+}
+
+// async function pesquisarPlace(nome) {
+//   const sql = `select uuid_from_bin(uuid) uuid from tbl_places where nome = %?%`;
+//   const conn = await database.connect();
+//   let place = await conn.query(sql, nome);
+
+//   return place;
+//   conn.end();
+// }
+
 export default {
   sendRequest,
   createPlace,
@@ -390,5 +418,8 @@ export default {
   denunciarResposta,
   deleteCupons,
   deleteEventos,
-  deletePromocao
+  deletePromocao,
+  deletarPlace,
+  updatePlaces,
+  // pesquisarPlace
 };

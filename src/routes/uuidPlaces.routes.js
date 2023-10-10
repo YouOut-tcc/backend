@@ -19,6 +19,7 @@ routes.use(verifyifUser)
 
 routes.get('/informacoes', places.showInfo)
 routes.post('/denunciar', places.denunciarPlace)
+// routes.post('/pesquisar', places.pesquisarPlace);
 
 // juntar avaliar e avaliacoes
 routes.post('/avaliar', places.avaliarPlace)

@@ -67,6 +67,7 @@ join tbl_usuario b on b.id = a.FK_usuario_id
 select * from tbl_places where uuid=uuid_to_bin('8f243d99-022b-521b-a2e5-b4d061a299bb');
 
 select * from tbl_avaliacoes;
+select * from tbl_places where uuid_from_bin(uuid) = "27e992e0-3d87-5a23-b208-4972991ae593";
 select uuid_from_bin(uuid) from tbl_places;
 select * from tbl_usuario;
 select * from tbl_favoritos where FK_usuario_id = 1 and FK_place_id = 1;

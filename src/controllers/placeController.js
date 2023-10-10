@@ -449,6 +449,36 @@ async function denunciarPlace(req, res) {
   }
 }
 
+async function deletarPlace(req, res) {
+  try{
+    await service.deletarPlace(req.place.id);
+    res.status(200).send({message: "deletado"});
+  } catch(error) {
+    res.status(500).send({message: error});
+  }
+}
+
+async function updatePlaces(req, res) {
+  try {
+    const {nome, nome_empresarial, telefone, celular, descricao} = req.body;
+
+    await service.updatePlaces(nome, nome_empresarial, telefone, celular, descricao, req.place.id);
+    res.status().send({message: "Dados atualizados"})
+  } catch(error) {
+    res.status(500).send({message: error})
+  }
+}
+
+// async function pesquisarPlace(req, res) {
+//   try {
+//     const {nome} = req.body;
+//     let result = await service.pesquisarPlace(nome);
+//     res.status(200).send({message: result});
+//   } catch (error) {
+//     res.status(500).send({message: error});
+//   }
+// }
+
 export default {
   requestCreation,
   showInfo,
@@ -474,4 +504,7 @@ export default {
   denunciarPlace,
   denunciarAvaliacao,
   denunciarResposta,
+  deletarPlace,
+  updatePlaces,
+  // pesquisarPlace,
 };

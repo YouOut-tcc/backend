@@ -17,10 +17,11 @@ routes.post('/cupons', places.criarCupons)
 routes.put('/eventos', places.updateEventos);
 routes.put('/cupons', places.updateCupons);
 routes.put('/promocoes', places.updatePromocao);
+routes.post('/atualizar', places.updatePlaces);
 routes.delete('/eventos/:eventoId', places.deleteEventos);
 routes.delete('/cupons/:cupomId', places.deleteCupons);
 routes.delete('/promocoes/:promocaoId', places.deletePromocao);
+routes.delete('/deletar', places.deletarPlace);
 
 export default routes;
-
 
