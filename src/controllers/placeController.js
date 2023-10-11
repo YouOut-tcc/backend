@@ -108,7 +108,7 @@ async function requestCreation(req, res) {
 }
 
 function showInfo(req, res) {
-  return res.status(200).send({ message: req.place });
+  return res.status(200).send(req.place);
 }
 
 async function avaliarPlace(req, res) {
