@@ -116,6 +116,25 @@ async function getInformacoesUser(userid) {
   return result;
 }
 
+async function pesquisarPlace(nome) {
+  const sql = "select *, uuid_from_bin(uuid) as uuid from tbl_places where match(nome) against(?) and deletado = false;"
+  const conn = await database.connect();
+  const [place] = await conn.query(sql, nome);
+
+  conn.end();
+  return place;
+}
+
+async function pesquisarPlaceTag(tagId) {
+  const sql = "select uuid_from_bin(uuid) as uuid, c.tag from tbl_places a join tbl_place_has_tags b join tbl_tags c on b.FK_tag_id = c.id and b.FK_place_id = a.id where c.id = ?"
+
+  const conn = await database.connect();
+  const [result] = await conn.query(sql, tagId);
+
+  conn.end();
+  return result;
+}
+
 export default {
   createUser,
   updateUser,
@@ -124,5 +143,7 @@ export default {
   verifyUserExist,
   getFavoritos,
   getAvaliacoes,
-  getInformacoesUser
+  getInformacoesUser,
+  pesquisarPlace,
+  pesquisarPlaceTag,
 };

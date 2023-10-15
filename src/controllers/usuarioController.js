@@ -191,6 +191,26 @@ async function getInformacoesUser(req, res) {
   }
 }
 
+async function pesquisarPlace(req, res) {
+  try {
+    const {nome} = req.body;
+    const result = await service.pesquisarPlace(nome);
+    res.status(200).send(result);
+  } catch (error) {
+    res.status(500).send({message: error});
+  }
+}
+
+async function pesquisarPlaceTag(req, res) {
+  try{
+    const {tagId} = req.params;
+    const result = await service.pesquisarPlaceTag(parseInt(tagId));
+    res.status(200).send(result);
+  } catch(error) {
+    res.status(500).send({message: error})
+  }
+}
+
 export default {
   usuarioCadastro,
   usuarioDeletar,
@@ -200,5 +220,7 @@ export default {
   usuarioToken,
 	getFavoritos,
 	getAvaliacoes,
-	getInformacoesUser
+	getInformacoesUser,
+  pesquisarPlace,
+  pesquisarPlaceTag,
 };

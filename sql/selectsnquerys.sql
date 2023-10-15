@@ -2,10 +2,12 @@ use youout;
 -- alter table tbl_places rename column note to  nota;
 -- desc tbl_usuario;
 select * from tbl_avaliacoes; 
+select * from tbl_tags;
 select * from tbl_favoritos;
 select * from tbl_place_logins;
 select * from tbl_eventos;
-
+select * from tbl_places where match(nome) against("Padaria");
+select * from tbl_favoritos where FK_usuario_id = 1 and FK_place_id = 1;
 delete from tbl_eventos where id = 1;
 
 select * from vw_notas;

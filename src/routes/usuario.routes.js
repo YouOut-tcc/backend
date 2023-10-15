@@ -23,6 +23,8 @@ routes.get('/favoritos', usuario.getFavoritos)
 routes.get('/avaliacoes', usuario.getAvaliacoes)
 routes.get('/informacoes', usuario.getInformacoesUser)
 routes.post('/update-informacoes', usuario.usuarioUpdate)
+routes.post('/pesquisar', usuario.pesquisarPlace);
+routes.post('/pesquisar/tag/:tagId', usuario.pesquisarPlaceTag);
 // routes.use('/logout')
 // routes.use('/reset')
 // routes.use('/update')

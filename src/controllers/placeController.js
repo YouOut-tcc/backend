@@ -469,16 +469,6 @@ async function updatePlaces(req, res) {
   }
 }
 
-// async function pesquisarPlace(req, res) {
-//   try {
-//     const {nome} = req.body;
-//     let result = await service.pesquisarPlace(nome);
-//     res.status(200).send({message: result});
-//   } catch (error) {
-//     res.status(500).send({message: error});
-//   }
-// }
-
 export default {
   requestCreation,
   showInfo,
@@ -506,5 +496,4 @@ export default {
   denunciarResposta,
   deletarPlace,
   updatePlaces,
-  // pesquisarPlace,
 };

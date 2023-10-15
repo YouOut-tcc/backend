@@ -19,17 +19,16 @@ routes.use(verifyifUser)
 
 routes.get('/informacoes', places.showInfo)
 routes.post('/denunciar', places.denunciarPlace)
-// routes.post('/pesquisar', places.pesquisarPlace);
 
 // juntar avaliar e avaliacoes
-routes.post('/avaliar', places.avaliarPlace)
+routes.post('/avaliacoes', places.avaliarPlace)
 routes.get('/avaliacoes', places.getAvaliacoes)
 
 routes.post('/avaliacoes/denunciar/:id', places.denunciarAvaliacao)
 routes.post('/respotas/denunciar/:id', places.denunciarResposta)
 
 // juntar favoritar e favorito
-routes.post('/favoritar', places.criarFavorito)
+routes.post('/favorito', places.criarFavorito)
 routes.get('/favorito', places.getFavorito)
 routes.delete('/favorito', places.deletarFavorito)
 

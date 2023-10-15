@@ -45,7 +45,8 @@ create table if not exists tbl_places(
     deletado_dia     date     default null,
     deletado         boolean  not null default false,
     
-    primary key(id)
+    primary key(id),
+    fulltext(nome)
 );
 
 create table if not exists tbl_tags(
@@ -56,10 +57,11 @@ create table if not exists tbl_tags(
 
 create table if not exists tbl_place_has_tags(
     id          integer auto_increment not null,
-    tag         varchar(255) not null,
+    FK_tag_id 	integer not null,
     FK_place_id integer not null,
     primary key(id),
-    foreign key(FK_place_id) references tbl_places(id)
+    foreign key(FK_place_id) references tbl_places(id),
+    foreign key(FK_tag_id) references tbl_tags(id)
 );
 
 create table if not exists tbl_place_logins(
@@ -115,7 +117,7 @@ create table if not exists tbl_avaliacoes(
 
 -- fazendo essa tabela dessa forma, deixa possivel uma avaliação receber varios comentarios
 -- algo indesejado, tratar isso na logica do backend, mas mander por motivos de compatibilidade
-create table if not exists tbl_respotas(
+create table if not exists tbl_respostas(
     id              integer auto_increment not null,
     FK_avaliacao_id integer not null,
 	fk_place_logins_id  integer not null,

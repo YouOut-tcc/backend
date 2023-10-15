@@ -383,15 +383,6 @@ async function deletarPlace(id) {
   conn.end();
 }
 
-// async function pesquisarPlace(nome) {
-//   const sql = `select uuid_from_bin(uuid) uuid from tbl_places where nome = %?%`;
-//   const conn = await database.connect();
-//   let place = await conn.query(sql, nome);
-
-//   return place;
-//   conn.end();
-// }
-
 export default {
   sendRequest,
   createPlace,
@@ -421,5 +412,4 @@ export default {
   deletePromocao,
   deletarPlace,
   updatePlaces,
-  // pesquisarPlace
 };
