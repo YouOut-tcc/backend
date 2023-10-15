@@ -109,3 +109,13 @@ select a.id, uuid_from_bin(uuid) uuid, a.nome, coordenadas,
 select * from tbl_favoritos;
 
 insert into tbl_favoritos(FK_usuario_id, FK_place_id) values(1,3); 
+
+select * from tbl_places;
+update tbl_places set deletado = true, deletado_dia = now() where id = 1;
+update tbl_places set denunciado = true, denuncias = denuncias + 1 where id = 1;
+
+
+
+
+
+

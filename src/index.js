@@ -2,7 +2,6 @@ import express from "express";
 import routes from "./routes/routes.js";
 import cors from "cors";
 import dotenv from 'dotenv';
-import { validarJSON } from "./middlewares/validador.js";
 dotenv.config();
 
 const api = express();
@@ -14,7 +13,7 @@ api.use(express.json());
 api.use((err, req, res, next)=>{
   console.log(err.type);
   if(err.status === 400){
-    return res.status(err.status).send("cu");
+    return res.status(err.status).send({error: "Malformed JSON in request body"});
   }
   return next(err);
 })
