@@ -417,8 +417,9 @@ async function deleteCupons(req, res) {
 async function denunciarAvaliacao(req, res) {
   const { motivo } = req.body;
   const avaliacaoid = req.params.id;
+  const userid = req.infoUser.id;
   try {
-    await service.denunciarAvaliacao(avaliacaoid, motivo);
+    await service.denunciarAvaliacao(avaliacaoid, userid, motivo);
     res.status(200).send({ message: "Denunciado" });
   } catch (error) {
     console.log(error);
@@ -429,8 +430,9 @@ async function denunciarAvaliacao(req, res) {
 async function denunciarResposta(req, res) {
   const { motivo } = req.body;
   const respostaid = req.params.id;
+  const userid = req.infoUser.id;
   try {
-    await service.denunciarResposta(respostaid, motivo);
+    await service.denunciarResposta(respostaid, userid, motivo);
     res.status(200).send({ message: "Denunciado" });
   } catch (error) {
     console.log(error);
@@ -440,8 +442,10 @@ async function denunciarResposta(req, res) {
 
 async function denunciarPlace(req, res) {
   const { motivo } = req.body;
+  const placeid = req.place.id;
+  const userid = req.infoUser.id;
   try {
-    await service.denunciarPlace(req.place.id, motivo);
+    await service.denunciarPlace(placeid, userid, motivo);
     res.status(200).send({ message: "Denunciado" });
   } catch (error) {
     console.log(error);

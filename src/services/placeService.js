@@ -340,28 +340,28 @@ async function setResposta(avaliacaoid, placeid, coment) {
   conn.end();
 }
 
-async function denunciarPlace(placeid, motivo) {
+async function denunciarPlace(placeid, userid, motivo) {
   const sql =
-    "insert into tbl_places_denuncias(fk_place_id, motivo) values(?,?)";
-  const data = [placeid, motivo];
+    "insert into tbl_places_denuncias(fk_place_id, fk_usuario_id, motivo) values(?,?,?)";
+  const data = [placeid, userid, motivo];
 
   const conn = await database.connect();
   await conn.query(sql, data);
 }
 
-async function denunciarAvaliacao(avaliacaoid, motivo) {
+async function denunciarAvaliacao(avaliacaoid, userid, motivo) {
   const sql =
-    "insert into tbl_avaliacoes_denuncias(fk_avaliacoes_id, motivo) values(?,?)";
-  const data = [avaliacaoid, motivo];
+    "insert into tbl_avaliacoes_denuncias(fk_avaliacoes_id, fk_usuario_id, motivo) values(?,?,?)";
+  const data = [avaliacaoid, userid, motivo];
 
   const conn = await database.connect();
   await conn.query(sql, data);
 }
 
-async function denunciarResposta(respotaid, motivo) {
+async function denunciarResposta(respotaid, userid, motivo) {
   const sql =
-    "insert into tbl_respota_denuncias(fk_respotas_id, motivo) values(?,?)";
-  const data = [respotaid, motivo];
+    "insert into tbl_respota_denuncias(fk_respotas_id, fk_usuario_id, motivo) values(?,?,?)";
+  const data = [respotaid, userid, motivo];
 
   const conn = await database.connect();
   await conn.query(sql, data);
