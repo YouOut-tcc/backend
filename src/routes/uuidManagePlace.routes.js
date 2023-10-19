@@ -22,6 +22,7 @@ routes.delete('/eventos/:eventoId', places.deleteEventos);
 routes.delete('/cupons/:cupomId', places.deleteCupons);
 routes.delete('/promocoes/:promocaoId', places.deletePromocao);
 routes.delete('/deletar', places.deletarPlace);
+routes.post('/responder/:id', places.respoderAvaliacao);
 
 export default routes;
 

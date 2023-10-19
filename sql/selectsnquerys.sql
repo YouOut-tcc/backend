@@ -121,6 +121,10 @@ from tbl_logins_has_places a
 
 select * from tbl_places;
 
+select * from tbl_avaliacoes;
+select * from tbl_respostas;
+
+insert into tbl_respostas(FK_avaliacao_id, fk_place_logins_id, comentario) values(?,?,?);
 
 
 

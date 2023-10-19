@@ -473,6 +473,18 @@ async function updatePlaces(req, res) {
   }
 }
 
+async function respoderAvaliacao(req, res) {
+  try {
+    const { resposta } = req.body;
+    const { id } = req.params;
+
+    await service.respoderAvaliacao(id, req.infoUser.id, resposta);
+    res.status(200).send({ message: "Salvo" });
+  } catch (error) {
+    res.status(500).send({message: error})
+  }
+}
+
 export default {
   requestCreation,
   showInfo,
@@ -500,4 +512,5 @@ export default {
   denunciarResposta,
   deletarPlace,
   updatePlaces,
+  respoderAvaliacao
 };
