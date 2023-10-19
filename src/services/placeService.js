@@ -104,9 +104,12 @@ async function criarAvaliacao(comentario, nota, placeid, userid) {
 }
 
 async function getAvaliacoes(placeid, userid) {
-  const sql = `select a.id id, a.denunciado ,a.pontuacao, a.comentario, a.criado, b.nome from tbl_avaliacoes a
-    join tbl_usuario b on b.id = a.FK_usuario_id 
-      where FK_place_id=?`;
+  const sql = `select a.id id, a.denunciado ,a.pontuacao, a.comentario, a.criado, b.nome, 
+  c.comentario as resposta, c.denunciado as resposta_denuncia
+  from tbl_avaliacoes a
+      join tbl_usuario b on b.id = a.FK_usuario_id
+      left join tbl_respostas c on FK_avaliacao_id = a.id
+        where FK_place_id=?`;
   const data = [placeid, userid];
 
   const conn = database.pool;
