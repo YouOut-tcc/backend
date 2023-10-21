@@ -244,7 +244,6 @@ async function deleteEventos(eventoId) {
   conn.end();
 }
 
-
 async function criarPromocao(placeid, dt_fim, descricao) {
   const sql =
     "insert into tbl_promocao(fk_est, dt_vencimento, descricao) values(?,?,?)";
@@ -367,23 +366,41 @@ async function denunciarResposta(respotaid, userid, motivo) {
   await conn.query(sql, data);
 }
 
-async function updatePlaces(nome, nome_empresarial, telefone, celular, descricao, id) {
-  const sql = "update tbl_places set nome=?, nome_empresarial=?, telefone=?, celular=?, descricao=? where id = ? ";
+async function updatePlaces(
+  nome,
+  nome_empresarial,
+  telefone,
+  celular,
+  descricao,
+  id
+) {
+  const sql =
+    "update tbl_places set nome=?, nome_empresarial=?, telefone=?, celular=?, descricao=? where id = ? ";
   const data = [nome, nome_empresarial, telefone, celular, descricao, id];
 
   const conn = await database.connect();
-  await conn.query(sql,data);
+  await conn.query(sql, data);
 
   conn.end();
 }
 
 async function deletarPlace(id) {
-  const sql = "update tbl_places set deletado = true, deletado_dia = now() where id = ?";
+  const sql =
+    "update tbl_places set deletado = true, deletado_dia = now() where id = ?";
 
   const conn = await database.connect();
   await conn.query(sql, id);
 
   conn.end();
+}
+
+async function respoderAvaliacao(avaliacaoid, loginid, resposta) {
+  const sql =
+    "insert into tbl_respostas(FK_avaliacao_id, fk_place_logins_id, comentario) values(?,?,?)";
+  const data = [avaliacaoid, loginid, resposta];
+
+  const conn = await database.connect();
+  await conn.query(sql, data);
 }
 
 export default {
@@ -415,4 +432,5 @@ export default {
   deletePromocao,
   deletarPlace,
   updatePlaces,
+  respoderAvaliacao,
 };

@@ -226,6 +226,15 @@ async function resetPassword(req, res) {
   }
 }
 
+async function getPlacesOwn(req, res) {
+  try {
+    let places = await service.getPlacesOwn(req.infoUser.id);
+    res.status(200).send(places);
+  } catch (error) {
+    res.status(500).send({ message: error });
+  }
+}
+
 export default {
   placeCadastro,
   placeDeletar,
@@ -237,5 +246,6 @@ export default {
   getPermissions,
   requestPassordChange,
   resetPassword,
+  getPlacesOwn,
   // getLinkedPlaces
 };

@@ -9,7 +9,9 @@ const routes = express();
 
 routes.post('/request', permissions.isRoot, places.requestCreation);
 
-// routes.get('/places', estabelecimento.getLinkedPlaces)
+
+
+routes.get('/places', estabelecimento.getPlacesOwn)
 routes.get('/permissions', estabelecimento.getPermissions)
 routes.put('/permissions', estabelecimento.setPermissions)
 

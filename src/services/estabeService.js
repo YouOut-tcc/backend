@@ -142,6 +142,21 @@ async function getAllPermissions(email) {
   return user;
 }
 
+async function getPlacesOwn(loginid) {
+  const sql = `
+  select uuid_from_bin(b.uuid) uuid, b.cnpj, b.nome_empresarial, b.nome, b.telefone, b.celular, b.icon_url, b.nota, b.numero, b.cep, b.denunciado, b.denuncias, b.deletado, b.deletado_dia
+  from tbl_logins_has_places a
+    join tbl_places b on b.id = a.FK_place_id
+      where FK_login_id = ?`
+  const data = [loginid]
+
+  const conn = await database.connect();
+  const [places] = await conn.query(sql, data);
+
+  conn.end();
+  return places;
+}
+
 // initialser permissoes
 // update set aspermissoes
 // ver places linkados na conta
@@ -172,6 +187,10 @@ export default {
   linkLogin,
   updatePermissions,
   getAllPermissions,
+<<<<<<< HEAD
   resetPassword,
   setPassword
+=======
+  getPlacesOwn,
+>>>>>>> 12fe33eac7e12c4579ce46320b2054b004457802
 };

@@ -14,15 +14,17 @@ const routes = express();
 // /fotos
 // /perfil - famoso pegar todas as imfomações
 
+routes.get('/avaliacoes', places.getAvaliacoes)
+routes.get('/informacoes', places.showInfo)
+
 // so o usuario pode acessar
 routes.use(verifyifUser)
 
-routes.get('/informacoes', places.showInfo)
 routes.post('/denunciar', places.denunciarPlace)
 
 // juntar avaliar e avaliacoes
 routes.post('/avaliacoes', places.avaliarPlace)
-routes.get('/avaliacoes', places.getAvaliacoes)
+// routes.get('/avaliacoes', places.getAvaliacoes)
 
 routes.post('/avaliacoes/denunciar/:id', places.denunciarAvaliacao)
 routes.post('/respotas/denunciar/:id', places.denunciarResposta)

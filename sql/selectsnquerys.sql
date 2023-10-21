@@ -122,4 +122,23 @@ c.comentario as resposta, c.denunciado as resposta_denuncia
  from tbl_avaliacoes a
     join tbl_usuario b on b.id = a.FK_usuario_id
     left join tbl_respostas c on FK_avaliacao_id = a.id
-      where FK_place_id=1
+      where FK_place_id=1;
+select * from tbl_places_denuncias;
+update tbl_places set deletado = true, deletado_dia = now() where id = 1;
+update tbl_places set denunciado = true, denuncias = denuncias + 1 where id = 1;
+
+select uuid_from_bin(b.uuid) uuid, b.cnpj, b.nome_empresarial, b.nome, b.telefone, b.celular, b.icon_url, b.nota, b.numero, b.cep, b.denunciado, b.denuncias, b.deletado, b.deletado_dia
+from tbl_logins_has_places a
+	join tbl_places b on b.id = a.FK_place_id
+		where FK_login_id = 1;
+
+select * from tbl_places;
+
+select * from tbl_avaliacoes;
+select * from tbl_respostas;
+
+insert into tbl_respostas(FK_avaliacao_id, fk_place_logins_id, comentario) values(?,?,?);
+
+
+
+
