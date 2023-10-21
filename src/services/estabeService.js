@@ -187,10 +187,7 @@ export default {
   linkLogin,
   updatePermissions,
   getAllPermissions,
-<<<<<<< HEAD
   resetPassword,
-  setPassword
-=======
+  setPassword,
   getPlacesOwn,
->>>>>>> 12fe33eac7e12c4579ce46320b2054b004457802
 };
