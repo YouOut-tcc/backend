@@ -3,7 +3,7 @@ import estabelecimento from '../controllers/estabeController.js';
 import place from '../controllers/placeController.js';
 import manage from './managePlace.routes.js';
 import uuidPlaces from './uuidPlaces.routes.js';
-import { verifyJWT } from '../middlewares/jwt.js';
+import { verifyJWT, verifyJWTPassReset } from '../middlewares/jwt.js';
 import { verifyUUID } from '../middlewares/place.js';
 import { verifyifPlace } from '../middlewares/loginType.js';
 
@@ -11,6 +11,8 @@ const routes = express();
 
 routes.post('/login', estabelecimento.placeLogin);
 routes.post('/cadastro', estabelecimento.placeCadastro);
+routes.post('/resetpass', estabelecimento.requestPassordChange);
+routes.post('/setpass', verifyJWTPassReset ,estabelecimento.resetPassword);
 // routes.post('/oauth', usuario.usuarioOauth)
 
 routes.use(verifyJWT);

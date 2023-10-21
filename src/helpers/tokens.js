@@ -9,4 +9,14 @@ function generateToken(id, name, email, type) {
   );
 }
 
-export { generateToken };
+function generateTokenResetPassword(id, type) {
+  const secret = "abetterpassword";
+  return jwt.sign(
+    { login: { id: id, type: type } },
+    secret,
+    // colocar um tempo diferente
+    { expiresIn: 60 * 60 * 5 }
+  );
+}
+
+export { generateToken, generateTokenResetPassword };

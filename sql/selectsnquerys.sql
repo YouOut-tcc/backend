@@ -3,6 +3,8 @@ use youout;
 -- desc tbl_usuario;
 select * from tbl_avaliacoes; 
 select * from tbl_tags;
+
+select * from tbl_place_has_tags;
 select * from tbl_favoritos;
 select * from tbl_place_logins;
 select * from tbl_eventos;
@@ -108,14 +110,16 @@ select a.id, uuid_from_bin(uuid) uuid, a.nome, coordenadas,
 
 select * from tbl_favoritos;
 
+select a.id, uuid_from_bin(uuid) as uuid, c.tag from tbl_places a join tbl_place_has_tags b join tbl_tags c
+ on b.FK_tag_id = c.id and b.FK_place_id = a.id where b.FK_tag_id = 2;
+select * from tbl_tags;
+insert into tbl_tags(tag) value("Bebidas");
+insert into tbl_place_has_tags(FK_tag_id, FK_place_id) values(2, 3);
 insert into tbl_favoritos(FK_usuario_id, FK_place_id) values(1,3); 
 
-select * from tbl_places;
-update tbl_places set deletado = true, deletado_dia = now() where id = 1;
-update tbl_places set denunciado = true, denuncias = denuncias + 1 where id = 1;
-
-
-
-
-
-
+select a.id id, a.denunciado ,a.pontuacao, a.comentario, a.criado, b.nome, 
+c.comentario as resposta, c.denunciado as resposta_denuncia
+ from tbl_avaliacoes a
+    join tbl_usuario b on b.id = a.FK_usuario_id
+    left join tbl_respostas c on FK_avaliacao_id = a.id
+      where FK_place_id=1

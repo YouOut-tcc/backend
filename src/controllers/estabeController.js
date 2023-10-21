@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import service from '../services/estabeService.js';
-import { verifyJWT } from '../middlewares/jwt.js';
-import { generateToken } from "../helpers/tokens.js";
+import { verifyJWT, verifyJWTPassReset } from '../middlewares/jwt.js';
+import { generateToken, generateTokenResetPassword } from "../helpers/tokens.js";
 import helpers from '../helpers/helpers.js';
 import {verifyEntries} from '../helpers/validation.js';
 import { analytics } from 'googleapis/build/src/apis/analytics/index.js';
@@ -175,6 +175,57 @@ async function setPermissions(req, res){
 
 // deletar link
 
+async function requestPassordChange(req, res) {
+  const { email } = req.body;
+  let login;
+  let token;
+
+  // o usuarios com o mesmo token pode trocar a senha indevinidadmente
+
+  // se deixar a rota mais de baixo nivel, o type faz sentido
+
+  // verificar se o email não é uma string vazia
+  // verificar email existe
+  
+  login = await service.verifyPlaceExist(email);
+
+  if(!login){
+    return res.status(400).send({ message: "usuario não existe" });
+  }
+
+  // eniviar url do web com o token para mudar senha pelo email
+  // ta faltando a parte de enviar o email com a url do web com o token
+  token = generateTokenResetPassword(login.id, 'place');
+
+  return res.status(200).send({ token });
+
+  // caso queira pode registrar o pedido do reset de senha no banco de dados
+}
+
+async function resetPassword(req, res) {
+  const { password } = req.body;
+
+  let hash;
+
+  // pegar o id pelo token, fazer um midware;
+
+  if (typeof password != "string") {
+    return res.status(400).send({message: "senha no formato incorreto"});
+  }
+
+  if(password && password != "") {hash = await bcrypt.hash(password, saltRounds)}
+
+  try {
+    await service.setPassword(req.resetPass.id, hash);
+    res.status(200).send({ message: "Senha mudada com sucesso" });
+  } catch (error) {
+    if(error.code == "ER_DUP_ENTRY"){
+      return res.status(500).send({ message: "Duplicate entry" });
+    }
+    res.status(500).send({ message: error });
+  }
+}
+
 export default {
   placeCadastro,
   placeDeletar,
@@ -184,5 +235,7 @@ export default {
   linkLogin,
   setPermissions,
   getPermissions,
+  requestPassordChange,
+  resetPassword,
   // getLinkedPlaces
 };

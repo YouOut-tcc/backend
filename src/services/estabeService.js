@@ -5,6 +5,7 @@ import database from "../models/connection.js";
 // o service do estabelecimento não pode sequir o mesmo modelo do usuario
 
 async function verifyPlaceExist(email) {
+  // verificar se o email não esta com a tag deletado
   const sql = "select * from tbl_place_logins where email=?";
   const dataLogin = [email];
 
@@ -146,6 +147,21 @@ async function getAllPermissions(email) {
 // ver places linkados na conta
 // deletar link
 
+async function resetPassword(email) {
+  
+}
+
+async function setPassword(id, hashPassword) {
+  const sql = `update tbl_place_logins set hashPass = ? where id = ?`;
+  const data = [hashPassword, id];
+
+  const conn = await database.connect();
+  const [user] = await conn.query(sql, data);
+
+  conn.end();
+  return user;
+}
+
 export default {
   createLogin,
   updateLogin,
@@ -155,5 +171,7 @@ export default {
   createLoginChild,
   linkLogin,
   updatePermissions,
-  getAllPermissions
+  getAllPermissions,
+  resetPassword,
+  setPassword
 };
