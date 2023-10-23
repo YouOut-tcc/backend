@@ -1,0 +1,30 @@
+_id: req_25aefb93fb944f1da5075971ac4a470f
+type: Request
+parentId: fld_75a39e52a33649dfbfd1ced81f24b3d5
+modified: 1697383286764
+created: 1691265277794
+url: http://localhost:3333/estabelecimento/places/{{ _.basePlace }}/promocao
+name: getPromocoes
+description: ""
+method: GET
+body:
+  mimeType: application/json
+  text: ""
+parameters: []
+headers:
+  - id: pair_5871c91af89043628fb5d73e3c45c4fc
+    name: Authorization
+    value: Bearer {{ _.userToken }}
+    description: ""
+  - name: Content-Type
+    value: application/json
+    id: pair_b64085d8b48849b89274099aae25ad5e
+authentication: {}
+metaSortKey: -1697383239553
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

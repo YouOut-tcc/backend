@@ -1,0 +1,30 @@
+_id: req_59294a6645134b1d9ceb9e1ce69d5ce7
+type: Request
+parentId: fld_75a39e52a33649dfbfd1ced81f24b3d5
+modified: 1697383264938
+created: 1691265787243
+url: "{{ _.baseUrl }}/estabelecimento/places/{{ _.basePlace }}/cupons"
+name: getCupons
+description: ""
+method: GET
+body:
+  mimeType: application/json
+  text: ""
+parameters: []
+headers:
+  - id: pair_b96b2c8dd393420b872d1b7f5d914567
+    name: Authorization
+    value: Bearer {{ _.userToken }}
+    description: ""
+  - name: Content-Type
+    value: application/json
+    id: pair_99d2641b50ea4962a42efa25ec947365
+authentication: {}
+metaSortKey: -1697383239403
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

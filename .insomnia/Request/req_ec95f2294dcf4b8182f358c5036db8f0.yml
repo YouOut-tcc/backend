@@ -1,0 +1,25 @@
+_id: req_ec95f2294dcf4b8182f358c5036db8f0
+type: Request
+parentId: fld_bc07bd562d5e426fa795a2d395859622
+modified: 1697383757727
+created: 1692058157241
+url: "{{ _.baseUrl }}/usuario/favoritos"
+name: getFavoritos
+description: ""
+method: GET
+body: {}
+parameters: []
+headers:
+  - id: pair_0f3ed6a95f444d4fac88c37d6a400ba3
+    name: Authorization
+    value: Bearer {{ _.userToken }}
+    description: ""
+authentication: {}
+metaSortKey: -1697383749836
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

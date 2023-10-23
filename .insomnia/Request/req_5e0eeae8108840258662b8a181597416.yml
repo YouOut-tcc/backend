@@ -1,0 +1,25 @@
+_id: req_5e0eeae8108840258662b8a181597416
+type: Request
+parentId: fld_7a1f7811e3bb4879a0812dbf9935854c
+modified: 1697299587708
+created: 1691198536906
+url: "{{ _.baseUrl }}/usuario/avaliacoes"
+name: getAllAvaliaçõesUser
+description: ""
+method: GET
+body: {}
+parameters: []
+headers:
+  - id: pair_c7a964d540494c9a87e676f770c7bac8
+    name: Authorization
+    value: Bearer {{ _.userToken }}
+    description: ""
+authentication: {}
+metaSortKey: -1697299495808
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

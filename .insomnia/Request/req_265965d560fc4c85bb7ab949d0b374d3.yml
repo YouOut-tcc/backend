@@ -1,0 +1,31 @@
+_id: req_265965d560fc4c85bb7ab949d0b374d3
+type: Request
+parentId: fld_c971cb3b1b3049b98c1d2f74b5907b63
+modified: 1698099204959
+created: 1697849968355
+url: "{{ _.baseUrl }}/estabelecimento/login"
+name: Login Place
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"email": "testar@teste.com",
+    	"password": "123"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+  - name: User-Agent
+    value: insomnia/2023.5.8
+authentication: {}
+metaSortKey: -1698099204725
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

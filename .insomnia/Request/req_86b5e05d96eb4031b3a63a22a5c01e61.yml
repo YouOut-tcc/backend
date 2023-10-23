@@ -1,0 +1,30 @@
+_id: req_86b5e05d96eb4031b3a63a22a5c01e61
+type: Request
+parentId: fld_f1d36daceb574945bb99fb28718f6502
+modified: 1697383381493
+created: 1692057429087
+url: http://localhost:3333/estabelecimento/places/{{ _.basePlace }}/favoritar
+name: postFavorito
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: ""
+parameters: []
+headers:
+  - id: pair_8eb76d4c19d14108aa5f4417f8f70fb3
+    name: Authorization
+    value: Bearer {{ _.userToken }}
+    description: ""
+  - name: Content-Type
+    value: application/json
+    id: pair_202d3e36e97344f7af13f56506445f6e
+authentication: {}
+metaSortKey: -1697383381322
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

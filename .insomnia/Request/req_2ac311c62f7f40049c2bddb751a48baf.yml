@@ -1,0 +1,35 @@
+_id: req_2ac311c62f7f40049c2bddb751a48baf
+type: Request
+parentId: fld_c80a21113b0c426dbd13bbdfe9e36cc0
+modified: 1697383721909
+created: 1690931293840
+url: "{{ _.baseUrl }}/estabelecimento/manage/{{ _.basePlace }}/eventos"
+name: Eventos
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"descricao": "Eu não sei mais oq fazer",
+    	"inicio": "2023-08-02",
+    	"fim": "2023-08-05"
+    }
+parameters: []
+headers:
+  - id: pair_1476abc63fcc4997b4e3fbba93a29137
+    name: Authorization
+    value: Bearer {{ _.PlaceToken }}
+    description: ""
+  - name: Content-Type
+    value: application/json
+    id: pair_b8aa59a627ca40a6967cf62e8aed4423
+authentication: {}
+metaSortKey: -1697383697568
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

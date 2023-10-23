@@ -1,0 +1,30 @@
+_id: req_b2875c77d15e4e5c8e082131763e787b
+type: Request
+parentId: fld_c80a21113b0c426dbd13bbdfe9e36cc0
+modified: 1697849633392
+created: 1697849448217
+url: "{{ _.baseUrl }}/estabelecimento/resetpass"
+name: Request Reset Pass
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"email": "testar@teste.com"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+  - name: User-Agent
+    value: insomnia/2023.5.8
+authentication: {}
+metaSortKey: -1697849448217
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

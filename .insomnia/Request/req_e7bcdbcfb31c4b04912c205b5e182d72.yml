@@ -1,0 +1,36 @@
+_id: req_e7bcdbcfb31c4b04912c205b5e182d72
+type: Request
+parentId: fld_bc07bd562d5e426fa795a2d395859622
+modified: 1697384116954
+created: 1696797562244
+url: "{{ _.baseUrl }}/usuario/pesquisar/tag/2"
+name: pesquisar
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"nome": "padaria"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+    id: pair_63b52291c303426baef633d42b58b515
+  - name: User-Agent
+    value: insomnia/2023.5.8
+    id: pair_d3c0d7d5ae884dbe9203ec8625806914
+  - id: pair_2a8ba9012d0a40a1b0c0b1fed4b4f78b
+    name: Authorization
+    value: Bearer {{ _.userToken }}
+    description: ""
+authentication: {}
+metaSortKey: -1697383749886
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

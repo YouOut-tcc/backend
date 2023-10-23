@@ -1,0 +1,38 @@
+_id: req_ebf298d39a4f49d482ac9d4d7994e683
+type: Request
+parentId: fld_c80a21113b0c426dbd13bbdfe9e36cc0
+modified: 1697383707803
+created: 1693523196464
+url: http://localhost:3333/estabelecimento/manage/{{ _.basePlace }}/promocoes
+name: updateEst
+description: ""
+method: PUT
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"dt_fim": "2024-03-13",
+    	"descricao": "500% de desconto",
+    	"promocaoId": 2
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+    id: pair_63d5e66467ce44b6ad36e862f3d827c6
+  - name: User-Agent
+    value: Insomnia/2023.5.5
+    id: pair_62715a1dd0b04731882a32bea4c70d34
+  - id: pair_f0cac525a9734c2c8237e2cfbaf08f8d
+    name: Authorization
+    value: Bearer {{ _.PlaceToken }}
+    description: ""
+authentication: {}
+metaSortKey: -1697383697643
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

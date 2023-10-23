@@ -1,0 +1,30 @@
+_id: req_d9c7126ec2ff4b0b92eda82483a3af42
+type: Request
+parentId: fld_75a39e52a33649dfbfd1ced81f24b3d5
+modified: 1697383275987
+created: 1691197805095
+url: http://localhost:3333/estabelecimento/places/{{ _.basePlace }}/eventos
+name: getEventos
+description: ""
+method: GET
+body:
+  mimeType: application/json
+  text: ""
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+    id: pair_f9ecf6fa12334d9694652207db904696
+  - id: pair_0a92b7eada7a432092a8bd2f239d0b3d
+    name: Authorization
+    value: Bearer {{ _.userToken }}
+    description: ""
+authentication: {}
+metaSortKey: -1697383239453
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

@@ -1,0 +1,37 @@
+_id: req_d3690c8c63084c4085ca46d9ff8fa01c
+type: Request
+parentId: fld_c80a21113b0c426dbd13bbdfe9e36cc0
+modified: 1697849723490
+created: 1697849643894
+url: "{{ _.baseUrl }}/estabelecimento/setpass"
+name: Reset Pass
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"password": "123"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+    id: pair_951dfd6aa8284739b89a3d689a3d4a81
+  - name: User-Agent
+    value: insomnia/2023.5.8
+    id: pair_36786c284fc7425c858cb9889c73cbf4
+  - id: pair_c265c17ab73a400382e1b7f0c18d7bc7
+    name: Authorization
+    value: Bearer
+      eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6eyJpZCI6MSwidHlwZSI6InBsYWNlIn0sImlhdCI6MTY5Nzg0OTYwMiwiZXhwIjoxNjk3ODY3NjAyfQ.roONxmf37yMSCJmEHmaOybEt-JEqeN-9xHrwswvNo5g
+    description: ""
+authentication: {}
+metaSortKey: -1697616599051.5
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

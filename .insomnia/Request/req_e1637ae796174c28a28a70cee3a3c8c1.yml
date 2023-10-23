@@ -1,0 +1,35 @@
+_id: req_e1637ae796174c28a28a70cee3a3c8c1
+type: Request
+parentId: fld_7a1f7811e3bb4879a0812dbf9935854c
+modified: 1697299540556
+created: 1691198355339
+url: "{{ _.baseUrl
+  }}/estabelecimento/places/c331f5e9-3aee-5880-956a-a5557dde486a/avaliar"
+name: postAvaliação
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"comentario": "Mudando a nota do estabelecimento",
+    	"nota": 5
+    }
+parameters: []
+headers:
+  - id: pair_0531be2d1107415c9b024c1a5dd54289
+    name: Authorization
+    value: Bearer {{ _.userToken }}
+    description: ""
+  - name: Content-Type
+    value: application/json
+    id: pair_0c1da68b2b3c49a2ace5ed2f062e68a1
+authentication: {}
+metaSortKey: -1697299495908
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

@@ -1,0 +1,33 @@
+_id: req_b5f54504498442d995c1ef0642483f66
+type: Request
+parentId: fld_c80a21113b0c426dbd13bbdfe9e36cc0
+modified: 1697383697668
+created: 1696510729016
+url: "{{ _.baseUrl }}/estabelecimento/manage/{{ _.basePlace }}/deletar"
+name: DelEst
+description: ""
+method: DELETE
+body:
+  mimeType: application/json
+  text: ""
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+    id: pair_4b231c0ee31a4a8185b991a90bfc022a
+  - name: User-Agent
+    value: insomnia/2023.5.8
+    id: pair_e492983eeead43da9a75dfc8f7b75c80
+  - id: pair_73a1db274a01401da44d7a9d5d4e2f79
+    name: Authorization
+    value: Bearer {{ _.PlaceToken }}
+    description: ""
+authentication: {}
+metaSortKey: -1697383697543
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

@@ -1,0 +1,34 @@
+_id: req_6c1222e5ddd743fab8b8e9580800e211
+type: Request
+parentId: fld_c80a21113b0c426dbd13bbdfe9e36cc0
+modified: 1697383717725
+created: 1690932014685
+url: "{{ _.baseUrl }}/estabelecimento/manage/{{ _.basePlace }}/promocoes"
+name: Promoções
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"dt_fim": "2023-08-05",
+    	"descricao": "teste testa"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+    id: pair_11106bc1342c4417a2a18ba9f93e1078
+  - id: pair_91d10d1f690b42e6a7d984ff7d9fa20b
+    name: Authorization
+    value: Bearer {{ _.PlaceToken }}
+    description: ""
+authentication: {}
+metaSortKey: -1697383697593
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

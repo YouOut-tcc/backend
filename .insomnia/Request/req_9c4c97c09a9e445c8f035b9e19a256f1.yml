@@ -1,0 +1,36 @@
+_id: req_9c4c97c09a9e445c8f035b9e19a256f1
+type: Request
+parentId: fld_bc07bd562d5e426fa795a2d395859622
+modified: 1697383749946
+created: 1693355951125
+url: http://localhost:3333/usuario/update-informacoes
+name: updateUser
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+    id: pair_be64a62cac80445db10985c9e7d72ff8
+  - name: User-Agent
+    value: Insomnia/2023.5.5
+    id: pair_8cd53614b6504173bb4fda9ea19cbdcb
+  - id: pair_9e111baf8ce3481b9757ff0bb6d73b9a
+    name: Authorization
+    value: Bearer {{ _.userToken }}
+    description: ""
+authentication: {}
+metaSortKey: -1697383749786
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

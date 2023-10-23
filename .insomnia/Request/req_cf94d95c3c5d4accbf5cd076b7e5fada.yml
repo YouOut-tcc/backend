@@ -1,0 +1,28 @@
+_id: req_cf94d95c3c5d4accbf5cd076b7e5fada
+type: Request
+parentId: fld_75a39e52a33649dfbfd1ced81f24b3d5
+modified: 1697383247525
+created: 1694564766132
+url: "{{ _.baseUrl }}/estabelecimento/places"
+name: getAllPlaces
+description: ""
+method: GET
+body: {}
+parameters: []
+headers:
+  - name: User-Agent
+    value: insomnia/2023.5.8
+    id: pair_551fa905d0704f2493ce8ea33c93a0b1
+  - id: pair_225733b9d3794464ab087269ebd046ad
+    name: Authorization
+    value: Bearer {{ _.userToken }}
+    description: ""
+authentication: {}
+metaSortKey: -1697383239503
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

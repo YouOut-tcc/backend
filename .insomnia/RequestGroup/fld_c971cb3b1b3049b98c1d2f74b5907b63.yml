@@ -1,0 +1,10 @@
+_id: fld_c971cb3b1b3049b98c1d2f74b5907b63
+type: RequestGroup
+parentId: wrk_50e014ca025f41e1ab2a47f36ac722a5
+modified: 1698099300370
+created: 1698099193906
+name: .endpoits
+description: ""
+environment: {}
+environmentPropertyOrder: null
+metaSortKey: -1697849968455

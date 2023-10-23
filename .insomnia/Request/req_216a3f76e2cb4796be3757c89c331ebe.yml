@@ -1,0 +1,34 @@
+_id: req_216a3f76e2cb4796be3757c89c331ebe
+type: Request
+parentId: fld_c80a21113b0c426dbd13bbdfe9e36cc0
+modified: 1697383714715
+created: 1691188421436
+url: "{{ _.baseUrl }}/estabelecimento/manage/{{ _.basePlace }}/cupons"
+name: cupons
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"vencimento": "2023-09-10",
+    	"descricao": "80% de desconto teste"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+    id: pair_12280754dc0a42d29e2c869f423317b2
+  - id: pair_88715f7826ee4a30b7fc7f35b51f8043
+    name: Authorization
+    value: Bearer {{ _.PlaceToken }}
+    description: ""
+authentication: {}
+metaSortKey: -1697383697743
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

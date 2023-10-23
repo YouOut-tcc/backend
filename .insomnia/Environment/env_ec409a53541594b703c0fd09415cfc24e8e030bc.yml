@@ -1,0 +1,20 @@
+_id: env_ec409a53541594b703c0fd09415cfc24e8e030bc
+type: Environment
+parentId: wrk_50e014ca025f41e1ab2a47f36ac722a5
+modified: 1697383843557
+created: 1683930518022
+name: Base Environment
+data:
+  baseUrl: http://localhost:3333
+  PlaceToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbmZvVXNlciI6eyJpZCI6MSwidXNlck5hbWUiOiJlc3RhYmVsZWNpbWVudG8xIiwiZW1haWwiOiJ0ZXN0YXJAdGVzdGUuY29tIiwidXNlclR5cGUiOiJwbGFjZSJ9LCJpYXQiOjE2OTY5ODU1MTMsImV4cCI6MTY5NzAwMzUxM30.IoIG0rj0J8mvNsivTcpQSMDvjZnu81WoS_1c-Uo5ya4
+  userToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpbmZvVXNlciI6eyJpZCI6MSwidXNlck5hbWUiOiJNYXJjb3MiLCJlbWFpbCI6Im1hcmNvc0BlbWFpbC5jb20iLCJ1c2VyVHlwZSI6InVzZXIifSwiaWF0IjoxNjk3MzgzODI1LCJleHAiOjE2OTc0MDE4MjV9.zp_qjhM0O6MvIOTHW1zkkdOYGwH8ynvRkIyKcAf0vT0
+  basePlace: 27e992e0-3d87-5a23-b208-4972991ae593
+dataPropertyOrder:
+  "&":
+    - baseUrl
+    - PlaceToken
+    - userToken
+    - basePlace
+color: null
+isPrivate: false
+metaSortKey: 1683930518022

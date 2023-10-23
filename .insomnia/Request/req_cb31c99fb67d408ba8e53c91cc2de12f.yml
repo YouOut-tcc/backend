@@ -1,0 +1,29 @@
+_id: req_cb31c99fb67d408ba8e53c91cc2de12f
+type: Request
+parentId: fld_75a39e52a33649dfbfd1ced81f24b3d5
+modified: 1697383239775
+created: 1696986664824
+url: "{{ _.baseUrl
+  }}/estabelecimento/places/c331f5e9-3aee-5880-956a-a5557dde486a/avaliacoes"
+name: getPlace
+description: ""
+method: GET
+body: {}
+parameters: []
+headers:
+  - name: User-Agent
+    value: insomnia/2023.5.8
+    id: pair_f3a06ae36ceb4b80b1e2e19c13ddb0b6
+  - id: pair_8398214c8b154211b7634044abdcf43c
+    name: Authorization
+    value: Bearer {{ _.userToken }}
+    description: ""
+authentication: {}
+metaSortKey: -1697383239603
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
