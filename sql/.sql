@@ -217,7 +217,7 @@ create table if not exists tbl_respotas_denuncias (
     criado           datetime default now(),
     
     primary key(id),
-    foreign key(fk_respotas_id) references tbl_respotas(id),
+    foreign key(fk_respotas_id) references tbl_respostas(id),
     foreign key(fk_usuario_id) references tbl_usuario(id)
 );
 
