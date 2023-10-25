@@ -23,3 +23,5 @@ api.use("/", routes);
 api.listen(port, () => {
   console.log(`Server is Running... on port ${port}`);
 });
+
+export default api;
