@@ -1,5 +1,6 @@
 import { analytics } from "googleapis/build/src/apis/analytics/index.js";
 import database from "../models/connection.js";
+import { dbmysql } from "../connections/database.js";
 
 // isso é um placeholder, por questoes de segurança e confiabilidade
 // o service do estabelecimento não pode sequir o mesmo modelo do usuario
@@ -8,10 +9,10 @@ async function sendRequest(email) {
   const sql = "select * from tbl_place_logins where email=?";
   const dataLogin = [email];
 
-  const conn = await database.connect();
-  const [user] = await conn.query(sql, dataLogin);
+  // const conn = await database.connect();
+  const [user] = await dbmysql.query(sql, dataLogin);
 
-  conn.end();
+  // conn.end();
   return user;
 }
 
@@ -45,23 +46,23 @@ async function createPlace(
 
   // TODO: em caso de duplicação do uuid, tenta de novo ate pegar um não usado
 
-  const conn = database.pool;
-  await conn.query(sql, data);
+  // const conn = database.pool;
+  await dbmysql.query(sql, data);
 
   // conn.end();
 }
 
 async function linkLogin(email, cnpj) {
-  const conn = await database.connect();
+  // const conn = await database.connect();
   let idPlace, idUser;
 
   let sql = "select id from tbl_places where cnpj=?";
   let data = [cnpj];
-  [[idPlace]] = await conn.query(sql, data);
+  [[idPlace]] = await dbmysql.query(sql, data);
 
   sql = "select id from tbl_place_logins where email=?";
   data = [email];
-  [[idUser]] = await conn.query(sql, data);
+  [[idUser]] = await dbmysql.query(sql, data);
 
   if (idUser == undefined || idPlace == undefined) {
     throw {
@@ -73,9 +74,9 @@ async function linkLogin(email, cnpj) {
   sql =
     "insert into tbl_logins_has_places(FK_place_id, FK_login_id,permissions) values(?,?,B'1111111111111111')";
   data = [idPlace.id, idUser.id];
-  await conn.query(sql, data);
+  await dbmysql.query(sql, data);
 
-  conn.end();
+  // conn.end();
   return;
 }
 
@@ -84,10 +85,10 @@ async function getInfo(uuid) {
   const sql = "select * from tbl_places where uuid=uuid_to_bin(?)";
   const data = [uuid];
 
-  const conn = await database.connect();
-  const [result] = await conn.query(sql, data);
+  // const conn = await database.connect();
+  const [result] = await dbmysql.query(sql, data);
 
-  conn.end();
+  // conn.end();
   return result;
 }
 
@@ -96,11 +97,11 @@ async function criarAvaliacao(comentario, nota, placeid, userid) {
     "insert into tbl_avaliacoes(pontuacao,comentario,FK_place_id,FK_usuario_id) values(?,?,?,?)";
   const data = [nota, comentario, placeid, userid];
 
-  const conn = await database.connect();
+  // const conn = await database.connect();
 
-  await conn.query(sql, data);
+  await dbmysql.query(sql, data);
 
-  conn.end();
+  // conn.end();
 }
 
 async function getAvaliacoes(placeid, userid) {
@@ -112,8 +113,8 @@ async function getAvaliacoes(placeid, userid) {
         where FK_place_id=?`;
   const data = [placeid, userid];
 
-  const conn = database.pool;
-  const [result] = await conn.query(sql, data);
+  // const conn = database.pool;
+  const [result] = await dbmysql.query(sql, data);
 
   // conn.end();
   return result;
@@ -124,10 +125,10 @@ async function criarFavorito(placeid, userid) {
     "insert into tbl_favoritos(FK_place_id,FK_usuario_id) values(?,?)";
   const data = [placeid, userid];
 
-  const conn = await database.connect();
-  await conn.query(sql, data);
+  // const conn = await database.connect();
+  await dbmysql.query(sql, data);
 
-  conn.end();
+  // conn.end();
 }
 
 async function deletarFavorito(placeid, userid) {
@@ -135,10 +136,10 @@ async function deletarFavorito(placeid, userid) {
     "delete from tbl_favoritos where FK_place_id = ? and FK_usuario_id = ?";
   const data = [placeid, userid];
 
-  const conn = await database.connect();
-  await conn.query(sql, data);
+  // const conn = await database.connect();
+  await dbmysql.query(sql, data);
 
-  conn.end();
+  // conn.end();
 }
 
 async function getFavorito(placeid, userid) {
@@ -146,10 +147,10 @@ async function getFavorito(placeid, userid) {
     "select * from tbl_favoritos where FK_usuario_id = ? and FK_place_id = ?";
   const data = [userid, placeid];
 
-  const conn = await database.connect();
-  let [[result]] = await conn.query(sql, data);
+  // const conn = await database.connect();
+  let [[result]] = await dbmysql.query(sql, data);
 
-  conn.end();
+  // conn.end();
   return result;
 }
 
@@ -158,10 +159,10 @@ async function favCount(placeid) {
     "select count(*) as qntdFavoritos from tbl_favoritos where FK_place_id = ?";
   const data = [placeid];
 
-  const conn = await database.connect();
-  await conn.query(sql, data);
+  // const conn = await database.connect();
+  await dbmysql.query(sql, data);
 
-  conn.end();
+  // conn.end();
 }
 
 async function getPlaces(limit, offset, location, idUser) {
@@ -189,8 +190,8 @@ async function getPlaces(limit, offset, location, idUser) {
       order by distancia
       limit ? offset ?;`;
 
-  const conn = await database.connect();
-  const [result] = await conn.query(sql, [
+  // const conn = await database.connect();
+  const [result] = await dbmysql.query(sql, [
     location[0],
     location[1],
     idUser,
@@ -198,7 +199,7 @@ async function getPlaces(limit, offset, location, idUser) {
     offset,
   ]);
 
-  conn.end();
+  // conn.end();
   return result;
 }
 
@@ -207,20 +208,20 @@ async function criarEventos(descricao, inicio, fim, placeid) {
     "insert into tbl_eventos(descricao, dt_inicio, dt_fim, fk_est) values(?,?,?,?)";
   const data = [descricao, inicio, fim, placeid];
 
-  const conn = await database.connect();
-  await conn.query(sql, data);
+  // const conn = await database.connect();
+  await dbmysql.query(sql, data);
 
-  conn.end();
+  // conn.end();
 }
 
 async function getEventos(placeid) {
   const sql =
     "select descricao, dt_inicio, dt_fim from tbl_eventos where fk_est = ?";
 
-  const conn = await database.connect();
-  const result = await conn.query(sql, placeid);
+  // const conn = await database.connect();
+  const result = await dbmysql.query(sql, placeid);
 
-  conn.end();
+  // conn.end();
   return result;
 }
 
@@ -229,19 +230,19 @@ async function updateEventos(descricao, dt_inicio, dt_fim, eventoId) {
     "update tbl_eventos set descricao = ?, dt_inicio = ?, dt_fim = ? where id = ?";
   const data = [descricao, dt_inicio, dt_fim, eventoId];
 
-  const conn = await database.connect();
-  conn.query(sql, data);
+  // const conn = await database.connect();
+  dbmysql.query(sql, data);
 
-  conn.end();
+  // conn.end();
 }
 
 async function deleteEventos(eventoId) {
   const sql = "delete from tbl_eventos where id = ?";
   // const sql = "insert into tbl_eventos(deletado) values(true) where id = ? and deletado = false";
-  const conn = await database.connect();
-  conn.query(sql, eventoId);
+  // const conn = await database.connect();
+  dbmysql.query(sql, eventoId);
 
-  conn.end();
+  // conn.end();
 }
 
 async function criarPromocao(placeid, dt_fim, descricao) {
@@ -249,20 +250,20 @@ async function criarPromocao(placeid, dt_fim, descricao) {
     "insert into tbl_promocao(fk_est, dt_vencimento, descricao) values(?,?,?)";
   const data = [placeid, dt_fim, descricao];
 
-  const conn = await database.connect();
-  await conn.query(sql, data);
+  // const conn = await database.connect();
+  await dbmysql.query(sql, data);
 
-  await conn.end();
+  // await conn.end();
 }
 
 async function getPromocao(placeid) {
   const sql =
     "select dt_criacao, dt_vencimento, descricao from tbl_promocao where fk_est = ?";
 
-  const conn = await database.connect();
-  const result = conn.query(sql, placeid);
+  // const conn = await database.connect();
+  const result = dbmysql.query(sql, placeid);
 
-  conn.end();
+  // conn.end();
   return result;
 }
 
@@ -271,19 +272,19 @@ async function updatePromocao(dt_fim, descricao, promocaoId) {
     "update tbl_promocao set dt_vencimento = ?, descricao = ? where id = ?";
   const data = [dt_fim, descricao, promocaoId];
 
-  const conn = await database.connect();
-  conn.query(sql, data);
+  // const conn = await database.connect();
+  dbmysql.query(sql, data);
 
-  conn.end();
+  // conn.end();
 }
 
 async function deletePromocao(promocaoId) {
   const sql = "delete from tbl_promocao where id = ?";
   // const sql = "insert into tbl_promocao(deletado) values(true) where id = ? and deletado = false";
-  const conn = await database.connect();
-  conn.query(sql, promocaoId);
+  // const conn = await database.connect();
+  dbmysql.query(sql, promocaoId);
 
-  conn.end();
+  // conn.end();
 }
 
 async function criarCupons(placeid, vencimento, descricao) {
@@ -291,20 +292,20 @@ async function criarCupons(placeid, vencimento, descricao) {
     "insert into tbl_cupons(fk_est, dt_vencimento, descricao) values(?,?,?)";
   const data = [placeid, vencimento, descricao];
 
-  const conn = await database.connect();
-  await conn.query(sql, data);
+  // const conn = await database.connect();
+  await dbmysql.query(sql, data);
 
-  conn.end();
+  // conn.end();
 }
 
 async function getCupons(placeid) {
   const sql =
     "select dt_criacao, dt_vencimento, descricao from tbl_cupons where fk_est = ?";
 
-  const conn = await database.connect();
-  const result = conn.query(sql, placeid);
+  // const conn = await database.connect();
+  const result = dbmysql.query(sql, placeid);
 
-  conn.end();
+  // conn.end();
   return result;
 }
 
@@ -313,19 +314,19 @@ async function updateCupons(dt_vencimento, descricao, cupomId) {
     "update tbl_cupons set dt_vencimento = ?, descricao = ? where id = ?";
   const data = [dt_vencimento, descricao, cupomId];
 
-  const conn = await database.connect();
-  conn.query(sql, data);
+  // const conn = await database.connect();
+  dbmysql.query(sql, data);
 
-  conn.end();
+  // conn.end();
 }
 
 async function deleteCupons(cupomId) {
   const sql = "delete from tbl_cupons where id = ?";
   // const sql = "insert into tbl_cupons(deletado) values(true) where id = ? and deletado = false";
-  const conn = await database.connect();
-  conn.query(sql, cupomId);
+  // const conn = await database.connect();
+  dbmysql.query(sql, cupomId);
 
-  conn.end();
+  // conn.end();
 }
 
 async function setResposta(avaliacaoid, placeid, coment) {
@@ -333,10 +334,10 @@ async function setResposta(avaliacaoid, placeid, coment) {
     "Insert into tbl_respostas (fk_avaliacao_id, fk_place_logins_id, comentario) values(? ? ?)";
   const data = [avaliacaoid, placeid, coment];
 
-  const conn = await database.connect();
-  await conn.query(sql, data);
+  // const conn = await database.connect();
+  await dbmysql.query(sql, data);
 
-  conn.end();
+  // conn.end();
 }
 
 async function denunciarPlace(placeid, userid, motivo) {
@@ -344,8 +345,9 @@ async function denunciarPlace(placeid, userid, motivo) {
     "insert into tbl_places_denuncias(fk_place_id, fk_usuario_id, motivo) values(?,?,?)";
   const data = [placeid, userid, motivo];
 
-  const conn = await database.connect();
-  await conn.query(sql, data);
+  // const conn = await database.connect();
+  await dbmysql.query(sql, data);
+  // conn.end();
 }
 
 async function denunciarAvaliacao(avaliacaoid, userid, motivo) {
@@ -353,8 +355,9 @@ async function denunciarAvaliacao(avaliacaoid, userid, motivo) {
     "insert into tbl_avaliacoes_denuncias(fk_avaliacoes_id, fk_usuario_id, motivo) values(?,?,?)";
   const data = [avaliacaoid, userid, motivo];
 
-  const conn = await database.connect();
-  await conn.query(sql, data);
+  // const conn = await database.connect();
+  await dbmysql.query(sql, data);
+  // conn.end();
 }
 
 async function denunciarResposta(respotaid, userid, motivo) {
@@ -362,8 +365,10 @@ async function denunciarResposta(respotaid, userid, motivo) {
     "insert into tbl_respota_denuncias(fk_respotas_id, fk_usuario_id, motivo) values(?,?,?)";
   const data = [respotaid, userid, motivo];
 
-  const conn = await database.connect();
-  await conn.query(sql, data);
+  // const conn = await database.connect();
+  await dbmysql.query(sql, data);
+
+  // conn.end();
 }
 
 async function updatePlaces(
@@ -378,20 +383,20 @@ async function updatePlaces(
     "update tbl_places set nome=?, nome_empresarial=?, telefone=?, celular=?, descricao=? where id = ? ";
   const data = [nome, nome_empresarial, telefone, celular, descricao, id];
 
-  const conn = await database.connect();
-  await conn.query(sql, data);
+  // const conn = await database.connect();
+  await dbmysql.query(sql, data);
 
-  conn.end();
+  // conn.end();
 }
 
 async function deletarPlace(id) {
   const sql =
     "update tbl_places set deletado = true, deletado_dia = now() where id = ?";
 
-  const conn = await database.connect();
-  await conn.query(sql, id);
+  // const conn = await database.connect();
+  await dbmysql.query(sql, id);
 
-  conn.end();
+  // conn.end();
 }
 
 async function respoderAvaliacao(avaliacaoid, loginid, resposta) {
@@ -399,8 +404,9 @@ async function respoderAvaliacao(avaliacaoid, loginid, resposta) {
     "insert into tbl_respostas(FK_avaliacao_id, fk_place_logins_id, comentario) values(?,?,?)";
   const data = [avaliacaoid, loginid, resposta];
 
-  const conn = await database.connect();
-  await conn.query(sql, data);
+  // const conn = await database.connect();
+  await dbmysql.query(sql, data);
+  // conn.end();
 }
 
 export default {

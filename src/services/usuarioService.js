@@ -1,14 +1,15 @@
 import bcrypt from "bcrypt";
 import database from "../models/connection.js";
+import { dbmysql } from "../connections/database.js";
 
 async function verifyUserExist(email) {
   const sql = "select * from tbl_usuario where email=?";
   const dataLogin = [email];
 
-  const conn = await database.connect();
-  const [[user]] = await conn.query(sql, dataLogin);
+  // const conn = await database.connect();
+  const [[user]] = await dbmysql.query(sql, dataLogin);
 
-  conn.end();
+  // conn.end();
   return user;
 }
 
@@ -22,9 +23,9 @@ async function createUser(
     "insert into tbl_usuario(nome, email, hashPass, telefone) values(?,?,?,?)";
   const data = [name, email, hashPass, telefone];
 
-  const conn = await database.connect();
-  await conn.query(sql, data);
-  conn.end();
+  // const conn = await database.connect();
+  await dbmysql.query(sql, data);
+  // conn.end();
 }
 
 async function updateUser(id, name, email, password, adm) {
@@ -32,17 +33,17 @@ async function updateUser(id, name, email, password, adm) {
     "update tbl_usuario set nome = ?, email = ?, senha = ?, adm = ? where id = ?";
   const data = [name, email, password, adm, id];
 
-  const conn = await database.connect();
-  await conn.query(sql, data);
-  conn.end();
+  // const conn = await database.connect();
+  await dbmysql.query(sql, data);
+  // conn.end();
 }
 
 async function deleteUser(id) {
   const sql = "delete from tbl_usuario where id = ?";
 
-  const conn = await database.connect();
-  await conn.query(sql, id);
-  conn.end();
+  // const conn = await database.connect();
+  await dbmysql.query(sql, id);
+  // conn.end();
 }
 
 async function loginUser(email, password) {
@@ -85,10 +86,10 @@ async function getFavoritos(userid) {
       where FK_usuario_id = ?;`;
   const data = [userid];
 
-  const conn = await database.connect();
-  const [result] = await conn.query(sql, data);
+  // const conn = await database.connect();
+  const [result] = await dbmysql.query(sql, data);
 
-  conn.end();
+  // conn.end();
   return result;
 }
 
@@ -97,10 +98,10 @@ async function getAvaliacoes(userid) {
     "select * from tbl_avaliacoes where FK_usuario_id=?";
   const data = [userid];
 
-  const conn = await database.connect();
-  const [result] = await conn.query(sql, data);
+  // const conn = await database.connect();
+  const [result] = await dbmysql.query(sql, data);
 
-  conn.end();
+  // conn.end();
   return result;
 }
 
@@ -109,29 +110,29 @@ async function getInformacoesUser(userid) {
     "select * from tbl_usuario where id=?";
   const data = [userid];
 
-  const conn = await database.connect();
-  const [result] = await conn.query(sql, data);
+  // const conn = await database.connect();
+  const [result] = await dbmysql.query(sql, data);
 
-  conn.end();
+  // conn.end();
   return result;
 }
 
 async function pesquisarPlace(nome) {
   const sql = "select *, uuid_from_bin(uuid) as uuid from tbl_places where match(nome) against(?) and deletado = false;"
-  const conn = await database.connect();
-  const [place] = await conn.query(sql, nome);
+  // const conn = await database.connect();
+  const [place] = await dbmysql.query(sql, nome);
 
-  conn.end();
+  // conn.end();
   return place;
 }
 
 async function pesquisarPlaceTag(tagId) {
   const sql = "select uuid_from_bin(uuid) as uuid, c.tag from tbl_places a join tbl_place_has_tags b join tbl_tags c on b.FK_tag_id = c.id and b.FK_place_id = a.id where c.id = ?"
 
-  const conn = await database.connect();
-  const [result] = await conn.query(sql, tagId);
+  // const conn = await database.connect();
+  const [result] = await dbmysql.query(sql, tagId);
 
-  conn.end();
+  // conn.end();
   return result;
 }
 

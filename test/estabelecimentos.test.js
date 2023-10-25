@@ -1,18 +1,17 @@
 import request from "supertest";
 import chai from "chai";
-import database from "../src/models/connection.js";
+import { dbmysql } from "../src/connections/database.js";
 // import app from "../src/index.js"
 
 const expect = chai.expect;
 const app = "http://localhost:3333";
-
-const conn = await database.connect();
 
 let tokenPlace = undefined;
 
 let erroLogin = false;
 let erroCadastro = false;
 let backendOnline = true;
+let conn = undefined;
 
 // beforeEach(function () {
 //   if (this.currentTest.parent.tests.some((test) => test.state === "failed"))
@@ -34,11 +33,8 @@ function checkErrors(err, done) {
 
 describe("ENDPOINTS /estabelecimentos", () => {
 
-  before(async (done) => {
-    await conn.beginTransaction(function (err) {
-      if (err) throw err;
-      done();
-    });
+  before(async () => {
+    await dbmysql.setTestConnection();
   })
 
   beforeEach(function () {
@@ -48,8 +44,7 @@ describe("ENDPOINTS /estabelecimentos", () => {
   });
 
   after((done) => {
-    conn.rollback();
-    conn.end();
+    dbmysql.endTest();
     done();
   })
 
