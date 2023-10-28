@@ -1,7 +1,5 @@
 import mysql2 from "mysql2/promise";
 // import mariadb from "mariadb";
-import dotenv from "dotenv";
-dotenv.config();
 
 class DBMysql {
   pool = undefined;
