@@ -1,8 +1,7 @@
 import express from "express";
+import "./helpers/dotenv.js";
 import routes from "./routes/routes.js";
 import cors from "cors";
-import { setEnv } from "./helpers/dotenv.js";
-setEnv();
 
 const api = express();
 const port = process.env.PORT;
