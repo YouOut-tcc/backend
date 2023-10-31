@@ -11,7 +11,7 @@ async function requestCreation(req, res) {
     numero,
     cep,
     descricao,
-    latitute,
+    latitude,
     longitude,
   } = req.body;
 
@@ -70,7 +70,7 @@ async function requestCreation(req, res) {
     numero,
     cep,
     descricao,
-    latitute,
+    latitude: latitude,
     longitude,
   });
 
@@ -93,7 +93,7 @@ async function requestCreation(req, res) {
       numero,
       cep,
       descricao,
-      latitute,
+      latitude,
       longitude
     );
     await service.linkLogin(req.infoUser.email, cnpj);
