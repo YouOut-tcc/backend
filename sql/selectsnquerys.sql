@@ -1,4 +1,7 @@
 use youout;
+
+-- modelo antigo
+
 -- alter table tbl_places rename column note to  nota;
 -- desc tbl_usuario;
 select * from tbl_avaliacoes; 
@@ -132,4 +135,11 @@ delete from tbl_place_logins where id = 9;
 
 start transaction;
 rollback;
+
+-- fim do modelo antigo ------------------------------
+
+
+
+
+
 
