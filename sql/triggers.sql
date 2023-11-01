@@ -1,5 +1,3 @@
-use yououttest;
-
 drop trigger if exists trg_denunciar_place;
 drop trigger if exists trg_denunciar_avaliacao;
 drop trigger if exists trg_denunciar_resposta;
@@ -30,7 +28,7 @@ begin
 	update tbl_avaliacoes set denunciado = true, denuncias = denuncias + 1 where id = new.fk_avaliacao_id;
 end;//
 
-create trigger trg_denunciar_resposta after insert on tbl_respota_denuncias
+create trigger trg_denunciar_resposta after insert on tbl_resposta_denuncias
 for each row
 begin
 	declare denuncias_counter integer;

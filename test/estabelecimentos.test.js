@@ -1,6 +1,5 @@
 import request from "supertest";
 import chai from "chai";
-import { dbmysql } from "../src/connections/database.js";
 // import app from "../src/index.js"
 
 const expect = chai.expect;
@@ -11,7 +10,6 @@ let tokenPlace = undefined;
 let erroLogin = false;
 let erroCadastro = false;
 let backendOnline = true;
-let conn = undefined;
 
 // beforeEach(function () {
 //   if (this.currentTest.parent.tests.some((test) => test.state === "failed"))
@@ -33,27 +31,19 @@ function checkErrors(err, done) {
 
 describe("ENDPOINTS /estabelecimentos", () => {
 
-  before(async () => {
-    await dbmysql.setTestConnection();
-  })
+  // before(async () => {
+  // })
 
   beforeEach(function () {
-
     if (!backendOnline)
       this.skip();
   });
 
-  after((done) => {
-    dbmysql.endTest();
-    done();
-  })
+  // after((done) => {
+  //   done();
+  // })
 
   describe("Iniciado o login e place inicial", () => {
-    const login = {
-      email: "teste@teste.teste",
-      password: "testeteste",
-    };
-
     const cadastro = {
       name: "Teste",
       email: "teste@teste.teste",
@@ -75,8 +65,8 @@ describe("ENDPOINTS /estabelecimentos", () => {
 
     it("Login de um login", (done) => {
       request(app)
-        .get("/estabelecimento/places")
-        .set("Authorization", `Bearer ${tokenPlace}`)
+        .post("/estabelecimento/places")
+        .send(cadastro)
         .end((err, res) => {
           expect(res.status).to.equal(200);
           // expect(res.body.message).to.equal('Bem-vindo à API');
@@ -88,10 +78,6 @@ describe("ENDPOINTS /estabelecimentos", () => {
 
     xit("Verificando se place existe", (done) => {});
   });
-  // beforeEach(function () {
-  //   if (this.currentTest.parent.tests.some((test) => test.state === "failed"))
-  //     this.skip(); // Skip subsequent tests if the describe block failed
-  // });
 
   xit("Criando o primeiro teste", (done) => {
     request("http://localhost:3333")

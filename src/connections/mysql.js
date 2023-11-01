@@ -3,13 +3,8 @@ import mysql2 from "mysql2/promise";
 
 class DBMysql {
   pool = undefined;
-  usePool = true;
-  onTest = false;
-  connTest = undefined;
 
   constructor() {
-    this.onTest = process.env.NODE_ENV == "test" ? true : false;
-
     this.pool = mysql2.createPool({
       host: process.env.HOST,
       user: process.env.USER,
@@ -24,16 +19,6 @@ class DBMysql {
       enableKeepAlive: true,
       keepAliveInitialDelay: 0,
     })
-  }
-
-  async setTestConnection(){
-    this.connTest = await mysql2.createConnection({
-      host:     process.env.HOST,
-      password: process.env.PASSWORD,
-      port:     process.env.BDPORT,
-      database: process.env.DATABASE,
-      user:     process.env.USER,
-    });
   }
 
   async querysafe(query, data) {
@@ -78,11 +63,6 @@ class DBMysql {
   }
 
   multiquery(querys, datas) {}
-
-  endTest(){
-    this.connTest.rollback();
-    this.connTest.end();
-  }
 
   close() {
     this.pool.end();

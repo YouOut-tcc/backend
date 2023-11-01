@@ -1,5 +1,4 @@
 import bcrypt from "bcrypt";
-import database from "../models/connection.js";
 import { dbmysql } from "../connections/database.js";
 
 // isso é um placeholder, por questoes de segurança e confiabilidade
@@ -10,10 +9,8 @@ async function verifyPlaceExist(email) {
   const sql = "select * from tbl_place_logins where email=?";
   const dataLogin = [email];
 
-  // const conn = await database.connect();
   const [[user]] = await dbmysql.query(sql, dataLogin);
 
-  // conn.end();
   return user;
 }
 
@@ -27,9 +24,7 @@ async function createLogin(
     "insert into tbl_place_logins(nome, email, hashPass, telefone, parent) values(?,?,?,?,?)";
   const data = [name, email, hashPass, telefone, 0];
 
-  // const conn = await database.connect();
   await dbmysql.query(sql, data);
-  // conn.end();
 }
 
 // dano biologico, mudar depois
@@ -45,9 +40,7 @@ async function deleteLogin(id) {
   const sql =
     "update tbl_place_logins set deletado = true, deletado_dia = now() where id=?";
 
-  // const conn = await database.connect();
   await dbmysql.query(sql, id);
-  // conn.end();
 }
 
 async function loginPlace(email, password) {
@@ -76,13 +69,10 @@ async function createLoginChild(
     "insert into tbl_place_logins(nome, email, hashPass, telefone, parent) values(?,?,?,?,?)";
   const data = [name, email, hashPass, telefone, parent];
 
-  // const conn = await database.connect();
   await dbmysql.query(sql, data);
-  // conn.end();
 }
 
 async function linkLogin(email, idPlace) {
-  // const conn = await database.connect();
   let idUser;
   let sql, data;
 
@@ -102,7 +92,6 @@ async function linkLogin(email, idPlace) {
   data = [idPlace, idUser.id];
   await dbmysql.query(sql, data);
 
-  // conn.end();
   return;
 }
 
@@ -124,9 +113,8 @@ async function updatePermissions(permissions, email) {
   sql =
     "update tbl_login_has_places set permissoes=B? where fk_login_id=(select id from tbl_place_logins where email=?)";
   data = [permissions, email];
-  // const conn = await database.connect();
+
   await dbmysql.query(sql, data);
-  // conn.end();
 }
 
 async function getAllPermissions(email) {
@@ -135,10 +123,8 @@ async function getAllPermissions(email) {
   const sql = "select a.email, bin(b.permissoes), b.fk_place_id from tbl_place_logins a join tbl_login_has_places b on a.id = b.fk_login_id where email=? and deletado = 0;";
   const dataLogin = [email];
 
-  // const conn = await database.connect();
   const [user] = await dbmysql.query(sql, dataLogin);
 
-  // conn.end();
   return user;
 }
 
@@ -150,10 +136,8 @@ async function getPlacesOwn(loginid) {
       where fk_login_id = ?`
   const data = [loginid]
 
-  // const conn = await database.connect();
   const [places] = await dbmysql.query(sql, data);
 
-  // conn.end();
   return places;
 }
 
@@ -170,10 +154,8 @@ async function setPassword(id, hashPassword) {
   const sql = `update tbl_place_logins set hashPass = ? where id = ?`;
   const data = [hashPassword, id];
 
-  // const conn = await database.connect();
   const [user] = await dbmysql.query(sql, data);
 
-  // conn.end();
   return user;
 }
 

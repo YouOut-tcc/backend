@@ -81,7 +81,6 @@ create table if not exists tbl_place_logins(
     primary key(id)
 );
 
--- colocar um sistema de permissoes
 create table if not exists tbl_logins_has_places(
     id          integer auto_increment not null,
     FK_place_id integer not null,
@@ -95,7 +94,6 @@ create table if not exists tbl_logins_has_places(
     unique(FK_place_id, FK_login_id)
 );
 
--- adicionar columa de denunciado
 create table if not exists tbl_avaliacoes(
     id            integer auto_increment not null,
     FK_usuario_id integer not null,
@@ -157,7 +155,8 @@ create table if not exists tbl_promocao(
     primary key(id),
     foreign key(fk_est) references tbl_places(id)
 );
--- colocar nome para eventos
+
+
 create table if not exists tbl_eventos(
 	id int auto_increment not null,
     deletado boolean default false,

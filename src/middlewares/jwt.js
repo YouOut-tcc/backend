@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
 import helpers from "../helpers/helpers.js";
-import database from "../models/connection.js";
 import { dbmysql } from "../connections/database.js";
 
 async function verifyEmailExist(email, type=undefined){
@@ -13,10 +12,8 @@ async function verifyEmailExist(email, type=undefined){
 	}
   const dataLogin = [email];
 
-  // const conn = database.pool;
   const [[user]] = await dbmysql.query(sql, dataLogin);
 
-  // conn.end();
   return user
 }
 
@@ -30,10 +27,8 @@ async function verifyEmailExistById(id, type=undefined){
 	}
   const dataLogin = [id];
 
-  // const conn = database.pool;
   const [[user]] = await dbmysql.query(sql, dataLogin);
 
-  // conn.end();
   return user
 }
 

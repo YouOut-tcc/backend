@@ -1,4 +1,8 @@
+-- create database if not exists youout;
+-- use youout;
+
 create database if not exists yououttest;
+-- drop database yououttest;
 use yououttest;
 
 create table if not exists tbl_usuarios(
@@ -15,6 +19,7 @@ create table if not exists tbl_usuarios(
     primary key(id)
 );
 
+-- Tirar a columas notas
 create table if not exists tbl_places(
 	id               integer auto_increment not null,
     uuid             binary(16) not null unique,
@@ -113,6 +118,8 @@ create table if not exists tbl_avaliacoes(
     foreign key(fk_usuario_id) references tbl_usuarios(id)
 );
 
+-- fazendo essa tabela dessa forma, deixa possivel uma avaliação receber varios comentarios
+-- algo indesejado, tratar isso na logica do backend, mas mander por motivos de compatibilidade
 create table if not exists tbl_respostas(
     id              integer auto_increment not null,
     fk_avaliacao_id integer not null,

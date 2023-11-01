@@ -1,5 +1,3 @@
-import { analytics } from "googleapis/build/src/apis/analytics/index.js";
-import database from "../models/connection.js";
 import { dbmysql } from "../connections/database.js";
 
 const permissionsList = {
@@ -21,10 +19,8 @@ async function getPermissions(placeid, loginid) {
   const sql = "select bin(b.permissoes) permissoes from tbl_place_logins a join tbl_login_has_places b on a.id = b.fk_login_id where a.id=? and b.fk_place_id=? and deletado = 0;";
   const data = [loginid, placeid];
 
-  // const conn = await database.connect();
   const [[permissoes]] = await dbmysql.query(sql, data);
 
-  // conn.end();
   return permissoes;
 }
 
