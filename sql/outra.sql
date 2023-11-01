@@ -211,7 +211,7 @@ create table if not exists tbl_avaliacao_denuncias (
     foreign key(fk_usuario_id) references tbl_usuarios(id)
 );
 
-create table if not exists tbl_respota_denuncias (
+create table if not exists tbl_resposta_denuncias (
 	id               integer auto_increment,
     fk_resposta_id   integer,
     fk_usuario_id    integer,

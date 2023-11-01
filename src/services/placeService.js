@@ -72,7 +72,7 @@ async function linkLogin(email, cnpj) {
   }
 
   sql =
-    "insert into tbl_logins_has_places(FK_place_id, FK_login_id,permissions) values(?,?,B'1111111111111111')";
+    "insert into tbl_login_has_places(fk_place_id, fk_login_id, permissoes) values(?,?,B'1111111111111111')";
   data = [idPlace.id, idUser.id];
   await dbmysql.query(sql, data);
 
@@ -94,7 +94,7 @@ async function getInfo(uuid) {
 
 async function criarAvaliacao(comentario, nota, placeid, userid) {
   const sql =
-    "insert into tbl_avaliacoes(pontuacao,comentario,FK_place_id,FK_usuario_id) values(?,?,?,?)";
+    "insert into tbl_avaliacoes(pontuacao, comentario, fk_place_id, fk_usuario_id) values(?,?,?,?)";
   const data = [nota, comentario, placeid, userid];
 
   // const conn = await database.connect();
@@ -108,9 +108,9 @@ async function getAvaliacoes(placeid, userid) {
   const sql = `select a.id id, a.denunciado ,a.pontuacao, a.comentario, a.criado, b.nome, 
   c.comentario as resposta, c.denunciado as resposta_denuncia
   from tbl_avaliacoes a
-      join tbl_usuario b on b.id = a.FK_usuario_id
-      left join tbl_respostas c on FK_avaliacao_id = a.id
-        where FK_place_id=?`;
+      join tbl_usuarios b on b.id = a.fk_usuario_id
+      left join tbl_respostas c on fk_avaliacao_id = a.id
+        where fk_place_id=?`;
   const data = [placeid, userid];
 
   // const conn = database.pool;
@@ -122,7 +122,7 @@ async function getAvaliacoes(placeid, userid) {
 
 async function criarFavorito(placeid, userid) {
   const sql =
-    "insert into tbl_favoritos(FK_place_id,FK_usuario_id) values(?,?)";
+    "insert into tbl_favoritos(fk_place_id, fk_usuario_id) values(?,?)";
   const data = [placeid, userid];
 
   // const conn = await database.connect();
@@ -133,7 +133,7 @@ async function criarFavorito(placeid, userid) {
 
 async function deletarFavorito(placeid, userid) {
   const sql =
-    "delete from tbl_favoritos where FK_place_id = ? and FK_usuario_id = ?";
+    "delete from tbl_favoritos where fk_place_id = ? and fk_usuario_id = ?";
   const data = [placeid, userid];
 
   // const conn = await database.connect();
@@ -144,7 +144,7 @@ async function deletarFavorito(placeid, userid) {
 
 async function getFavorito(placeid, userid) {
   const sql =
-    "select * from tbl_favoritos where FK_usuario_id = ? and FK_place_id = ?";
+    "select * from tbl_favoritos where fk_usuario_id = ? and fk_place_id = ?";
   const data = [userid, placeid];
 
   // const conn = await database.connect();
@@ -154,9 +154,10 @@ async function getFavorito(placeid, userid) {
   return result;
 }
 
+// mudar o nome dessa alies
 async function favCount(placeid) {
   const sql =
-    "select count(*) as qntdFavoritos from tbl_favoritos where FK_place_id = ?";
+    "select count(*) as qntdFavoritos from tbl_favoritos where fk_place_id = ?";
   const data = [placeid];
 
   // const conn = await database.connect();
@@ -171,9 +172,9 @@ async function getPlaces(limit, offset, location, idUser) {
     ST_Distance_Sphere(
       coordenadas,
       point(?, ?)
-    ) distancia, nota, (CASE WHEN b.FK_usuario_id is NOT NULL THEN true ELSE false END) AS favorito
-    from tbl_places a left join tbl_favoritos b on b.FK_place_id = a.id
-      and b.FK_usuario_id = ? where a.deletado = false order by distancia limit ? offset ?;`;
+    ) distancia, nota, (CASE WHEN b.fk_usuario_id is NOT NULL THEN true ELSE false END) AS favorito
+    from tbl_places a left join tbl_favoritos b on b.fk_place_id = a.id
+      and b.fk_usuario_id = ? where a.deletado = false order by distancia limit ? offset ?;`;
 
   const sql = `select a.id, a.denunciado, uuid_from_bin(uuid) uuid, a.nome, coordenadas,
       ST_Distance_Sphere(
@@ -181,11 +182,11 @@ async function getPlaces(limit, offset, location, idUser) {
         point(?, ?)
       ) distancia, 
       coalesce(c.nota, 0) nota, 
-      (b.FK_usuario_id IS NOT NULL) favorito
+      (b.fk_usuario_id IS NOT NULL) favorito
       from tbl_places a
       left join vw_notas c on c.id = a.id
-      left join tbl_favoritos b on b.FK_place_id = a.id
-      and b.FK_usuario_id = ?
+      left join tbl_favoritos b on b.fk_place_id = a.id
+      and b.fk_usuario_id = ?
       where a.deletado = false
       order by distancia
       limit ? offset ?;`;
@@ -205,7 +206,7 @@ async function getPlaces(limit, offset, location, idUser) {
 
 async function criarEventos(descricao, inicio, fim, placeid) {
   const sql =
-    "insert into tbl_eventos(descricao, dt_inicio, dt_fim, fk_est) values(?,?,?,?)";
+    "insert into tbl_eventos(descricao, inicio, fim, fk_place_id) values(?,?,?,?)";
   const data = [descricao, inicio, fim, placeid];
 
   // const conn = await database.connect();
@@ -216,7 +217,7 @@ async function criarEventos(descricao, inicio, fim, placeid) {
 
 async function getEventos(placeid) {
   const sql =
-    "select descricao, dt_inicio, dt_fim from tbl_eventos where fk_est = ?";
+    "select descricao, inicio, fim from tbl_eventos where fk_place_id = ?";
 
   // const conn = await database.connect();
   const result = await dbmysql.query(sql, placeid);
@@ -227,7 +228,7 @@ async function getEventos(placeid) {
 
 async function updateEventos(descricao, dt_inicio, dt_fim, eventoId) {
   const sql =
-    "update tbl_eventos set descricao = ?, dt_inicio = ?, dt_fim = ? where id = ?";
+    "update tbl_eventos set descricao = ?, inicio = ?, fim = ? where id = ?";
   const data = [descricao, dt_inicio, dt_fim, eventoId];
 
   // const conn = await database.connect();
@@ -247,7 +248,7 @@ async function deleteEventos(eventoId) {
 
 async function criarPromocao(placeid, dt_fim, descricao) {
   const sql =
-    "insert into tbl_promocao(fk_est, dt_vencimento, descricao) values(?,?,?)";
+    "insert into tbl_promocoes(fk_place_id, vencimento, descricao) values(?,?,?)";
   const data = [placeid, dt_fim, descricao];
 
   // const conn = await database.connect();
@@ -258,7 +259,7 @@ async function criarPromocao(placeid, dt_fim, descricao) {
 
 async function getPromocao(placeid) {
   const sql =
-    "select dt_criacao, dt_vencimento, descricao from tbl_promocao where fk_est = ?";
+    "select criado, vencimento, descricao from tbl_promocoes where fk_place_id = ?";
 
   // const conn = await database.connect();
   const result = dbmysql.query(sql, placeid);
@@ -269,7 +270,7 @@ async function getPromocao(placeid) {
 
 async function updatePromocao(dt_fim, descricao, promocaoId) {
   const sql =
-    "update tbl_promocao set dt_vencimento = ?, descricao = ? where id = ?";
+    "update tbl_promocoes set vencimento = ?, descricao = ? where id = ?";
   const data = [dt_fim, descricao, promocaoId];
 
   // const conn = await database.connect();
@@ -279,7 +280,7 @@ async function updatePromocao(dt_fim, descricao, promocaoId) {
 }
 
 async function deletePromocao(promocaoId) {
-  const sql = "delete from tbl_promocao where id = ?";
+  const sql = "delete from tbl_promocoes where id = ?";
   // const sql = "insert into tbl_promocao(deletado) values(true) where id = ? and deletado = false";
   // const conn = await database.connect();
   dbmysql.query(sql, promocaoId);
@@ -289,7 +290,7 @@ async function deletePromocao(promocaoId) {
 
 async function criarCupons(placeid, vencimento, descricao) {
   const sql =
-    "insert into tbl_cupons(fk_est, dt_vencimento, descricao) values(?,?,?)";
+    "insert into tbl_cupons(fk_place_id, vencimento, descricao) values(?,?,?)";
   const data = [placeid, vencimento, descricao];
 
   // const conn = await database.connect();
@@ -300,7 +301,7 @@ async function criarCupons(placeid, vencimento, descricao) {
 
 async function getCupons(placeid) {
   const sql =
-    "select dt_criacao, dt_vencimento, descricao from tbl_cupons where fk_est = ?";
+    "select criacao, vencimento, descricao from tbl_cupons where fk_place_id = ?";
 
   // const conn = await database.connect();
   const result = dbmysql.query(sql, placeid);
@@ -311,7 +312,7 @@ async function getCupons(placeid) {
 
 async function updateCupons(dt_vencimento, descricao, cupomId) {
   const sql =
-    "update tbl_cupons set dt_vencimento = ?, descricao = ? where id = ?";
+    "update tbl_cupons set vencimento = ?, descricao = ? where id = ?";
   const data = [dt_vencimento, descricao, cupomId];
 
   // const conn = await database.connect();
@@ -342,7 +343,7 @@ async function setResposta(avaliacaoid, placeid, coment) {
 
 async function denunciarPlace(placeid, userid, motivo) {
   const sql =
-    "insert into tbl_places_denuncias(fk_place_id, fk_usuario_id, motivo) values(?,?,?)";
+    "insert into tbl_place_denuncias(fk_place_id, fk_usuario_id, motivo) values(?,?,?)";
   const data = [placeid, userid, motivo];
 
   // const conn = await database.connect();
@@ -352,7 +353,7 @@ async function denunciarPlace(placeid, userid, motivo) {
 
 async function denunciarAvaliacao(avaliacaoid, userid, motivo) {
   const sql =
-    "insert into tbl_avaliacoes_denuncias(fk_avaliacoes_id, fk_usuario_id, motivo) values(?,?,?)";
+    "insert into tbl_avaliacao_denuncias(fk_avaliacoes_id, fk_usuario_id, motivo) values(?,?,?)";
   const data = [avaliacaoid, userid, motivo];
 
   // const conn = await database.connect();
@@ -360,10 +361,10 @@ async function denunciarAvaliacao(avaliacaoid, userid, motivo) {
   // conn.end();
 }
 
-async function denunciarResposta(respotaid, userid, motivo) {
+async function denunciarResposta(respostaid, userid, motivo) {
   const sql =
-    "insert into tbl_respota_denuncias(fk_respotas_id, fk_usuario_id, motivo) values(?,?,?)";
-  const data = [respotaid, userid, motivo];
+    "insert into tbl_resposta_denuncias(fk_resposta_id, fk_usuario_id, motivo) values(?,?,?)";
+  const data = [respostaid, userid, motivo];
 
   // const conn = await database.connect();
   await dbmysql.query(sql, data);
@@ -401,7 +402,7 @@ async function deletarPlace(id) {
 
 async function respoderAvaliacao(avaliacaoid, loginid, resposta) {
   const sql =
-    "insert into tbl_respostas(FK_avaliacao_id, fk_place_logins_id, comentario) values(?,?,?)";
+    "insert into tbl_respostas(fk_avaliacao_id, fk_place_logins_id, comentario) values(?,?,?)";
   const data = [avaliacaoid, loginid, resposta];
 
   // const conn = await database.connect();

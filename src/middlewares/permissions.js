@@ -18,14 +18,14 @@ async function isRoot(req, res, next) {
 }
 
 async function getPermissions(placeid, loginid) {
-  const sql = "select bin(b.permissions) permissions from tbl_place_logins a join tbl_logins_has_places b on a.id = b.FK_login_id where a.id=? and b.FK_place_id=? and deletado = 0;";
+  const sql = "select bin(b.permissoes) permissoes from tbl_place_logins a join tbl_login_has_places b on a.id = b.fk_login_id where a.id=? and b.fk_place_id=? and deletado = 0;";
   const data = [loginid, placeid];
 
   // const conn = await database.connect();
-  const [[permissions]] = await dbmysql.query(sql, data);
+  const [[permissoes]] = await dbmysql.query(sql, data);
 
   // conn.end();
-  return permissions;
+  return permissoes;
 }
 
 async function maskBits(bits, mask) {

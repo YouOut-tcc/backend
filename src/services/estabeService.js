@@ -24,7 +24,7 @@ async function createLogin(
   telefone = undefined
 ) {
   const sql =
-    "insert into tbl_place_logins(nome, email, hashPass, telefone,parent) values(?,?,?,?,?)";
+    "insert into tbl_place_logins(nome, email, hashPass, telefone, parent) values(?,?,?,?,?)";
   const data = [name, email, hashPass, telefone, 0];
 
   // const conn = await database.connect();
@@ -32,14 +32,13 @@ async function createLogin(
   // conn.end();
 }
 
+// dano biologico, mudar depois
 async function updateLogin(id, name, email, password, adm) {
   const sql =
-    "update tbl_place_logins set nome = ?, email = ?, senha = ?, adm = ? where id = ?";
+    "update tbl_place_logins set nome = ?, email = ?,  = ? where id = ?";
   const data = [name, email, password, adm, id];
 
-  // const conn = await database.connect();
   await dbmysql.query(sql, data);
-  // conn.end();
 }
 
 async function deleteLogin(id) {
@@ -99,7 +98,7 @@ async function linkLogin(email, idPlace) {
   }
 
   sql =
-    "insert into tbl_logins_has_places(FK_place_id, FK_login_id) values(?,?)";
+    "insert into tbl_login_has_places(fk_place_id, fk_login_id) values(?,?)";
   data = [idPlace, idUser.id];
   await dbmysql.query(sql, data);
 
@@ -123,7 +122,7 @@ async function updatePermissions(permissions, email) {
   // }
   
   sql =
-    "update tbl_logins_has_places set permissions=B? where FK_login_id=(select id from tbl_place_logins where email=?)";
+    "update tbl_login_has_places set permissoes=B? where fk_login_id=(select id from tbl_place_logins where email=?)";
   data = [permissions, email];
   // const conn = await database.connect();
   await dbmysql.query(sql, data);
@@ -133,7 +132,7 @@ async function updatePermissions(permissions, email) {
 async function getAllPermissions(email) {
   // mudar para usar um id em vez do email
   // colocar para mostrar o uuid?
-  const sql = "select a.email, bin(b.permissions), b.FK_place_id from tbl_place_logins a join tbl_logins_has_places b on a.id = b.FK_login_id where email=? and deletado = 0;";
+  const sql = "select a.email, bin(b.permissoes), b.fk_place_id from tbl_place_logins a join tbl_login_has_places b on a.id = b.fk_login_id where email=? and deletado = 0;";
   const dataLogin = [email];
 
   // const conn = await database.connect();
@@ -146,9 +145,9 @@ async function getAllPermissions(email) {
 async function getPlacesOwn(loginid) {
   const sql = `
   select uuid_from_bin(b.uuid) uuid, b.cnpj, b.nome_empresarial, b.nome, b.telefone, b.celular, b.icon_url, b.nota, b.numero, b.cep, b.denunciado, b.denuncias, b.deletado, b.deletado_dia
-  from tbl_logins_has_places a
-    join tbl_places b on b.id = a.FK_place_id
-      where FK_login_id = ?`
+  from tbl_login_has_places a
+    join tbl_places b on b.id = a.fk_place_id
+      where fk_login_id = ?`
   const data = [loginid]
 
   // const conn = await database.connect();

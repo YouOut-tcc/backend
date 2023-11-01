@@ -9,7 +9,7 @@ async function verifyEmailExist(email, type=undefined){
 	if(type != 'user'){
 		sql = "select email, parent from tbl_place_logins where email=? and deletado = 0";
 	} else {
-		sql = "select email from tbl_usuario where email=? and deletado = 0";
+		sql = "select email from tbl_usuarios where email=? and deletado = 0";
 	}
   const dataLogin = [email];
 
@@ -26,7 +26,7 @@ async function verifyEmailExistById(id, type=undefined){
 	if(type != 'user'){
 		sql = "select email, parent from tbl_place_logins where id=? and deletado = 0";
 	} else {
-		sql = "select email from tbl_usuario where id=? and deletado = 0";
+		sql = "select email from tbl_usuarios where id=? and deletado = 0";
 	}
   const dataLogin = [id];
 
