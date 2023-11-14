@@ -29,6 +29,7 @@ CREATE FUNCTION uuid_to_bin(s CHAR(36))
 CREATE FUNCTION `uuid_v5`(ns CHAR(36), name VARCHAR(2000))
   RETURNS
     BINARY(16)
+    deterministic
   BEGIN
     SET @ns_bin = uuid_to_bin(ns);
     SET @prehash_value = CONCAT(@ns_bin, name);

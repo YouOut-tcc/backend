@@ -326,7 +326,7 @@ async function deletarPlace(id) {
 
 async function respoderAvaliacao(avaliacaoid, loginid, resposta) {
   const sql =
-    "insert into tbl_respostas(fk_avaliacao_id, fk_place_logins_id, comentario) values(?,?,?)";
+    "insert into tbl_respostas(fk_avaliacao_id, fk_place_login_id, comentario) values(?,?,?)";
   const data = [avaliacaoid, loginid, resposta];
 
   await dbmysql.query(sql, data);

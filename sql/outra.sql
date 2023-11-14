@@ -1,9 +1,9 @@
--- create database if not exists youout;
--- use youout;
+create database if not exists youout;
+use youout;
 
-create database if not exists yououttest;
+-- create database if not exists yououttest;
 -- drop database yououttest;
-use yououttest;
+-- use yououttest;
 
 create table if not exists tbl_usuarios(
 	id           integer auto_increment not null,
