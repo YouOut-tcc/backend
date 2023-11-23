@@ -91,7 +91,7 @@ async function criarAvaliacao(comentario, nota, placeid, userid) {
 
 async function getAvaliacoes(placeid, userid) {
   const sql = `select a.id id, a.denunciado ,a.pontuacao, a.comentario, a.criado, b.nome, 
-  c.comentario as resposta, c.denunciado as resposta_denuncia
+  c.comentario as resposta, c.denunciado as resposta_denuncia, c.criado as resposta_criada
   from tbl_avaliacoes a
       join tbl_usuarios b on b.id = a.fk_usuario_id
       left join tbl_respostas c on fk_avaliacao_id = a.id
