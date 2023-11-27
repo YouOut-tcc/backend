@@ -241,7 +241,7 @@ async function getPlaces(req, res) {
 }
 
 async function criarEventos(req, res) {
-  const { descricao, inicio, fim } = req.body;
+  const { nome, descricao, valor, inicio, fim } = req.body;
   if (typeof descricao != "string") {
     return res.status(400).send({ message: "Formato de descrição inválido" });
   }
@@ -251,7 +251,7 @@ async function criarEventos(req, res) {
       .send({ message: "Tamanho da descrição é maior que o limite permitido" });
   }
   try {
-    await service.criarEventos(descricao, inicio, fim, req.place.id);
+    await service.criarEventos(nome, descricao, valor, inicio, fim, req.place.id);
     res.status(200).send({ message: "Evento criado" });
   } catch (error) {
     res.status(400).send({ message: error });

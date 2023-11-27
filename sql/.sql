@@ -169,6 +169,7 @@ create table if not exists tbl_eventos(
     fk_place_id integer not  null,
     nome        varchar(150) not null,
     descricao   varchar(150),
+    valor       decimal(15, 2) not null,
     inicio      datetime default null,
     fim         datetime default null,
 
