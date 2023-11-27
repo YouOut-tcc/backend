@@ -278,10 +278,12 @@ async function getEventos(req, res) {
     // retomar a url da imagem, no momento irei fazer de um jeito porco
     // mudar para usar o sistema do s3 em vez de pegar no seco
     // quando mudar isso, configurar certo o s3 para não permitir acesso publico
+
+    // dessa forma o backend retona urls invalidas
     result.forEach(element => {
       element.image = imageUrlBuilder(element.id, req.place.uuid, "eventos");
     });
-    res.status(200).send({result});
+    res.status(200).send(result);
   } catch (error) {
     res.status(400).send({ message: error });
   }
