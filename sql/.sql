@@ -1,19 +1,20 @@
 create database if not exists youout;
 use youout;
--- drop database youout;
 
--- eu carlos, não sei escrever respostas
+-- create database if not exists yououttest;
+-- drop database yououttest;
+-- use yououttest;
 
-create table if not exists tbl_usuario(
+create table if not exists tbl_usuarios(
 	id           integer auto_increment not null,
     nome         varchar(65) not null,
     email        varchar(65) unique not null,
     hashPass     varchar(150) default null,
     telefone     int(15) default null,
     
-    criado       datetime default now(),
     deletado_dia date default null,
     deletado     boolean not null default false,
+    criado       datetime default now(),
     
     primary key(id)
 );
@@ -42,27 +43,29 @@ create table if not exists tbl_places(
 
 	denunciado       bool     default false,
     denuncias        integer  default 0,
-    criado           datetime default now(),
     deletado_dia     datetime     default null,
     deletado         boolean  not null default false,
+    criado           datetime default now(),
     
     primary key(id),
-    fulltext(nome)
+    fulltext(nome, descricao)
 );
 
 create table if not exists tbl_tags(
     id  integer auto_increment not null,
     tag varchar(255) not null,
+
     primary key(id)
 );
 
 create table if not exists tbl_place_has_tags(
     id          integer auto_increment not null,
-    FK_tag_id 	integer not null,
-    FK_place_id integer not null,
+    fk_tag_id 	integer not null,
+    fk_place_id integer not null,
+
     primary key(id),
-    foreign key(FK_place_id) references tbl_places(id),
-    foreign key(FK_tag_id) references tbl_tags(id)
+    foreign key(fk_place_id) references tbl_places(id),
+    foreign key(fk_tag_id) references tbl_tags(id)
 );
 
 create table if not exists tbl_place_logins(
@@ -81,48 +84,49 @@ create table if not exists tbl_place_logins(
     primary key(id)
 );
 
-create table if not exists tbl_logins_has_places(
+create table if not exists tbl_login_has_places(
     id          integer auto_increment not null,
-    FK_place_id integer not null,
-    FK_login_id integer not null,
+    fk_place_id integer not null,
+    fk_login_id integer not null,
+    permissoes  bit(16) not null default b'0000000000000000',
+
     criado      datetime default now(),
-    permissions bit(16) not null default b'0000000000000000',
     
     primary key(id),
-    foreign key(FK_place_id) references tbl_places(id),
-    foreign key(FK_login_id) references tbl_place_logins(id),
-    unique(FK_place_id, FK_login_id)
+    foreign key(fk_place_id) references tbl_places(id),
+    foreign key(fk_login_id) references tbl_place_logins(id),
+    unique(fk_place_id, fk_login_id)
 );
 
 create table if not exists tbl_avaliacoes(
     id            integer auto_increment not null,
-    FK_usuario_id integer not null,
-    FK_place_id   integer not null,
+    fk_usuario_id integer not null,
+    fk_place_id   integer not null,
 
     pontuacao  decimal(3, 1) unsigned  NOT NULL,
     -- comentario_null 
     comentario varchar(255) default '',
     
-    denunciado   bool     default false,
+    denunciado   boolean  default false,
     denuncias    integer  default 0,
     deletado     boolean  not null default false,
     deletado_dia datetime default null,
     criado       datetime default now(),
 
     primary key(id),
-    foreign key(FK_place_id) references tbl_places(id),
-    foreign key(FK_usuario_id) references tbl_usuario(id)
+    foreign key(fk_place_id) references tbl_places(id),
+    foreign key(fk_usuario_id) references tbl_usuarios(id)
 );
 
 -- fazendo essa tabela dessa forma, deixa possivel uma avaliação receber varios comentarios
 -- algo indesejado, tratar isso na logica do backend, mas mander por motivos de compatibilidade
 create table if not exists tbl_respostas(
     id              integer auto_increment not null,
-    FK_avaliacao_id integer not null,
-	fk_place_logins_id  integer not null,
+    fk_avaliacao_id integer not null,
+	fk_place_login_id  integer not null,
     -- comentario_null 
     
-    denunciado   bool         default false,
+    denunciado   boolean      default false,
     denuncias    integer      default 0,
     comentario   varchar(255) default '',
     deletado     boolean      not null default false,
@@ -130,99 +134,104 @@ create table if not exists tbl_respostas(
     criado       datetime     default now(),
 
     primary key(id),
-    foreign key(FK_avaliacao_id) references tbl_avaliacoes(id),
-    foreign key(fk_place_logins_id) references tbl_place_logins(id)
+    foreign key(fk_avaliacao_id) references tbl_avaliacoes(id),
+    foreign key(fk_place_login_id) references tbl_place_logins(id)
 );
 
 create table if not exists tbl_favoritos(
     id            integer auto_increment not null,
-    FK_usuario_id integer not null,
-    FK_place_id   integer not null,
+    fk_usuario_id integer not null,
+    fk_place_id   integer not null,
+
     criado        datetime default now(),
+
     primary key(id),
-    foreign key(FK_usuario_id) references tbl_usuario(id),
-    foreign key(FK_place_id) references tbl_places(id),
-    UNIQUE (FK_usuario_id, FK_place_id)
+    foreign key(fk_usuario_id) references tbl_usuarios(id),
+    foreign key(fk_place_id) references tbl_places(id),
+    UNIQUE (fk_usuario_id, fk_place_id)
 );
 
-create table if not exists tbl_promocao(
-    id int auto_increment not null,
-    fk_est int not null,
-    dt_criacao datetime default now(),
-    dt_vencimento date default null,
-    deletado boolean default false,
-    descricao varchar(150) not null,
-    primary key(id),
-    foreign key(fk_est) references tbl_places(id)
-);
+create table if not exists tbl_promocoes(
+    id integer  auto_increment not null,
+    fk_place_id integer not null,
+    vencimento  date default null,
+    descricao   varchar(150) not null,
 
+    deletado   boolean default false,
+    criado     datetime default now(),
+
+    primary key(id),
+    foreign key(fk_place_id) references tbl_places(id)
+);
 
 create table if not exists tbl_eventos(
-	id int auto_increment not null,
-    deletado boolean default false,
-    dt_criacao datetime default now(),
-    nome varchar(150) not null,
-    descricao varchar(150),
-    dt_inicio date default null,
-    dt_fim date default null,
-    fk_est int not  null,
+	id          integer auto_increment not null,
+    fk_place_id integer not  null,
+    nome        varchar(150) not null,
+    descricao   varchar(150),
+    inicio      datetime default null,
+    fim         datetime default null,
+
+    deletado    boolean default false,
+    criado      datetime default now(),
+
     primary key(id),
-    foreign key(fk_est) references tbl_places(id)
+    foreign key(fk_place_id) references tbl_places(id)
 );
 
 create table if not exists tbl_cupons (
-	id int auto_increment not null,
-    fk_est int not null,
-    dt_criacao datetime default now(),
-    dt_vencimento date default null,
+	id          integer auto_increment not null,
+    fk_place_id integer not null,
+    descricao   varchar(30) not null,
+    vencimento  date default null,
+
     deletado boolean default false,
-    descricao varchar(30) not null,
+    criado   datetime default now(),
+
     primary key(id),
-    foreign key(fk_est) references tbl_places(id)
+    foreign key(fk_place_id) references tbl_places(id)
 );
 
-create table if not exists tbl_places_denuncias (
-	id           integer auto_increment,
-    fk_place_id  integer,
+create table if not exists tbl_place_denuncias (
+	id            integer auto_increment,
+    fk_place_id   integer,
     fk_usuario_id integer,
-    motivo       varchar(255),
+    motivo        varchar(255),
     
-    criado       datetime default now(),
+    criado        datetime default now(),
     
     primary key(id),
     foreign key(fk_place_id) references tbl_places(id),
-    foreign key(fk_usuario_id) references tbl_usuario(id)
+    foreign key(fk_usuario_id) references tbl_usuarios(id)
 );
 
-create table if not exists tbl_avaliacoes_denuncias (
+create table if not exists tbl_avaliacao_denuncias (
 	id               integer auto_increment,
-    fk_avaliacoes_id integer,
+    fk_avaliacao_id  integer,
     fk_usuario_id    integer,
     motivo           varchar(255),
     
     criado           datetime default now(),
     
     primary key(id),
-    foreign key(fk_avaliacoes_id) references tbl_avaliacoes(id),
-    foreign key(fk_usuario_id) references tbl_usuario(id)
+    foreign key(fk_avaliacao_id) references tbl_avaliacoes(id),
+    foreign key(fk_usuario_id) references tbl_usuarios(id)
 );
 
-create table if not exists tbl_respotas_denuncias (
+create table if not exists tbl_resposta_denuncias (
 	id               integer auto_increment,
-    fk_respotas_id   integer,
+    fk_resposta_id   integer,
     fk_usuario_id    integer,
     motivo           varchar(255),
     
     criado           datetime default now(),
     
     primary key(id),
-    foreign key(fk_respotas_id) references tbl_respostas(id),
-    foreign key(fk_usuario_id) references tbl_usuario(id)
+    foreign key(fk_resposta_id) references tbl_respostas(id),
+    foreign key(fk_usuario_id) references tbl_usuarios(id)
 );
 
 create or replace view vw_notas as
-select FK_place_id id, round(avg(pontuacao), 1) nota 
+select fk_place_id id, round(avg(pontuacao), 1) nota 
     from tbl_avaliacoes 
-    group by FK_place_id;
-    
-
+    group by fk_place_id;
