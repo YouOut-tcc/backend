@@ -1,5 +1,7 @@
 import service from "../services/placeService.js";
 import { isJSONEntriesNullorEmpty } from "../helpers/validation.js";
+import { saveEventImage } from "../services/imageService.js";
+import { imageUrlBuilder } from "../helpers/image.js";
 
 async function requestCreation(req, res) {
   const {
@@ -241,7 +243,11 @@ async function getPlaces(req, res) {
 }
 
 async function criarEventos(req, res) {
-  const { nome, descricao, valor, inicio, fim } = req.body;
+  let { nome, descricao, valor, inicio, fim, image } = req.body;
+  console.log(req.file)
+  let buffer = new Buffer.from(image.replace(/^data:image\/\w+;base64,/, ""), 'base64');
+  // const { buffer } = req.file;
+
   if (typeof descricao != "string") {
     return res.status(400).send({ message: "Formato de descrição inválido" });
   }
@@ -250,8 +256,16 @@ async function criarEventos(req, res) {
       .status(400)
       .send({ message: "Tamanho da descrição é maior que o limite permitido" });
   }
+  valor = parseFloat(valor);
+
+  console.log({ nome, descricao, valor, inicio, fim })
+  console.log(buffer);
+
   try {
-    await service.criarEventos(nome, descricao, valor, inicio, fim, req.place.id);
+    let [result] = await service.criarEventos(nome, descricao, valor, inicio, fim, req.place.id);
+    let id = result.insertId;
+    //salva no s3
+    await saveEventImage(id, buffer, req.place.uuid, null);
     res.status(200).send({ message: "Evento criado" });
   } catch (error) {
     res.status(400).send({ message: error });
@@ -261,7 +275,13 @@ async function criarEventos(req, res) {
 async function getEventos(req, res) {
   try {
     const [result] = await service.getEventos(req.place.id);
-    res.status(200).send(result);
+    // retomar a url da imagem, no momento irei fazer de um jeito porco
+    // mudar para usar o sistema do s3 em vez de pegar no seco
+    // quando mudar isso, configurar certo o s3 para não permitir acesso publico
+    result.forEach(element => {
+      element.image = imageUrlBuilder(element.id, req.place.uuid, "eventos");
+    });
+    res.status(200).send({result});
   } catch (error) {
     res.status(400).send({ message: error });
   }

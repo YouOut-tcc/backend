@@ -179,12 +179,12 @@ async function criarEventos(nome, descricao, valor, inicio, fim, placeid) {
     "insert into tbl_eventos(nome, descricao, valor, inicio, fim, fk_place_id) values(?,?,?,?,?,?)";
   const data = [nome, descricao, valor, inicio, fim, placeid];
 
-  await dbmysql.query(sql, data);
+  return await dbmysql.query(sql, data);
 }
 
 async function getEventos(placeid) {
   const sql =
-    "select nome, descricao, valor, inicio, fim, criado from tbl_eventos where fk_place_id = ?";
+    "select id, nome, descricao, valor, inicio, fim, criado from tbl_eventos where fk_place_id = ?";
 
   const result = await dbmysql.query(sql, placeid);
 
