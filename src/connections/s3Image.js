@@ -13,7 +13,7 @@ class S3Image {
   bucketName;
 
   constructor(){
-    this.s3Client = new S3Client({});
+    this.s3Client = new S3Client({ region: process.env.S3_LOCATION });
     this.bucketName = process.env.S3_BUCKET;
   }
 
@@ -23,7 +23,7 @@ class S3Image {
       Key: path,
       Body: file,
       ACL: 'public-read', // Defina a permissão de acesso ao arquivo
-      // ContentType: mimetype,
+      ContentType: mimetype,
     }
     try {
       console.log("salvando imagem, eu acho")

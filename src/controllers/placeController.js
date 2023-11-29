@@ -242,8 +242,10 @@ async function getPlaces(req, res) {
   }
 }
 
+// olhar o minetype para não ser carregado algo fora de uma imagem
+// medo de ser possivel dar upload de algo fora de uma imagem
 async function criarEventos(req, res) {
-  let { nome, descricao, valor, inicio, fim, image } = req.body;
+  let { nome, descricao, valor, inicio, fim, image, minetype } = req.body;
   console.log(req.file)
   let buffer = new Buffer.from(image.replace(/^data:image\/\w+;base64,/, ""), 'base64');
   // const { buffer } = req.file;
@@ -264,8 +266,9 @@ async function criarEventos(req, res) {
   try {
     let [result] = await service.criarEventos(nome, descricao, valor, inicio, fim, req.place.id);
     let id = result.insertId;
+
     //salva no s3
-    await saveEventImage(id, buffer, req.place.uuid, null);
+    await saveEventImage(id, buffer, req.place.uuid, minetype);
     res.status(200).send({ message: "Evento criado" });
   } catch (error) {
     res.status(400).send({ message: error });
