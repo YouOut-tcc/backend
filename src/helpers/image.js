@@ -3,11 +3,12 @@ import multer from "multer";
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-function imageUrlBuilder(id, uuid, type) {
+// mudar a exteção futuramente
+function imageUrlBuilder(id, placeUuid, type, imageUuid) {
   const bucket = process.env.S3_BUCKET;
   const location = process.env.S3_LOCATION;
 
-  return `https://${bucket}.s3.${location}.amazonaws.com/${uuid}/${type}/${id}.jpg`
+  return `https://${bucket}.s3.${location}.amazonaws.com/${placeUuid}/${type}/${imageUuid}-${id}.jpg`
 }
 
 export { upload, imageUrlBuilder };

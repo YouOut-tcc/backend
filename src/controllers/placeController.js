@@ -1,6 +1,6 @@
 import service from "../services/placeService.js";
 import { isJSONEntriesNullorEmpty } from "../helpers/validation.js";
-import { saveEventImage } from "../services/imageService.js";
+import { saveEventImage, getEventImages } from "../services/imageService.js";
 import { imageUrlBuilder } from "../helpers/image.js";
 
 async function requestCreation(req, res) {
@@ -244,6 +244,7 @@ async function getPlaces(req, res) {
 
 // olhar o minetype para não ser carregado algo fora de uma imagem
 // medo de ser possivel dar upload de algo fora de uma imagem
+// corrigir a data, backend e frontend
 async function criarEventos(req, res) {
   let { nome, descricao, valor, inicio, fim, image, minetype } = req.body;
   console.log(req.file)
@@ -277,16 +278,20 @@ async function criarEventos(req, res) {
 
 async function getEventos(req, res) {
   try {
+    const uuid = req.place.uuid;
     const [result] = await service.getEventos(req.place.id);
     // retomar a url da imagem, no momento irei fazer de um jeito porco
     // mudar para usar o sistema do s3 em vez de pegar no seco
     // quando mudar isso, configurar certo o s3 para não permitir acesso publico
 
     // dessa forma o backend retona urls invalidas
-    result.forEach(element => {
-      element.image = imageUrlBuilder(element.id, req.place.uuid, "eventos");
+    // result.forEach(element => {
+    //   element.image = imageUrlBuilder(element.id, req.place.uuid, "eventos");
+    // });
+
+    getEventImages(uuid, result).then(eventos => {
+      res.status(200).send(eventos);
     });
-    res.status(200).send(result);
   } catch (error) {
     res.status(400).send({ message: error });
   }

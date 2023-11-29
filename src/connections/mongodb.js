@@ -24,7 +24,7 @@ class DBMongodb {
     });
   }
 
-  async fistInsertImageMeta(collection, uuid, data) {
+  fistInsertImageMeta(collection, uuid, data) {
     let placeEvento = {
       uuid: uuid,
       imagens: [data],
@@ -50,17 +50,30 @@ class DBMongodb {
     });
   }
 
-  async insertNewImageMeta(collection, uuid, data) {
+  insertNewImageMeta(collection, uuid, data) {
     collection.updateOne({ uuid: uuid }, { $push: { imagens: data } });
   }
 
   // ainda não foi testado
-  async updateImageMeta(collection, uuid, data) {
+  updateImageMeta(collection, uuid, data) {
     collection.updateOne(
       { uuid: uuid, "imagens.id": id },
       { $set: { "imagens.$": data } }
     );
   }
+
+  // não testado
+  async getImagen(collectionName, uuid ){
+
+  }
+
+  async getImagens(collectionName, placeUuid){
+    const collection = this.db.collection(collectionName);
+    const uuid = new UUID(placeUuid);
+    let result = await collection.findOne({ uuid: uuid });
+    return result;
+  }
+
 }
 
 export default DBMongodb;
