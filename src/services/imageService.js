@@ -4,16 +4,16 @@ import { mongodb } from "../connections/database.js";
 import { v4 as uuidv4 } from "uuid";
 import { imageUrlBuilder } from "../helpers/image.js";
 
-async function saveEventImage(id, buffer, uuid, minetype) {
+async function saveEventImage(id, buffer, uuid, mimetype) {
   let imageUuid = uuidv4();
   let path = `${uuid}/eventos/${imageUuid}-${id}.jpg`;
   console.log("indo salvar a imagem");
 
-  await s3Image.upload(path, buffer, minetype);
+  await s3Image.upload(path, buffer, mimetype);
 
   let data = {
     uuid: new UUID(imageUuid),
-    type: minetype,
+    type: mimetype,
     size: buffer.length,
     id: id
   }

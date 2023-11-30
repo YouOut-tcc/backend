@@ -131,11 +131,9 @@ async function avaliarPlace(req, res) {
   }
 
   if (comentario.length > 255) {
-    return res
-      .status(400)
-      .send({
-        message: "Tamanho do comentário é maior que o limite permitido",
-      });
+    return res.status(400).send({
+      message: "Tamanho do comentário é maior que o limite permitido",
+    });
   }
 
   if (nota < 0 || nota > 5) {
@@ -246,10 +244,8 @@ async function getPlaces(req, res) {
 // medo de ser possivel dar upload de algo fora de uma imagem
 // corrigir a data, backend e frontend
 async function criarEventos(req, res) {
-  let { nome, descricao, valor, inicio, fim, image, minetype } = req.body;
-  console.log(req.file)
-  let buffer = new Buffer.from(image.replace(/^data:image\/\w+;base64,/, ""), 'base64');
-  // const { buffer } = req.file;
+  let { nome, descricao, valor, inicio, fim } = req.body;
+  const { buffer, mimetype } = req.file;
 
   if (typeof descricao != "string") {
     return res.status(400).send({ message: "Formato de descrição inválido" });
@@ -261,15 +257,14 @@ async function criarEventos(req, res) {
   }
   valor = parseFloat(valor);
 
-  console.log({ nome, descricao, valor, inicio, fim })
-  console.log(buffer);
+  // console.log({ nome, descricao, valor, inicio, fim });
 
   try {
     let [result] = await service.criarEventos(nome, descricao, valor, inicio, fim, req.place.id);
     let id = result.insertId;
 
     //salva no s3
-    await saveEventImage(id, buffer, req.place.uuid, minetype);
+    await saveEventImage(id, buffer, req.place.uuid, mimetype);
     res.status(200).send({ message: "Evento criado" });
   } catch (error) {
     res.status(400).send({ message: error });
@@ -289,7 +284,7 @@ async function getEventos(req, res) {
     //   element.image = imageUrlBuilder(element.id, req.place.uuid, "eventos");
     // });
 
-    getEventImages(uuid, result).then(eventos => {
+    getEventImages(uuid, result).then((eventos) => {
       res.status(200).send(eventos);
     });
   } catch (error) {
@@ -319,12 +314,12 @@ async function updateEventos(req, res) {
 }
 
 async function deleteEventos(req, res) {
-  try{
-    const {eventoId} = req.params;
+  try {
+    const { eventoId } = req.params;
     await service.deleteEventos(parseInt(eventoId));
-    res.status(200).send({message: "Apagado"})
-  } catch(error) {
-    res.status(500).send({message: error})
+    res.status(200).send({ message: "Apagado" });
+  } catch (error) {
+    res.status(500).send({ message: error });
   }
 }
 
@@ -377,12 +372,12 @@ async function updatePromocao(req, res) {
 }
 
 async function deletePromocao(req, res) {
-  try{
-    const {promocaoId} = req.params;
+  try {
+    const { promocaoId } = req.params;
     await service.deletePromocao(parseInt(promocaoId));
-    res.status(200).send({message: "Apagado"})
-  } catch(error) {
-    res.status(500).send({message: error})
+    res.status(200).send({ message: "Apagado" });
+  } catch (error) {
+    res.status(500).send({ message: error });
   }
 }
 
@@ -435,12 +430,12 @@ async function updateCupons(req, res) {
 }
 
 async function deleteCupons(req, res) {
-  try{
-    const {cupomId} = req.params
+  try {
+    const { cupomId } = req.params;
     await service.deleteCupons(parseInt(cupomId));
-    res.status(200).send({message: "deletado"});
-  } catch(error){
-    res.status(400).send({message: error})
+    res.status(200).send({ message: "deletado" });
+  } catch (error) {
+    res.status(400).send({ message: error });
   }
 }
 
@@ -484,22 +479,29 @@ async function denunciarPlace(req, res) {
 }
 
 async function deletarPlace(req, res) {
-  try{
+  try {
     await service.deletarPlace(req.place.id);
-    res.status(200).send({message: "deletado"});
-  } catch(error) {
-    res.status(500).send({message: error});
+    res.status(200).send({ message: "deletado" });
+  } catch (error) {
+    res.status(500).send({ message: error });
   }
 }
 
 async function updatePlaces(req, res) {
   try {
-    const {nome, nome_empresarial, telefone, celular, descricao} = req.body;
+    const { nome, nome_empresarial, telefone, celular, descricao } = req.body;
 
-    await service.updatePlaces(nome, nome_empresarial, telefone, celular, descricao, req.place.id);
-    res.status().send({message: "Dados atualizados"})
-  } catch(error) {
-    res.status(500).send({message: error})
+    await service.updatePlaces(
+      nome,
+      nome_empresarial,
+      telefone,
+      celular,
+      descricao,
+      req.place.id
+    );
+    res.status().send({ message: "Dados atualizados" });
+  } catch (error) {
+    res.status(500).send({ message: error });
   }
 }
 
@@ -511,7 +513,7 @@ async function respoderAvaliacao(req, res) {
     await service.respoderAvaliacao(id, req.infoUser.id, resposta);
     res.status(200).send({ message: "Salvo" });
   } catch (error) {
-    res.status(500).send({message: error})
+    res.status(500).send({ message: error });
   }
 }
 
@@ -542,5 +544,5 @@ export default {
   denunciarResposta,
   deletarPlace,
   updatePlaces,
-  respoderAvaliacao
+  respoderAvaliacao,
 };
