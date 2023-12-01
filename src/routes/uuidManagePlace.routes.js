@@ -2,6 +2,7 @@ import express from 'express';
 import places from '../controllers/placeController.js';
 import estabelecimento from '../controllers/estabeController.js';
 import permissions from "../middlewares/permissions.js";
+import { upload } from '../helpers/image.js';
 
 const routes = express();
 
@@ -11,7 +12,7 @@ routes.post('/cadastrar', permissions.CADASTRAR, estabelecimento.createLoginChil
 
 // verificar permissoes do usuario 
 routes.get('/informacoes', places.showInfo)
-routes.post('/eventos', places.criarEventos)
+routes.post('/eventos', upload.single('image'), places.criarEventos)
 routes.post('/promocoes', places.criarPromocao)
 routes.post('/cupons', places.criarCupons)
 routes.put('/eventos', places.updateEventos);

@@ -140,14 +140,6 @@ async function favCount(placeid) {
 
 async function getPlaces(limit, offset, location, idUser) {
   // fazer com que esse select pegue se o estabelecimento é favoritado pelo usuario: talvez fazer isso
-  const sqlbackup = `select a.id, uuid_from_bin(uuid) uuid, a.nome, ST_AsGeoJSON(coordenadas) coordenadas , 
-    ST_Distance_Sphere(
-      coordenadas,
-      point(?, ?)
-    ) distancia, nota, (CASE WHEN b.fk_usuario_id is NOT NULL THEN true ELSE false END) AS favorito
-    from tbl_places a left join tbl_favoritos b on b.fk_place_id = a.id
-      and b.fk_usuario_id = ? where a.deletado = false order by distancia limit ? offset ?;`;
-
   const sql = `select a.id, a.denunciado, uuid_from_bin(uuid) uuid, a.nome, coordenadas,
       ST_Distance_Sphere(
         coordenadas,
@@ -174,17 +166,17 @@ async function getPlaces(limit, offset, location, idUser) {
   return result;
 }
 
-async function criarEventos(descricao, inicio, fim, placeid) {
+async function criarEventos(nome, descricao, valor, inicio, fim, placeid) {
   const sql =
-    "insert into tbl_eventos(descricao, inicio, fim, fk_place_id) values(?,?,?,?)";
-  const data = [descricao, inicio, fim, placeid];
+    "insert into tbl_eventos(nome, descricao, valor, inicio, fim, fk_place_id) values(?,?,?,?,?,?)";
+  const data = [nome, descricao, valor, inicio, fim, placeid];
 
-  await dbmysql.query(sql, data);
+  return await dbmysql.query(sql, data);
 }
 
 async function getEventos(placeid) {
   const sql =
-    "select descricao, inicio, fim from tbl_eventos where fk_place_id = ?";
+    "select id, nome, descricao, valor, inicio, fim, criado from tbl_eventos where fk_place_id = ?";
 
   const result = await dbmysql.query(sql, placeid);
 

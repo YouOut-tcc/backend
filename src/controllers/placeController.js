@@ -1,5 +1,7 @@
 import service from "../services/placeService.js";
 import { isJSONEntriesNullorEmpty } from "../helpers/validation.js";
+import { saveEventImage, getEventImages } from "../services/imageService.js";
+import { imageUrlBuilder } from "../helpers/image.js";
 
 async function requestCreation(req, res) {
   const {
@@ -129,11 +131,9 @@ async function avaliarPlace(req, res) {
   }
 
   if (comentario.length > 255) {
-    return res
-      .status(400)
-      .send({
-        message: "Tamanho do comentário é maior que o limite permitido",
-      });
+    return res.status(400).send({
+      message: "Tamanho do comentário é maior que o limite permitido",
+    });
   }
 
   if (nota < 0 || nota > 5) {
@@ -222,11 +222,6 @@ async function getPlaces(req, res) {
       location,
       req.infoUser.id
     );
-    // console.log(result)
-    // result.forEach((element, index) => {
-    //   let parser = JSON.parse(element.coordenadas);
-    //   result[index].coordenadas = parser.coordinates;
-    // })
     res.status(200).send(result);
   } catch (error) {
     console.log(error.constructor.name);
@@ -240,8 +235,13 @@ async function getPlaces(req, res) {
   }
 }
 
+// olhar o minetype para não ser carregado algo fora de uma imagem
+// medo de ser possivel dar upload de algo fora de uma imagem
+// corrigir a data, backend e frontend
 async function criarEventos(req, res) {
-  const { descricao, inicio, fim } = req.body;
+  let { nome, descricao, valor, inicio, fim } = req.body;
+  const { buffer, mimetype } = req.file;
+
   if (typeof descricao != "string") {
     return res.status(400).send({ message: "Formato de descrição inválido" });
   }
@@ -250,8 +250,16 @@ async function criarEventos(req, res) {
       .status(400)
       .send({ message: "Tamanho da descrição é maior que o limite permitido" });
   }
+  valor = parseFloat(valor);
+
+  // console.log({ nome, descricao, valor, inicio, fim });
+
   try {
-    await service.criarEventos(descricao, inicio, fim, req.place.id);
+    let [result] = await service.criarEventos(nome, descricao, valor, inicio, fim, req.place.id);
+    let id = result.insertId;
+
+    //salva no s3
+    await saveEventImage(id, buffer, req.place.uuid, mimetype);
     res.status(200).send({ message: "Evento criado" });
   } catch (error) {
     res.status(400).send({ message: error });
@@ -260,8 +268,20 @@ async function criarEventos(req, res) {
 
 async function getEventos(req, res) {
   try {
+    const uuid = req.place.uuid;
     const [result] = await service.getEventos(req.place.id);
-    res.status(200).send(result);
+    // retomar a url da imagem, no momento irei fazer de um jeito porco
+    // mudar para usar o sistema do s3 em vez de pegar no seco
+    // quando mudar isso, configurar certo o s3 para não permitir acesso publico
+
+    // dessa forma o backend retona urls invalidas
+    // result.forEach(element => {
+    //   element.image = imageUrlBuilder(element.id, req.place.uuid, "eventos");
+    // });
+
+    getEventImages(uuid, result).then((eventos) => {
+      res.status(200).send(eventos);
+    });
   } catch (error) {
     res.status(400).send({ message: error });
   }
@@ -289,12 +309,12 @@ async function updateEventos(req, res) {
 }
 
 async function deleteEventos(req, res) {
-  try{
-    const {eventoId} = req.params;
+  try {
+    const { eventoId } = req.params;
     await service.deleteEventos(parseInt(eventoId));
-    res.status(200).send({message: "Apagado"})
-  } catch(error) {
-    res.status(500).send({message: error})
+    res.status(200).send({ message: "Apagado" });
+  } catch (error) {
+    res.status(500).send({ message: error });
   }
 }
 
@@ -347,12 +367,12 @@ async function updatePromocao(req, res) {
 }
 
 async function deletePromocao(req, res) {
-  try{
-    const {promocaoId} = req.params;
+  try {
+    const { promocaoId } = req.params;
     await service.deletePromocao(parseInt(promocaoId));
-    res.status(200).send({message: "Apagado"})
-  } catch(error) {
-    res.status(500).send({message: error})
+    res.status(200).send({ message: "Apagado" });
+  } catch (error) {
+    res.status(500).send({ message: error });
   }
 }
 
@@ -405,12 +425,12 @@ async function updateCupons(req, res) {
 }
 
 async function deleteCupons(req, res) {
-  try{
-    const {cupomId} = req.params
+  try {
+    const { cupomId } = req.params;
     await service.deleteCupons(parseInt(cupomId));
-    res.status(200).send({message: "deletado"});
-  } catch(error){
-    res.status(400).send({message: error})
+    res.status(200).send({ message: "deletado" });
+  } catch (error) {
+    res.status(400).send({ message: error });
   }
 }
 
@@ -454,22 +474,29 @@ async function denunciarPlace(req, res) {
 }
 
 async function deletarPlace(req, res) {
-  try{
+  try {
     await service.deletarPlace(req.place.id);
-    res.status(200).send({message: "deletado"});
-  } catch(error) {
-    res.status(500).send({message: error});
+    res.status(200).send({ message: "deletado" });
+  } catch (error) {
+    res.status(500).send({ message: error });
   }
 }
 
 async function updatePlaces(req, res) {
   try {
-    const {nome, nome_empresarial, telefone, celular, descricao} = req.body;
+    const { nome, nome_empresarial, telefone, celular, descricao } = req.body;
 
-    await service.updatePlaces(nome, nome_empresarial, telefone, celular, descricao, req.place.id);
-    res.status().send({message: "Dados atualizados"})
-  } catch(error) {
-    res.status(500).send({message: error})
+    await service.updatePlaces(
+      nome,
+      nome_empresarial,
+      telefone,
+      celular,
+      descricao,
+      req.place.id
+    );
+    res.status().send({ message: "Dados atualizados" });
+  } catch (error) {
+    res.status(500).send({ message: error });
   }
 }
 
@@ -481,7 +508,7 @@ async function respoderAvaliacao(req, res) {
     await service.respoderAvaliacao(id, req.infoUser.id, resposta);
     res.status(200).send({ message: "Salvo" });
   } catch (error) {
-    res.status(500).send({message: error})
+    res.status(500).send({ message: error });
   }
 }
 
@@ -512,5 +539,5 @@ export default {
   denunciarResposta,
   deletarPlace,
   updatePlaces,
-  respoderAvaliacao
+  respoderAvaliacao,
 };
