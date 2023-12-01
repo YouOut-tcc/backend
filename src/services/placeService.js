@@ -24,9 +24,9 @@ async function createPlace(
   latitute,
   longitude
 ) {
-  const sql = `insert into tbl_places
-      (uuid,cnpj,nome_empresarial,nome,telefone,celular,numero,cep,nota,descricao,coordenadas) 
-      values(uuid_v5(uuid(), ''),?,?,?,?,?,?,?,0,?,point(?,?))`;
+  const sql = `insert into tbl_requisicoes
+      (uuid,cnpj,nome_empresarial,nome,telefone,celular,numero,cep,descricao,coordenadas) 
+      values(uuid_v5(uuid(), ''),?,?,?,?,?,?,?,?,point(?,?))`;
   const data = [
     cnpj,
     nome_empresarial,
