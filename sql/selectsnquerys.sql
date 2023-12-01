@@ -1,5 +1,5 @@
 use youout;
-
+select * from tbl_administradores;
 -- modelo antigo
 
 -- alter table tbl_places rename column note to  nota;

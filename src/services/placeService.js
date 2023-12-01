@@ -201,7 +201,7 @@ async function updateEventos(descricao, dt_inicio, dt_fim, eventoId) {
 
 async function deleteEventos(eventoId) {
   const sql = "delete from tbl_eventos where id = ?";
-  // const sql = "insert into tbl_eventos(deletado) values(true) where id = ? and deletado = false";
+  // const sql = "update tbl_eventos set deletado = true where id = ? and deletado = false";
 
   dbmysql.query(sql, eventoId);
 }
@@ -233,7 +233,7 @@ async function updatePromocao(dt_fim, descricao, promocaoId) {
 
 async function deletePromocao(promocaoId) {
   const sql = "delete from tbl_promocoes where id = ?";
-  // const sql = "insert into tbl_promocao(deletado) values(true) where id = ? and deletado = false";
+  // const sql = "update tbl_promocao set deletado = true where id = ? and deletado = false";
 
   dbmysql.query(sql, promocaoId);
 }
@@ -265,7 +265,7 @@ async function updateCupons(dt_vencimento, descricao, cupomId) {
 
 async function deleteCupons(cupomId) {
   const sql = "delete from tbl_cupons where id = ?";
-  // const sql = "insert into tbl_cupons(deletado) values(true) where id = ? and deletado = false";
+  // const sql = "update tbl_cupons set deletado = true where id = ? and deletado = false";
 
   dbmysql.query(sql, cupomId);
 }

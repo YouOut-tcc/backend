@@ -4,6 +4,40 @@ use youout;
 
 -- eu carlos, não sei escrever respostas
 
+create table if not exists tbl_requisicoes(
+	id               integer auto_increment not null,
+    uuid             binary(16) not null unique,
+
+    cnpj             char(18) unique not null,
+    nome_empresarial varchar(255) not null,
+    nome             varchar(255) not null,
+    telefone         char(20) default null,
+    celular          char(20) default null,
+
+    descricao        text default null,
+
+    -- Endereço:
+    numero           varchar(32) default null,
+    cep              char(12) not null,
+
+    -- localização:
+    coordenadas      geometry not null,
+
+    solicitado       datetime default now(),
+    recusado_dia     datetime     default null,
+    aceitado         boolean  not null default false,
+    
+    primary key(id),
+    fulltext(nome)
+);
+
+create table if not exists tbl_administradores(
+	id int auto_increment not null primary key,
+    nome varchar(65) not null,
+    hashpass varchar(150) not null,
+    email varchar(250) unique not null
+);
+
 create table if not exists tbl_usuario(
 	id           integer auto_increment not null,
     nome         varchar(65) not null,
