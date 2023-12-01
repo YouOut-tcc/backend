@@ -130,9 +130,11 @@ async function getAllPermissions(email) {
 
 async function getPlacesOwn(loginid) {
   const sql = `
-  select uuid_from_bin(b.uuid) uuid, b.cnpj, b.nome_empresarial, b.nome, b.telefone, b.celular, b.icon_url, b.nota, b.numero, b.cep, b.denunciado, b.denuncias, b.deletado, b.deletado_dia
+  select uuid_from_bin(b.uuid) uuid, b.cnpj, b.nome_empresarial, b.nome, b.telefone, b.celular, b.icon_url, b.numero, b.cep, b.denunciado, b.denuncias, b.deletado, b.deletado_dia,
+  coalesce(c.nota, 0) nota
   from tbl_login_has_places a
     join tbl_places b on b.id = a.fk_place_id
+    left join vw_notas c on c.id = b.id
       where fk_login_id = ?`
   const data = [loginid]
 
