@@ -103,7 +103,7 @@ async function getInformacoesUser(userid) {
 }
 
 async function pesquisarPlace(nome) {
-  const sql = "select *, uuid_from_bin(uuid) as uuid from tbl_places where match(nome) against(?) and deletado = false;"
+  const sql = "select *, uuid_from_bin(uuid) as uuid from tbl_places where match(nome, descricao) against(?) and deletado = false;"
 
   const [place] = await dbmysql.query(sql, nome);
 
