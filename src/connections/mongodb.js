@@ -17,11 +17,13 @@ class DBMongodb {
         version: ServerApiVersion.v1,
         strict: true,
         deprecationErrors: true,
-      }
-    }).connect().then((mongo) => {
-      this.mongo = mongo;
-      this.db = mongo.db(process.env.DATABASE);
-    });
+      },
+    })
+      .connect()
+      .then((mongo) => {
+        this.mongo = mongo;
+        this.db = mongo.db(process.env.DATABASE);
+      });
   }
 
   fistInsertImageMeta(collection, uuid, data) {
@@ -34,13 +36,13 @@ class DBMongodb {
 
   async checkIfExist(collection, uuid) {
     let result = await collection.findOne({ uuid: uuid });
-    return result ? true : false;
+    return result;
   }
 
   async insertImageMeta(collectionName, placeUuid, data) {
     const collection = this.db.collection(collectionName);
     const uuid = new UUID(placeUuid);
-    this.checkIfExist(collection, uuid).then(result => {
+    this.checkIfExist(collection, uuid).then((result) => {
       if (result) {
         console.log("criando uma nova");
         this.insertNewImageMeta(collection, uuid, data);
@@ -55,25 +57,36 @@ class DBMongodb {
   }
 
   // ainda não foi testado
-  updateImageMeta(collection, uuid, data) {
-    collection.updateOne(
-      { uuid: uuid, "imagens.id": id },
-      { $set: { "imagens.$": data } }
-    );
+  async updateImageMeta(collectionName, placeUuid, data, config) {
+    const collection = this.db.collection(collectionName);
+    const uuid = new UUID(placeUuid);
+    let result = await this.checkIfExist(collection, uuid);
+    if (result) {
+      collection.updateOne({ uuid: uuid }, { $push: { imagens: data } });
+      // collection.findOne({ uuid: uuid, "imagens.id_pos": data.id_pos }).then((result)=>{
+      //   if(result){
+
+      //   } else {
+      //     collection.updateOne(
+      //       { "imagens.id_pos": data.id_pos },
+      //       { $set: { "imagens.$": data } }
+      //     );
+      //   }
+      // });
+    } else {
+      this.fistInsertImageMeta(collection, uuid, data);
+    }
   }
 
   // não testado
-  async getImagen(collectionName, uuid ){
+  async getImagen(collectionName, uuid) {}
 
-  }
-
-  async getImagens(collectionName, placeUuid){
+  async getImagens(collectionName, placeUuid) {
     const collection = this.db.collection(collectionName);
     const uuid = new UUID(placeUuid);
     let result = await collection.findOne({ uuid: uuid });
     return result;
   }
-
 }
 
 export default DBMongodb;

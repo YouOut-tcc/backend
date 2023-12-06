@@ -1,6 +1,6 @@
 import service from "../services/placeService.js";
 import { isJSONEntriesNullorEmpty } from "../helpers/validation.js";
-import { saveEventImage, getEventImages } from "../services/imageService.js";
+import { saveEventImage, getEventImages, getBanners, updateBanners } from "../services/imageService.js";
 import { imageUrlBuilder } from "../helpers/image.js";
 
 async function requestCreation(req, res) {
@@ -512,6 +512,71 @@ async function respoderAvaliacao(req, res) {
   }
 }
 
+async function getPlaceBanners(req, res) {
+  try {
+    let images = await getBanners(req.place.uuid);
+    let imagesPath = [];
+    images.imagens.forEach((element)=>{
+      imagesPath.push(imageUrlBuilder(undefined, req.place.uuid, "banners", element.uuid));
+    })
+    console.log(images);
+    res.status(200).send(imagesPath);
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({ message: error });
+  }
+}
+
+// verificar se a ordeme mudou
+// verificar se foi adicionado uma nove imagem
+// se a nova imagem foi realocada
+async function updateBanner(req, res) {
+  try {
+    const { ordem, newImagesIdPos, imageDelete } = req.body;
+    let newImagens = [];
+    if(req.files.length > 0){
+      req.files.forEach((element, index) => {
+        newImagens.push({
+          buffer: element.buffer,
+          size: element.size,
+          mimetype: element.mimetype,
+          id_pos: newImagesIdPos[index]
+        });
+      });
+    }
+    console.log(newImagens);
+    // não existe uma nova ordem
+    if(!imageDelete){
+      console.log("sem image para apagar");
+    }
+
+    if(!ordem){
+      console.log("não uma ordem nova");
+    }
+
+    // não existe uma nova imagem
+    if(newImagens.length <= 0){
+      console.log("sem imagens novas");
+    }
+
+    await updateBanners(req.place.uuid, {
+      ordem,
+      newImagens,
+      imageDelete,
+      newImagesIdPos
+    });
+
+    // let images = await getBanners(req.place.uuid);
+    // console.log(images);
+
+    // await service.respoderAvaliacao(id, req.infoUser.id, resposta);
+    res.status(200).send({ message: "Salvo" });
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({ message: error });
+  }
+}
+
 export default {
   requestCreation,
   showInfo,
@@ -540,4 +605,6 @@ export default {
   deletarPlace,
   updatePlaces,
   respoderAvaliacao,
+  updateBanner,
+  getPlaceBanners
 };

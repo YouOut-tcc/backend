@@ -44,7 +44,7 @@ function verifyJWT(req, res, next){
 			return res.status(401).send({ message: 'Usuário não autenticado' })
 		}
 		// sera que é nesscesario mantar o email do usuario, mudar isso para usar o id, talvez?
-		const user = await verifyEmailExist(decoded.infoUser.email, decoded.infoUser.userType)
+		const user = await verifyEmailExistById(decoded.infoUser.id, decoded.infoUser.userType)
 		if (!user) {
 			return res.status(401).send({ message: 'Usuário não existe' });
 		}

@@ -11,7 +11,8 @@ routes.post('/link', estabelecimento.linkLogin);
 routes.post('/cadastrar', permissions.CADASTRAR, estabelecimento.createLoginChild);
 
 // verificar permissoes do usuario 
-routes.get('/informacoes', places.showInfo)
+routes.get('/informacoes', places.showInfo);
+routes.post('/banners', upload.array('banners', 5), places.updateBanner);
 routes.post('/eventos', upload.single('image'), places.criarEventos)
 routes.post('/promocoes', places.criarPromocao)
 routes.post('/cupons', places.criarCupons)
