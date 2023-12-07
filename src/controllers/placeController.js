@@ -535,13 +535,19 @@ async function updateBanner(req, res) {
   try {
     const {imageDelete, ordemOldId, ordemUuid, deleteStartIndex, newImagesIdPos} = req.body;
     
+    if(ordemOldId == undefined){
+      return res.status(200).send({ message: "Nada para fazer" });
+    }
+
     let newImagensIndex = [];
-    if(typeof newImagesIdPos == 'object'){
-      newImagesIdPos.forEach(element=>{
-        newImagensIndex.push(parseInt(element));
-      })
-    } else {
-      newImagensIndex.push(parseInt(newImagesIdPos));
+    if(newImagesIdPos != undefined){
+      if(typeof newImagesIdPos == 'object'){
+        newImagesIdPos.forEach(element=>{
+          newImagensIndex.push(parseInt(element));
+        })
+      } else {
+        newImagensIndex.push(parseInt(newImagesIdPos));
+      }
     }
     
     let dataProcess = [];
@@ -563,40 +569,10 @@ async function updateBanner(req, res) {
         oldIndex: ordemIndex,
       }
       dataProcess.push(data);
-    })
-    
-    // let newImagens = [];
-    // if(req.files.length > 0){
-    //   req.files.forEach((element, index) => {
-    //     newImagens.push({
-    //       buffer: element.buffer,
-    //       size: element.size,
-    //       mimetype: element.mimetype,
-    //       id_pos: newImagesIdPos[index]
-    //     });
-    //   });
-    // }
-    // console.log(newImagens);
-    // // não existe uma nova ordem
-    // if(!imageDelete){
-    //   console.log("sem image para apagar");
-    // }
-
-    // if(!imagesOrdem){
-    //   console.log("não uma ordem nova");
-    // }
-
-    // // não existe uma nova imagem
-    // if(newImagens.length <= 0){
-    //   console.log("sem imagens novas");
-    // }
+    });
 
     await updateBanners(req.place.uuid, dataProcess);
 
-    // let images = await getBanners(req.place.uuid);
-    // console.log(images);
-
-    // await service.respoderAvaliacao(id, req.infoUser.id, resposta);
     res.status(200).send({ message: "Salvo" });
   } catch (error) {
     console.log(error)

@@ -45,7 +45,6 @@ async function getEventImages(placeUuid, eventos) {
 }
 
 async function updateBanners(placeUuid, data) {
-  let newImagesUuid = [];
   let existDocument = undefined;
   let placeUUID = new UUID(placeUuid); 
 
@@ -110,53 +109,6 @@ async function updateBanners(placeUuid, data) {
       }
     });
   }
-
-  // // exite imagem novas
-  // if(data.newImagens.length > 0){
-  //   let collection = mongodb.db.collection("banners");
-  //   let placeUUID = new UUID(placeUuid); 
-  //   let exist = await mongodb.checkIfExist(collection, placeUUID);
-
-  //   data.newImagens.forEach(async (element) => {
-  //     let uuid = uuidv4();
-  //     newImagesUuid.push(uuid);
-  //     let path = `${placeUuid}/banners/${uuid}.jpg`;
-  //     console.log(element);
-  //     let data = {
-  //       uuid,
-  //       type: element.mimetype,
-  //       size: element.size,
-  //       id_pos: parseInt(element.id_pos)
-  //     }
-  //     await s3Image.upload(path, element.buffer, element.mimetype);
-  //     if(exist){
-  //       await collection.updateOne({ uuid: placeUUID }, { $push: { imagens: data } });
-  //     } else {
-  //       let placeEvento = {
-  //         uuid: placeUUID,
-  //         imagens: [data],
-  //       };
-  //       exist = true;
-  //       await collection.insertOne(placeEvento);
-  //     }
-  //   });
-  // }
-
-  // let imageUuid = uuidv4()
-  // let path = `${uuid}/eventos/${imageUuid}-${id}.jpg`;
-  // console.log("indo salvar a imagem");
-
-  // await s3Image.upload(path, buffer, mimetype);
-
-  // let data = {
-  //   uuid: new UUID(imageUuid),
-  //   type: mimetype,
-  //   size: buffer.length,
-  //   id: id
-  // }
-
-  // await mongodb.insertImageMeta("eventos", uuid, data);
-  // console.log("talvez a imagem salvou com sucesso");
 }
 
 async function getBanners(placeUuid) {
