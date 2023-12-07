@@ -2,6 +2,7 @@ import service from "../services/placeService.js";
 import { isJSONEntriesNullorEmpty } from "../helpers/validation.js";
 import { saveEventImage, getEventImages, getBanners, updateBanners } from "../services/imageService.js";
 import { imageUrlBuilder } from "../helpers/image.js";
+import { validate as uuidValidate } from 'uuid';
 
 async function requestCreation(req, res) {
   const {
@@ -532,39 +533,65 @@ async function getPlaceBanners(req, res) {
 // se a nova imagem foi realocada
 async function updateBanner(req, res) {
   try {
-    const { ordem, newImagesIdPos, imageDelete } = req.body;
-    let newImagens = [];
-    if(req.files.length > 0){
-      req.files.forEach((element, index) => {
-        newImagens.push({
-          buffer: element.buffer,
-          size: element.size,
-          mimetype: element.mimetype,
-          id_pos: newImagesIdPos[index]
-        });
-      });
+    const {imageDelete, ordemOldId, ordemUuid, deleteStartIndex, newImagesIdPos} = req.body;
+    
+    let newImagensIndex = [];
+    if(typeof newImagesIdPos == 'object'){
+      newImagesIdPos.forEach(element=>{
+        newImagensIndex.push(parseInt(element));
+      })
+    } else {
+      newImagensIndex.push(parseInt(newImagesIdPos));
     }
-    console.log(newImagens);
-    // não existe uma nova ordem
-    if(!imageDelete){
-      console.log("sem image para apagar");
-    }
+    
+    let dataProcess = [];
+    ordemOldId.forEach((element, index) => {
+      let ordemIndex = parseInt(element);
+      let uuid = ordemUuid[ordemIndex];
+      let file = undefined;
+      
+      if(!uuidValidate(uuid)){
+        uuid = undefined;
+        let indexNewImage = newImagensIndex.indexOf(index);
+        file = req.files[indexNewImage];
+      }
 
-    if(!ordem){
-      console.log("não uma ordem nova");
-    }
+      let data = {
+        uuid: uuid,
+        file: file,
+        newId: index,
+        oldIndex: ordemIndex,
+      }
+      dataProcess.push(data);
+    })
+    
+    // let newImagens = [];
+    // if(req.files.length > 0){
+    //   req.files.forEach((element, index) => {
+    //     newImagens.push({
+    //       buffer: element.buffer,
+    //       size: element.size,
+    //       mimetype: element.mimetype,
+    //       id_pos: newImagesIdPos[index]
+    //     });
+    //   });
+    // }
+    // console.log(newImagens);
+    // // não existe uma nova ordem
+    // if(!imageDelete){
+    //   console.log("sem image para apagar");
+    // }
 
-    // não existe uma nova imagem
-    if(newImagens.length <= 0){
-      console.log("sem imagens novas");
-    }
+    // if(!imagesOrdem){
+    //   console.log("não uma ordem nova");
+    // }
 
-    await updateBanners(req.place.uuid, {
-      ordem,
-      newImagens,
-      imageDelete,
-      newImagesIdPos
-    });
+    // // não existe uma nova imagem
+    // if(newImagens.length <= 0){
+    //   console.log("sem imagens novas");
+    // }
+
+    await updateBanners(req.place.uuid, dataProcess);
 
     // let images = await getBanners(req.place.uuid);
     // console.log(images);

@@ -46,46 +46,101 @@ async function getEventImages(placeUuid, eventos) {
 
 async function updateBanners(placeUuid, data) {
   let newImagesUuid = [];
-  let ordem = data.ordem;
+  let existDocument = undefined;
+  let placeUUID = new UUID(placeUuid); 
 
-  if(!data.imageDelete){
-    console.log("sem image para apagar");
-  }
+  let reorder = [];
+  let add = [];
 
-  if(!data.ordem){
-    console.log("não uma ordem nova");
-  }
-
-  // exite imagem novas
-  if(data.newImagens.length > 0){
-    let collection = mongodb.db.collection("banners");
-    let placeUUID = new UUID(placeUuid); 
-    let exist = await mongodb.checkIfExist(collection, placeUUID);
-
-    data.newImagens.forEach(async (element) => {
-      let uuid = uuidv4();
-      newImagesUuid.push(uuid);
-      let path = `${placeUuid}/banners/${uuid}.jpg`;
-      console.log(element);
+  data.forEach((element) => {
+    if(element.uuid){
       let data = {
-        uuid,
-        type: element.mimetype,
-        size: element.size,
-        id_pos: parseInt(element.id_pos)
+        new: element.newId,
+        old: element.oldIndex
       }
-      await s3Image.upload(path, element.buffer, element.mimetype);
-      if(exist){
-        await collection.updateOne({ uuid: placeUUID }, { $push: { imagens: data } });
+      reorder.push(data);
+    } else {
+      let uuid = uuidv4();
+      let path = `${placeUuid}/banners/${uuid}.jpg`;
+      let data = {
+        s3: {
+          path,
+          file: element.file
+        },
+        mongodb: {
+          uuid,
+          type: element.file.mimetype,
+          size: element.file.size
+        },
+        id: element.newId
+      }
+      add.push(data);
+    }
+  })
+
+  let collection = mongodb.db.collection("banners");
+  existDocument = await mongodb.checkIfExist(collection, placeUUID);
+
+  if(reorder.length > 0){
+    reorder.forEach(async (element) => {
+      collection.updateOne(
+        { uuid: placeUUID },
+        { $set: { [`imagens.${element.new}`]: existDocument.imagens[element.old] } }
+      );
+    });
+  }
+
+  if(add.length > 0){
+    add.forEach(async (element)=>{
+      let file = element.s3.file;
+      let path = element.s3.path;
+      await s3Image.upload(path, file.buffer, file.mimetype);
+      if(existDocument){
+        await collection.updateOne(
+          { uuid: placeUUID },
+          { $set: { [`imagens.${element.id}`]: element.mongodb } }
+        );
       } else {
-        let placeEvento = {
+        existDocument = true;
+        let data = {
           uuid: placeUUID,
-          imagens: [data],
+          imagens: [element.mongodb],
         };
-        exist = true;
-        await collection.insertOne(placeEvento);
+        await collection.insertOne(data);
       }
     });
   }
+
+  // // exite imagem novas
+  // if(data.newImagens.length > 0){
+  //   let collection = mongodb.db.collection("banners");
+  //   let placeUUID = new UUID(placeUuid); 
+  //   let exist = await mongodb.checkIfExist(collection, placeUUID);
+
+  //   data.newImagens.forEach(async (element) => {
+  //     let uuid = uuidv4();
+  //     newImagesUuid.push(uuid);
+  //     let path = `${placeUuid}/banners/${uuid}.jpg`;
+  //     console.log(element);
+  //     let data = {
+  //       uuid,
+  //       type: element.mimetype,
+  //       size: element.size,
+  //       id_pos: parseInt(element.id_pos)
+  //     }
+  //     await s3Image.upload(path, element.buffer, element.mimetype);
+  //     if(exist){
+  //       await collection.updateOne({ uuid: placeUUID }, { $push: { imagens: data } });
+  //     } else {
+  //       let placeEvento = {
+  //         uuid: placeUUID,
+  //         imagens: [data],
+  //       };
+  //       exist = true;
+  //       await collection.insertOne(placeEvento);
+  //     }
+  //   });
+  // }
 
   // let imageUuid = uuidv4()
   // let path = `${uuid}/eventos/${imageUuid}-${id}.jpg`;
