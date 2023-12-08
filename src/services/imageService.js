@@ -140,6 +140,27 @@ async function getBanners(placeUuid) {
   return images;
 }
 
+async function saveCardapioImage(imageUuid, buffer, uuid, mimetype) {
+  let path = `${uuid}/${imageUuid}-cardapio.jpg`;
+  console.log("indo salvar a cardapio");
+
+  await s3Image.upload(path, buffer, mimetype);
+
+  let data = {
+    uuid: new UUID(imageUuid),
+    type: mimetype,
+    size: buffer.length,
+  };
+
+  await mongodb.insertImageMeta("cardapio", uuid, data);
+  console.log("talvez o cardapio salvou com sucesso");
+}
+
+async function getCardapiosImage(placeUuid) {
+  let images = await mongodb.getImagens("cardapio", placeUuid);
+  return images;
+}
+
 // deletar banner
 // adicionar banners
 // reordernar banners
@@ -150,4 +171,6 @@ export {
   getBanners,
   updateBanners,
   saveIconImage,
+  saveCardapioImage,
+  getCardapiosImage
 };

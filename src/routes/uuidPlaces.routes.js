@@ -17,6 +17,7 @@ const routes = express();
 routes.get('/avaliacoes', places.getAvaliacoes);
 routes.get('/informacoes', places.showInfo);
 routes.get('/eventos', places.getEventos);
+routes.get('/cardapio', places.getCardapio);
 routes.get('/promocao', places.getPromocao);
 routes.get('/cupons', places.getCupons);
 routes.get('/banners', places.getPlaceBanners);

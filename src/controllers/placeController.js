@@ -1,10 +1,18 @@
 import service from "../services/placeService.js";
 import { isJSONEntriesNullorEmpty } from "../helpers/validation.js";
-import { saveEventImage, getEventImages, getBanners, updateBanners, saveIconImage } from "../services/imageService.js";
+import {
+  saveEventImage,
+  getEventImages,
+  getBanners,
+  updateBanners,
+  saveIconImage,
+  getCardapiosImage,
+  saveCardapioImage,
+} from "../services/imageService.js";
 import { imageUrlBuilder } from "../helpers/image.js";
-import { validate as uuidValidate } from 'uuid';
+import { validate as uuidValidate } from "uuid";
 import { v4 as uuidv4 } from "uuid";
-import { imageUrlBuilderIcon } from "../helpers/image.js";
+import { imageUrlBuilderIcon, imageUrlBuilderCardapio } from "../helpers/image.js";
 
 async function requestCreation(req, res) {
   const {
@@ -226,11 +234,11 @@ async function getPlaces(req, res) {
       req.infoUser.id
     );
 
-    result.forEach(element => {
-      if(element.icon_url){
+    result.forEach((element) => {
+      if (element.icon_url) {
         element.icon_url = imageUrlBuilderIcon(element.uuid, element.icon_url);
       }
-    })
+    });
 
     res.status(200).send(result);
   } catch (error) {
@@ -265,7 +273,14 @@ async function criarEventos(req, res) {
   // console.log({ nome, descricao, valor, inicio, fim });
 
   try {
-    let [result] = await service.criarEventos(nome, descricao, valor, inicio, fim, req.place.id);
+    let [result] = await service.criarEventos(
+      nome,
+      descricao,
+      valor,
+      inicio,
+      fim,
+      req.place.id
+    );
     let id = result.insertId;
 
     //salva no s3
@@ -526,13 +541,15 @@ async function getPlaceBanners(req, res) {
   try {
     let images = await getBanners(req.place.uuid);
     let imagesPath = [];
-    images.imagens.forEach((element)=>{
-      imagesPath.push(imageUrlBuilder(undefined, req.place.uuid, "banners", element.uuid));
-    })
+    images.imagens.forEach((element) => {
+      imagesPath.push(
+        imageUrlBuilder(undefined, req.place.uuid, "banners", element.uuid)
+      );
+    });
     console.log(images);
     res.status(200).send(imagesPath);
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).send({ message: error });
   }
 }
@@ -542,30 +559,36 @@ async function getPlaceBanners(req, res) {
 // se a nova imagem foi realocada
 async function updateBanner(req, res) {
   try {
-    const {imageDelete, ordemOldId, ordemUuid, deleteStartIndex, newImagesIdPos} = req.body;
-    
-    if(ordemOldId == undefined){
+    const {
+      imageDelete,
+      ordemOldId,
+      ordemUuid,
+      deleteStartIndex,
+      newImagesIdPos,
+    } = req.body;
+
+    if (ordemOldId == undefined) {
       return res.status(200).send({ message: "Nada para fazer" });
     }
 
     let newImagensIndex = [];
-    if(newImagesIdPos != undefined){
-      if(typeof newImagesIdPos == 'object'){
-        newImagesIdPos.forEach(element=>{
+    if (newImagesIdPos != undefined) {
+      if (typeof newImagesIdPos == "object") {
+        newImagesIdPos.forEach((element) => {
           newImagensIndex.push(parseInt(element));
-        })
+        });
       } else {
         newImagensIndex.push(parseInt(newImagesIdPos));
       }
     }
-    
+
     let dataProcess = [];
     ordemOldId.forEach((element, index) => {
       let ordemIndex = parseInt(element);
       let uuid = ordemUuid[ordemIndex];
       let file = undefined;
-      
-      if(!uuidValidate(uuid)){
+
+      if (!uuidValidate(uuid)) {
         uuid = undefined;
         let indexNewImage = newImagensIndex.indexOf(index);
         file = req.files[indexNewImage];
@@ -576,7 +599,7 @@ async function updateBanner(req, res) {
         file: file,
         newId: index,
         oldIndex: ordemIndex,
-      }
+      };
       dataProcess.push(data);
     });
 
@@ -584,7 +607,7 @@ async function updateBanner(req, res) {
 
     res.status(200).send({ message: "Salvo" });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).send({ message: error });
   }
 }
@@ -598,20 +621,50 @@ async function updatePlaceIcon(req, res) {
 
     res.status(200).send({ message: "Salvo" });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).send({ message: error });
   }
 }
 
 async function updatePlaceInfo(req, res) {
   try {
-    const {telefone, celular} = req.body;
+    const { telefone, celular } = req.body;
 
     await service.updateInfoPlace(req.place.id, telefone, celular);
 
     res.status(200).send({ message: "Salvo" });
   } catch (error) {
-    console.log(error)
+    console.log(error);
+    res.status(500).send({ message: error });
+  }
+}
+
+async function uploadCardapio(req, res) {
+  try {
+    const { buffer, mimetype } = req.file;
+    let imageUuid = uuidv4();
+    await saveCardapioImage(imageUuid, buffer, req.place.uuid, mimetype);
+
+    res.status(200).send({ message: "Salvo" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: error });
+  }
+}
+
+async function getCardapio(req, res) {
+  try {
+    let images = await getCardapiosImage(req.place.uuid);
+    let imagesPath = [];
+    images.imagens.forEach((element) => {
+      imagesPath.push(
+        imageUrlBuilderCardapio(req.place.uuid, element.uuid.toString())
+      );
+    });
+    // console.log(images);
+    res.status(200).send(imagesPath);
+  } catch (error) {
+    console.log(error);
     res.status(500).send({ message: error });
   }
 }
@@ -647,5 +700,7 @@ export default {
   updateBanner,
   getPlaceBanners,
   updatePlaceInfo,
-  updatePlaceIcon
+  updatePlaceIcon,
+  uploadCardapio,
+  getCardapio,
 };
