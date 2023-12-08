@@ -140,7 +140,7 @@ async function favCount(placeid) {
 
 async function getPlaces(limit, offset, location, idUser) {
   // fazer com que esse select pegue se o estabelecimento é favoritado pelo usuario: talvez fazer isso
-  const sql = `select a.id, a.denunciado, uuid_from_bin(uuid) uuid, a.nome, coordenadas,
+  const sql = `select a.id, a.icon_url, a.denunciado, uuid_from_bin(uuid) uuid, a.nome, coordenadas,
       ST_Distance_Sphere(
         coordenadas,
         point(?, ?)
