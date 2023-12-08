@@ -1,8 +1,10 @@
 import service from "../services/placeService.js";
 import { isJSONEntriesNullorEmpty } from "../helpers/validation.js";
-import { saveEventImage, getEventImages, getBanners, updateBanners } from "../services/imageService.js";
+import { saveEventImage, getEventImages, getBanners, updateBanners, saveIconImage } from "../services/imageService.js";
 import { imageUrlBuilder } from "../helpers/image.js";
 import { validate as uuidValidate } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
+import { imageUrlBuilderIcon } from "../helpers/image.js";
 
 async function requestCreation(req, res) {
   const {
@@ -223,6 +225,13 @@ async function getPlaces(req, res) {
       location,
       req.infoUser.id
     );
+
+    result.forEach(element => {
+      if(element.icon_url){
+        element.icon_url = imageUrlBuilderIcon(element.uuid, element.icon_url);
+      }
+    })
+
     res.status(200).send(result);
   } catch (error) {
     console.log(error.constructor.name);
@@ -580,6 +589,33 @@ async function updateBanner(req, res) {
   }
 }
 
+async function updatePlaceIcon(req, res) {
+  try {
+    const { buffer, mimetype } = req.file;
+    let imageUuid = uuidv4();
+    await saveIconImage(imageUuid, buffer, req.place.uuid, mimetype);
+    await service.updateIconPlace(req.place.id, imageUuid);
+
+    res.status(200).send({ message: "Salvo" });
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({ message: error });
+  }
+}
+
+async function updatePlaceInfo(req, res) {
+  try {
+    const {telefone, celular} = req.body;
+
+    await service.updateInfoPlace(req.place.id, telefone, celular);
+
+    res.status(200).send({ message: "Salvo" });
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({ message: error });
+  }
+}
+
 export default {
   requestCreation,
   showInfo,
@@ -609,5 +645,7 @@ export default {
   updatePlaces,
   respoderAvaliacao,
   updateBanner,
-  getPlaceBanners
+  getPlaceBanners,
+  updatePlaceInfo,
+  updatePlaceIcon
 };

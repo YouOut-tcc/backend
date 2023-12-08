@@ -324,6 +324,22 @@ async function respoderAvaliacao(avaliacaoid, loginid, resposta) {
   await dbmysql.query(sql, data);
 }
 
+async function updateInfoPlace(placeid, telefone, celular) {
+  const sql =
+    "update tbl_places set telefone = ?, celular = ? where id=?";
+  const data = [telefone, celular, placeid];
+
+  return dbmysql.query(sql, data);
+}
+
+async function updateIconPlace(placeid, uuid) {
+  const sql =
+    "update tbl_places set icon_url=? where id=?";
+  const data = [uuid, placeid];
+
+  return dbmysql.query(sql, data);
+}
+
 export default {
   sendRequest,
   createPlace,
@@ -354,4 +370,6 @@ export default {
   deletarPlace,
   updatePlaces,
   respoderAvaliacao,
+  updateInfoPlace,
+  updateIconPlace
 };

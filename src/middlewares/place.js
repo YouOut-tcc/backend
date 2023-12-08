@@ -1,9 +1,10 @@
 import { dbmysql } from '../connections/database.js';
+import { imageUrlBuilderIcon } from '../helpers/image.js';
 
 async function verifyUUID(req, res, next){
   // se o uuid estiver anormal o server morre
 
-  let sql = `select a.id, denunciado, nome, descricao, telefone, celular, numero, cep, coordenadas, criado,
+  let sql = `select a.id, icon_url, denunciado, nome, descricao, telefone, celular, numero, cep, coordenadas, criado,
   coalesce(c.nota, 0) nota
   from tbl_places a
   left join vw_notas c on c.id = a.id 
@@ -19,6 +20,9 @@ async function verifyUUID(req, res, next){
 
   req.place = result;
   req.place.uuid = req.params.uuid;
+  if(result.icon_url){
+    req.place.icon_url = imageUrlBuilderIcon(req.params.uuid, result.icon_url);
+  }
 
   return next();
 }

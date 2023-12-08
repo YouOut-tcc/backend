@@ -5,6 +5,7 @@ import { generateToken, generateTokenResetPassword } from "../helpers/tokens.js"
 import helpers from '../helpers/helpers.js';
 import {verifyEntries} from '../helpers/validation.js';
 import { analytics } from 'googleapis/build/src/apis/analytics/index.js';
+import { imageUrlBuilderIcon } from '../helpers/image.js';
 
 const saltRounds = 10;
 
@@ -229,6 +230,12 @@ async function resetPassword(req, res) {
 async function getPlacesOwn(req, res) {
   try {
     let places = await service.getPlacesOwn(req.infoUser.id);
+    places.forEach(element => {
+      let uuid = element.icon_url;
+      if(uuid){
+        element.icon_url = imageUrlBuilderIcon(element.uuid, uuid);
+      }
+    });
     res.status(200).send(places);
   } catch (error) {
     res.status(500).send({ message: error });

@@ -12,6 +12,8 @@ routes.post('/cadastrar', permissions.CADASTRAR, estabelecimento.createLoginChil
 
 // verificar permissoes do usuario 
 routes.get('/informacoes', places.showInfo);
+routes.post('/icon', upload.single("icon"), places.updatePlaceIcon);
+routes.post('/info', places.updatePlaceInfo);
 routes.post('/banners', upload.array('banners', 5), places.updateBanner);
 routes.post('/eventos', upload.single('image'), places.criarEventos)
 routes.post('/promocoes', places.criarPromocao)

@@ -18,4 +18,12 @@ function imageUrlBuilder(id, placeUuid, type, imageUuid) {
   return path;
 }
 
-export { upload, imageUrlBuilder };
+function imageUrlBuilderIcon(placeUuid, imageUuid) {
+  const bucket = process.env.S3_BUCKET;
+  const location = process.env.S3_LOCATION;
+  let path;
+  path = `https://${bucket}.s3.${location}.amazonaws.com/${placeUuid}/${imageUuid}.jpg`
+  return path;
+}
+
+export { upload, imageUrlBuilder, imageUrlBuilderIcon };

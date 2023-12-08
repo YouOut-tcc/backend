@@ -15,48 +15,68 @@ async function saveEventImage(id, buffer, uuid, mimetype) {
     uuid: new UUID(imageUuid),
     type: mimetype,
     size: buffer.length,
-    id: id
-  }
+    id: id,
+  };
 
   await mongodb.insertImageMeta("eventos", uuid, data);
+  console.log("talvez a imagem salvou com sucesso");
+}
+
+async function saveIconImage(imageUuid, buffer, uuid, mimetype) {
+  let path = `${uuid}/${imageUuid}.jpg`;
+  console.log("indo salvar a imagem");
+
+  await s3Image.upload(path, buffer, mimetype);
+
+  let data = {
+    uuid: new UUID(imageUuid),
+    type: mimetype,
+    size: buffer.length,
+  };
+
+  await mongodb.insertImageMeta("icon", uuid, data);
   console.log("talvez a imagem salvou com sucesso");
 }
 
 async function getEventImages(placeUuid, eventos) {
   let result = await mongodb.getImagens("eventos", placeUuid);
   // codigo porco abaixo
-  if(!result){
+  if (!result) {
     return eventos;
   }
   result.imagens.forEach((elementImagens, index) => {
     eventos.forEach((elementEventos, index) => {
-      if(elementEventos.id == elementImagens.id){
+      if (elementEventos.id == elementImagens.id) {
         let uuid = elementImagens.uuid.toString();
-        let imageUrl = imageUrlBuilder(elementImagens.id, placeUuid, "eventos", uuid)
+        let imageUrl = imageUrlBuilder(
+          elementImagens.id,
+          placeUuid,
+          "eventos",
+          uuid
+        );
         elementEventos.image = imageUrl;
       }
     });
   });
-  
+
   return eventos;
   // pegar todas as imagens
   // interar pelos eventos
-
 }
 
 async function updateBanners(placeUuid, data) {
   let existDocument = undefined;
-  let placeUUID = new UUID(placeUuid); 
+  let placeUUID = new UUID(placeUuid);
 
   let reorder = [];
   let add = [];
 
   data.forEach((element) => {
-    if(element.uuid){
+    if (element.uuid) {
       let data = {
         new: element.newId,
-        old: element.oldIndex
-      }
+        old: element.oldIndex,
+      };
       reorder.push(data);
     } else {
       let uuid = uuidv4();
@@ -64,37 +84,41 @@ async function updateBanners(placeUuid, data) {
       let data = {
         s3: {
           path,
-          file: element.file
+          file: element.file,
         },
         mongodb: {
           uuid,
           type: element.file.mimetype,
-          size: element.file.size
+          size: element.file.size,
         },
-        id: element.newId
-      }
+        id: element.newId,
+      };
       add.push(data);
     }
-  })
+  });
 
   let collection = mongodb.db.collection("banners");
   existDocument = await mongodb.checkIfExist(collection, placeUUID);
 
-  if(reorder.length > 0){
+  if (reorder.length > 0) {
     reorder.forEach(async (element) => {
       collection.updateOne(
         { uuid: placeUUID },
-        { $set: { [`imagens.${element.new}`]: existDocument.imagens[element.old] } }
+        {
+          $set: {
+            [`imagens.${element.new}`]: existDocument.imagens[element.old],
+          },
+        }
       );
     });
   }
 
-  if(add.length > 0){
-    add.forEach(async (element)=>{
+  if (add.length > 0) {
+    add.forEach(async (element) => {
       let file = element.s3.file;
       let path = element.s3.path;
       await s3Image.upload(path, file.buffer, file.mimetype);
-      if(existDocument){
+      if (existDocument) {
         await collection.updateOne(
           { uuid: placeUUID },
           { $set: { [`imagens.${element.id}`]: element.mongodb } }
@@ -120,4 +144,10 @@ async function getBanners(placeUuid) {
 // adicionar banners
 // reordernar banners
 
-export {saveEventImage, getEventImages, getBanners, updateBanners};
+export {
+  saveEventImage,
+  getEventImages,
+  getBanners,
+  updateBanners,
+  saveIconImage,
+};
